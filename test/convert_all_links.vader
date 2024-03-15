@@ -1,0 +1,189 @@
+Given:
+  Sapien ac iaculis feugiat, lacus lacus accumsan lorem, quis volutpat justo
+  turpis ac mauris.
+
+  Duis velit magna, scelerisque vitae, varius ut, aliquam vel, justo. Proin ac
+  augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
+  Ut sem nunc, vestibulum nec, sodales vitae, vehicula eget, ipsum. Sed nec
+  tortor. Aenean malesuada.
+
+  Nunc convallis, massa eu vestibulum commodo, quam
+  mauris interdum arcu, at pellentesque diam metus ut nulla. Vestibulum eu dolor
+  sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget, lobortis ac,
+  fringilla ac, turpis. Duis ac erat. Etiam consequat. Integer sed est eu elit
+  pellentesque dapibus. Duis venenatis magna feugiat.
+Execute (No links):
+  call mdlink#ConvertAllLinks()
+
+Expect:
+  Sapien ac iaculis feugiat, lacus lacus accumsan lorem, quis volutpat justo
+  turpis ac mauris.
+
+  Duis velit magna, scelerisque vitae, varius ut, aliquam vel, justo. Proin ac
+  augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
+  Ut sem nunc, vestibulum nec, sodales vitae, vehicula eget, ipsum. Sed nec
+  tortor. Aenean malesuada.
+
+  Nunc convallis, massa eu vestibulum commodo, quam
+  mauris interdum arcu, at pellentesque diam metus ut nulla. Vestibulum eu dolor
+  sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget, lobortis ac,
+  fringilla ac, turpis. Duis ac erat. Etiam consequat. Integer sed est eu elit
+  pellentesque dapibus. Duis venenatis magna feugiat.
+-------------------------------------------------------------------
+
+Given:
+  Sapien ac iaculis feugiat, [lacus](http://lacus.org/lacus) lacus accumsan
+  lorem, quis volutpat justo turpis ac mauris.
+
+  Duis velit [magna](www.magna.com), scelerisque
+  [vitae](https://vitae.net/index.html), varius ut, aliquam vel, justo. Proin ac
+  augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
+  Ut [sem](www.sem.com) [nunc](nunc.com), vestibulum [nec](www.nec.com), sodales
+  vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
+
+  Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
+  [pellentesque](https://pellentesque.com) diam metus ut nulla. Vestibulum eu
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  lobortis ac, [fringilla](www.fringilla.com) ac, [turpis](http://turpis.net).
+  Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque dapibus.
+  Duis venenatis magna feugiat.
+Execute (Multiple links, no heading):
+  call mdlink#ConvertAllLinks()
+
+Expect:
+  Sapien ac iaculis feugiat, [lacus][0] lacus accumsan
+  lorem, quis volutpat justo turpis ac mauris.
+
+  Duis velit [magna][1], scelerisque
+  [vitae][2], varius ut, aliquam vel, justo. Proin ac
+  augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
+  Ut [sem][3] [nunc][4], vestibulum [nec][5], sodales
+  vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
+
+  Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
+  [pellentesque][6] diam metus ut nulla. Vestibulum eu
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  lobortis ac, [fringilla][7] ac, [turpis][8].
+  Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque dapibus.
+  Duis venenatis magna feugiat.
+
+  ## Links
+
+  [0]: http://lacus.org/lacus
+  [1]: www.magna.com
+  [2]: https://vitae.net/index.html
+  [3]: www.sem.com
+  [4]: nunc.com
+  [5]: www.nec.com
+  [6]: https://pellentesque.com
+  [7]: www.fringilla.com
+  [8]: http://turpis.net
+-------------------------------------------------------------------
+
+Given:
+  Sapien ac iaculis feugiat, [lacus](http://lacus.org/lacus) lacus accumsan
+  lorem, quis volutpat justo turpis ac mauris.
+
+  Duis velit [magna](www.magna.com), scelerisque
+  [vitae](https://vitae.net/index.html), varius ut, aliquam vel, justo. Proin ac
+  augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
+  Ut [sem](www.sem.com) [nunc](nunc.com), vestibulum [nec](www.nec.com), sodales
+  vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
+
+  Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
+  [pellentesque](https://pellentesque.com) diam metus ut nulla. Vestibulum eu
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  lobortis ac, [fringilla](www.fringilla.com) ac, [turpis](http://turpis.net).
+  Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque dapibus.
+  Duis venenatis magna feugiat.
+
+  ## Links
+  
+
+Execute (Multiple links, heading present, no references yet):
+  call mdlink#ConvertAllLinks()
+
+Expect:
+  Sapien ac iaculis feugiat, [lacus][0] lacus accumsan
+  lorem, quis volutpat justo turpis ac mauris.
+
+  Duis velit [magna][1], scelerisque
+  [vitae][2], varius ut, aliquam vel, justo. Proin ac
+  augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
+  Ut [sem][3] [nunc][4], vestibulum [nec][5], sodales
+  vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
+
+  Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
+  [pellentesque][6] diam metus ut nulla. Vestibulum eu
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  lobortis ac, [fringilla][7] ac, [turpis][8].
+  Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque dapibus.
+  Duis venenatis magna feugiat.
+
+  ## Links
+
+  [0]: http://lacus.org/lacus
+  [1]: www.magna.com
+  [2]: https://vitae.net/index.html
+  [3]: www.sem.com
+  [4]: nunc.com
+  [5]: www.nec.com
+  [6]: https://pellentesque.com
+  [7]: www.fringilla.com
+  [8]: http://turpis.net
+-------------------------------------------------------------------
+
+Given:
+  Sapien ac iaculis feugiat, [lacus][0] lacus accumsan
+  lorem, quis volutpat justo turpis ac mauris.
+
+  Duis velit [magna](www.magna.com), scelerisque
+  [vitae](https://vitae.net/index.html), varius ut, aliquam vel, justo. Proin ac
+  augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
+  Ut [sem](www.sem.com) [nunc](nunc.com), vestibulum [nec](www.nec.com), sodales
+  vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
+
+  Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
+  [pellentesque][1] diam metus ut nulla. Vestibulum eu
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  lobortis ac, [fringilla](www.fringilla.com) ac, [turpis](http://turpis.net).
+  Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque dapibus.
+  Duis venenatis magna feugiat.
+
+  ## Links
+  
+  [0]: http://lacus.org/lacus
+  [1]: https://pellentesque.com
+
+Execute (Multiple links, heading and references present):
+  call mdlink#ConvertAllLinks()
+
+Expect:
+  Sapien ac iaculis feugiat, [lacus][0] lacus accumsan
+  lorem, quis volutpat justo turpis ac mauris.
+
+  Duis velit [magna][2], scelerisque
+  [vitae][3], varius ut, aliquam vel, justo. Proin ac
+  augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
+  Ut [sem][4] [nunc][5], vestibulum [nec][6], sodales
+  vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
+
+  Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
+  [pellentesque][1] diam metus ut nulla. Vestibulum eu
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  lobortis ac, [fringilla][7] ac, [turpis][8].
+  Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque dapibus.
+  Duis venenatis magna feugiat.
+
+  ## Links
+
+  [0]: http://lacus.org/lacus
+  [1]: https://pellentesque.com
+  [2]: www.magna.com
+  [3]: https://vitae.net/index.html
+  [4]: www.sem.com
+  [5]: nunc.com
+  [6]: www.nec.com
+  [7]: www.fringilla.com
+  [8]: http://turpis.net
+-------------------------------------------------------------------

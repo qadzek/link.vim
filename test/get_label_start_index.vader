@@ -1,0 +1,15 @@
+Before:
+  unlet! g:md_link_start_index
+After:
+  unlet! g:md_link_start_index
+
+Execute (Use default label start index):
+  let expected = 0
+  let actual = mdlink#GetLabelStartIndex()
+  AssertEqual expected, actual
+
+Execute (Change default label start index):
+  let g:md_link_start_index = 100
+  let expected = 100
+  let actual = mdlink#GetLabelStartIndex()
+  AssertEqual expected, actual

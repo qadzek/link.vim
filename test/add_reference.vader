@@ -1,0 +1,29 @@
+Given:
+  # A consectetuer nunc justo ac nisl.
+  
+  ## Nam vitae purus
+  
+  Cum sociis natoque [penatibus][0] et magnis dis parturient montes,
+  nascetur ridiculus mus. Praesent semper magna. In eu justo. Nunc vitae risus nec
+  sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+
+  ## Links
+
+  [0]: http://ipsum.com
+Execute (Add link reference definition):
+  call mdlink#AddReference('1', 'https://lorem.com/')
+
+Expect:
+  # A consectetuer nunc justo ac nisl.
+  
+  ## Nam vitae purus
+  
+  Cum sociis natoque [penatibus][0] et magnis dis parturient montes,
+  nascetur ridiculus mus. Praesent semper magna. In eu justo. Nunc vitae risus nec
+  sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+
+  ## Links
+
+  [0]: http://ipsum.com
+  [1]: https://lorem.com/
+------------------------------------------------------------

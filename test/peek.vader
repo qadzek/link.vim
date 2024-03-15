@@ -1,0 +1,32 @@
+Before:
+  edit resources/lorem-converted.md
+  normal! gg
+
+Execute (Valid peek, from single reference link on line, [2]):
+  call cursor(6, 1)
+  call mdlink#Peek()
+  let expected = '[2]: www.magna.com'
+  let messages = execute('messages')
+  let actual = split(messages, "\n")[-1] " Last message
+  AssertEqual expected, actual
+
+Execute (Valid peek, from multiple reference links on line, [5]):
+  call cursor(9, 15)
+  call mdlink#Peek()
+  let expected = '[5]: nunc.com'
+  let actual = split( execute('messages'), '\n')[-1] 
+  AssertEqual expected, actual
+
+Execute (Invalid peek, from below heading):
+  call cursor(23, 1)
+  call mdlink#Peek()
+  let expected = mdlink#err_msg['no_peek_from_ref']
+  let actual = split( execute('messages'), '\n')[-1] 
+  AssertEqual expected, actual
+
+Execute (Invalid peek, label [9] not found in reference section):
+  call cursor(16, 1)
+  call mdlink#Peek()
+  let expected = mdlink#err_msg['no_label_ref_section'] . '9'
+  let actual = split( execute('messages'), '\n')[-1] 
+  AssertEqual expected, actual

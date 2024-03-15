@@ -1,0 +1,54 @@
+# See https://github.com/Vimjas/vint/wiki/Config
+
+cmdargs:
+  # Checking more strictly (report errors, warnings and style problems)
+  severity: style_problem
+
+  # Enable coloring
+  color: true
+
+  # Enable Neovim syntax
+  env:
+    neovim: true
+
+  # Limit max violations count
+  error-limit: 10
+
+  # Print statistics like `Total violations: 20`
+  stat: true
+
+  # Print JSON instead of the human-readable output
+  json: false
+
+  # Change human-readable output format
+  format: '{file_path}:{line_number}:{column_number}: {description}'
+
+policies:
+  ProhibitAutocmdWithNoGroup:
+    enabled: true
+  ProhibitCommandRelyOnUser:
+    enabled: true
+  ProhibitCommandWithUnintendedSideEffect:
+    enabled: true
+  ProhibitEncodingOptionAfterScriptEncoding:
+    enabled: true
+  ProhibitEqualTildeOperator:
+    enabled: true
+  ProhibitImplicitScopeBuiltinVariable:
+    enabled: true
+  ProhibitMissingScriptEncoding:
+    enabled: true
+  ProhibitNoAbortFunction:
+    enabled: true
+  ProhibitSetNoCompatible:
+    enabled: true
+  ProhibitUnnecessaryDoubleQuote:
+    enabled: true
+  ProhibitUnusedVariable:
+    enabled: true
+  ProhibitUsingUndeclaredVariable:
+    enabled: true
+  ProhibitAbbreviationOption:
+    enabled: true
+  ProhibitImplicitScopeVariable:
+    enabled: true

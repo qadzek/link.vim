@@ -1,0 +1,23 @@
+Given:
+  # A consectetuer nunc justo ac nisl.
+  
+  ## Nam vitae purus
+  
+  Cum sociis natoque penatibus et magnis dis parturient montes,
+  nascetur ridiculus mus. Praesent semper magna. In eu justo. Nunc vitae risus nec
+  sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+Execute (No heading present):
+  call mdlink#AddHeading('## My Resources')
+
+Expect:
+  # A consectetuer nunc justo ac nisl.
+  
+  ## Nam vitae purus
+  
+  Cum sociis natoque penatibus et magnis dis parturient montes,
+  nascetur ridiculus mus. Praesent semper magna. In eu justo. Nunc vitae risus nec
+  sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+  
+  ## My Resources
+  
+------------------------------------------------------------

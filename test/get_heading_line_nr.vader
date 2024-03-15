@@ -1,0 +1,238 @@
+==============================================
+Execute ():
+  Log 'Cursor at top'
+==============================================
+
+Given;
+# A consectetuer nunc justo ac nisl.
+
+## Nam vitae purus
+
+Cum sociis natoque penatibus et magnis dis parturient montes,
+nascetur ridiculus mus. Praesent semper magna. In eu justo. Nunc vitae risus nec
+sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+Execute (No heading):
+  let expected = 0
+  let actual = mdlink#GetHeadingLineNr('## Links')
+  AssertEqual expected, actual
+-----------------------------------------------
+
+Given;
+# A consectetuer nunc justo ac nisl.
+
+## Nam vitae purus
+
+Cum sociis natoque penatibus et magnis dis parturient montes,
+nascetur ridiculus mus. Praesent semper magna. In eu justo. Nunc vitae risus nec
+sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+
+## Links
+Execute (Heading on very last line):
+  let expected = 9
+  let actual = mdlink#GetHeadingLineNr('## Links')
+  AssertEqual expected, actual
+-----------------------------------------------
+
+Given;
+# A consectetuer nunc justo ac nisl.
+
+## Nam vitae purus
+
+Cum sociis natoque penatibus et magnis dis parturient montes,
+nascetur ridiculus mus. Praesent semper magna. In eu justo. Nunc vitae risus nec
+sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+
+## Links
+
+Execute (Heading on last but one line, last one is blank):
+  let expected = 9
+  let actual = mdlink#GetHeadingLineNr('## Links')
+  AssertEqual expected, actual
+-----------------------------------------------
+
+Given;
+# A consectetuer nunc justo ac nisl.
+
+## Nam vitae purus
+
+Cum sociis natoque penatibus et magnis dis parturient montes,
+nascetur ridiculus mus.
+
+## Links
+
+Praesent semper magna. In eu justo. Nunc vitae risus nec
+sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+
+## Links
+
+[0]: http://www.loremipsumdolorsitamet.com
+[1]: http://www.ipsumloremconsecteturadipiscing.com
+[2]: http://www.dolorsitametconsecteturadipiscingelit.com
+[3]: http://www.adipiscingelitipsumdolorsitamet.com
+Execute (Two headings):
+  let expected = 13
+  let actual = mdlink#GetHeadingLineNr('## Links')
+  AssertEqual expected, actual
+-----------------------------------------------
+
+==============================================
+Execute ():
+  Log 'Cursor at bottom'
+==============================================
+
+Given;
+# A consectetuer nunc justo ac nisl.
+
+## Nam vitae purus
+
+Cum sociis natoque penatibus et magnis dis parturient montes,
+nascetur ridiculus mus. Praesent semper magna. In eu justo. Nunc vitae risus nec
+sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+Execute (No heading):
+  normal G
+  let expected = 0
+  let actual = mdlink#GetHeadingLineNr('## Links')
+  AssertEqual expected, actual
+-----------------------------------------------
+
+Given;
+# A consectetuer nunc justo ac nisl.
+
+## Nam vitae purus
+
+Cum sociis natoque penatibus et magnis dis parturient montes,
+nascetur ridiculus mus. Praesent semper magna. In eu justo. Nunc vitae risus nec
+sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+
+## Links
+Execute (Heading on very last line):
+  normal G
+  let expected = 9
+  let actual = mdlink#GetHeadingLineNr('## Links')
+  AssertEqual expected, actual
+-----------------------------------------------
+
+Given;
+# A consectetuer nunc justo ac nisl.
+
+## Nam vitae purus
+
+Cum sociis natoque penatibus et magnis dis parturient montes,
+nascetur ridiculus mus. Praesent semper magna. In eu justo. Nunc vitae risus nec
+sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+
+## Links
+
+Execute (Heading on last but one line, last one is blank):
+  normal G
+  let expected = 9
+  let actual = mdlink#GetHeadingLineNr('## Links')
+  AssertEqual expected, actual
+-----------------------------------------------
+
+Given;
+# A consectetuer nunc justo ac nisl.
+
+## Nam vitae purus
+
+Cum sociis natoque penatibus et magnis dis parturient montes,
+nascetur ridiculus mus.
+
+## Links
+
+Praesent semper magna. In eu justo. Nunc vitae risus nec
+sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+
+## Links
+
+[0]: http://www.loremipsumdolorsitamet.com
+[1]: http://www.ipsumloremconsecteturadipiscing.com
+[2]: http://www.dolorsitametconsecteturadipiscingelit.com
+[3]: http://www.adipiscingelitipsumdolorsitamet.com
+Execute (Two headings):
+  normal G
+  let expected = 13
+  let actual = mdlink#GetHeadingLineNr('## Links')
+  AssertEqual expected, actual
+-----------------------------------------------
+
+==============================================
+Execute ():
+  Log 'Cursor in middle'
+==============================================
+
+Given;
+# A consectetuer nunc justo ac nisl.
+
+## Nam vitae purus
+
+Cum sociis natoque penatibus et magnis dis parturient montes,
+nascetur ridiculus mus. Praesent semper magna. In eu justo. Nunc vitae risus nec
+sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+Execute (No heading):
+  normal 5j
+  let expected = 0
+  let actual = mdlink#GetHeadingLineNr('## Links')
+  AssertEqual expected, actual
+-----------------------------------------------
+
+Given;
+# A consectetuer nunc justo ac nisl.
+
+## Nam vitae purus
+
+Cum sociis natoque penatibus et magnis dis parturient montes,
+nascetur ridiculus mus. Praesent semper magna. In eu justo. Nunc vitae risus nec
+sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+
+## Links
+Execute (Heading on very last line):
+  normal 5j
+  let expected = 9
+  let actual = mdlink#GetHeadingLineNr('## Links')
+  AssertEqual expected, actual
+-----------------------------------------------
+
+Given;
+# A consectetuer nunc justo ac nisl.
+
+## Nam vitae purus
+
+Cum sociis natoque penatibus et magnis dis parturient montes,
+nascetur ridiculus mus. Praesent semper magna. In eu justo. Nunc vitae risus nec
+sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+
+## Links
+
+Execute (Heading on last but one line, last one is blank):
+  normal 5j
+  let expected = 9
+  let actual = mdlink#GetHeadingLineNr('## Links')
+  AssertEqual expected, actual
+-----------------------------------------------
+
+Given;
+# A consectetuer nunc justo ac nisl.
+
+## Nam vitae purus
+
+Cum sociis natoque penatibus et magnis dis parturient montes,
+nascetur ridiculus mus.
+
+## Links
+
+Praesent semper magna. In eu justo. Nunc vitae risus nec
+sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+
+## Links
+
+[0]: http://www.loremipsumdolorsitamet.com
+[1]: http://www.ipsumloremconsecteturadipiscing.com
+[2]: http://www.dolorsitametconsecteturadipiscingelit.com
+[3]: http://www.adipiscingelitipsumdolorsitamet.com
+Execute (Two headings):
+  normal 9j
+  let expected = 13
+  let actual = mdlink#GetHeadingLineNr('## Links')
+  AssertEqual expected, actual
+-----------------------------------------------

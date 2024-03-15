@@ -1,0 +1,123 @@
+Given;
+# A consectetuer nunc justo ac nisl.
+
+## Nam vitae purus
+
+Cum sociis natoque penatibus et magnis dis parturient montes,
+nascetur ridiculus mus.
+
+Praesent semper magna. In eu justo. Nunc vitae risus nec
+sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+
+## Links
+
+[0]: http://www.loremipsumdolorsitamet.com
+[1]: http://www.ipsumloremconsecteturadipiscing.com
+[2]: http://www.dolorsitametconsecteturadipiscingelit.com
+[3]: http://www.adipiscingelitipsumdolorsitamet.com
+Execute (Last line contains label):
+  let expected = 3
+  let actual = mdlink#GetLastLabel()
+  AssertEqual expected, actual
+-----------------------------------------------
+
+Given;
+# A consectetuer nunc justo ac nisl.
+
+## Nam vitae purus
+
+Cum sociis natoque penatibus et magnis dis parturient montes,
+nascetur ridiculus mus.
+
+Praesent semper magna. In eu justo. Nunc vitae risus nec
+sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+
+## Links
+
+[0]: http://www.loremipsumdolorsitamet.com
+[1]: http://www.ipsumloremconsecteturadipiscing.com
+[2]: http://www.dolorsitametconsecteturadipiscingelit.com
+[3]: http://www.adipiscingelitipsumdolorsitamet.com
+
+Execute (Last but one line contains label, last line is blank):
+  let expected = 3
+  let actual = mdlink#GetLastLabel()
+  AssertEqual expected, actual
+-----------------------------------------------
+
+Given;
+# A consectetuer nunc justo ac nisl.
+
+## Nam vitae purus
+
+Cum sociis natoque penatibus et magnis dis parturient montes,
+nascetur ridiculus mus.
+
+Praesent semper magna. In eu justo. Nunc vitae risus nec
+sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+Execute (No heading, no labels):
+  let expected = -1
+  let actual = mdlink#GetLastLabel()
+  AssertEqual expected, actual
+-----------------------------------------------
+
+Given;
+# A consectetuer nunc justo ac nisl.
+
+## Nam vitae purus
+
+Cum sociis natoque penatibus et magnis dis parturient montes,
+nascetur ridiculus mus.
+
+Praesent semper magna. In eu justo. Nunc vitae risus nec
+sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+
+[0]: http://www.loremipsumdolorsitamet.com
+[1]: http://www.ipsumloremconsecteturadipiscing.com
+[2]: http://www.dolorsitametconsecteturadipiscingelit.com
+[3]: http://www.adipiscingelitipsumdolorsitamet.com
+
+Execute (Labels, but no heading):
+  let expected = 3
+  let actual = mdlink#GetLastLabel()
+  AssertEqual expected, actual
+-----------------------------------------------
+
+Given;
+# A consectetuer nunc justo ac nisl.
+
+## Nam vitae purus
+
+Cum sociis natoque penatibus et magnis dis parturient montes,
+nascetur ridiculus mus.
+
+Praesent semper magna. In eu justo. Nunc vitae risus nec
+sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+
+## Links
+
+Execute (Heading, but no labels):
+  let expected = -1
+  let actual = mdlink#GetLastLabel()
+  AssertEqual expected, actual
+-----------------------------------------------
+
+Given;
+# A consectetuer nunc justo ac nisl.
+
+## Nam vitae purus
+
+Cum sociis natoque penatibus et magnis dis parturient montes,
+nascetur ridiculus mus.
+
+Praesent semper magna. In eu justo. Nunc vitae risus nec
+sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+
+## Links
+
+foo bar baz
+Execute (Heading, regular text instead of labels):
+  let expected = -1
+  let actual = mdlink#GetLastLabel()
+  AssertEqual expected, actual
+-----------------------------------------------

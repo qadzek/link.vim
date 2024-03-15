@@ -1,0 +1,6 @@
+command MdLinkConvertSingle          :call mdlink#ConvertSingleLink()
+command MdLinkConvertSingleInsert    :call mdlink#ConvertSingleLink('insert')
+command MdLinkConvertAll             :call mdlink#ConvertAllLinks()
+command MdLinkJump                   :call mdlink#Jump()
+command MdLinkPeek                   :call mdlink#Peek()
+command MdLinkDeleteUnneededRefs     :call mdlink#DeleteUnneededRefs()

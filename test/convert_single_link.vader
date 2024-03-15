@@ -1,0 +1,108 @@
+Given:
+  Cum sociis natoque penatibus et magnis dis parturient montes,
+Execute (No link):
+  call mdlink#ConvertSingleLink()
+
+Expect:
+  Cum sociis natoque penatibus et magnis dis parturient montes,
+-------------------------------------------------------------------
+
+Given:
+  Cum sociis natoque [penatibus](http://www.loremipsum.com) et magnis dis parturient montes,
+Execute (Single link):
+  call mdlink#ConvertSingleLink()
+
+Expect:
+  Cum sociis natoque [penatibus][0] et magnis dis parturient montes,
+
+  ## Links
+
+  [0]: http://www.loremipsum.com
+-------------------------------------------------------------------
+
+Given:
+  Cum sociis natoque [penatibus](http://www.loremipsum.com) et [magnis](http://www.dolorsitamet.com) dis parturient montes,
+Execute (Two links):
+  call mdlink#ConvertSingleLink()
+  call mdlink#ConvertSingleLink()
+
+Expect:
+  Cum sociis natoque [penatibus][0] et [magnis][1] dis parturient montes,
+
+  ## Links
+
+  [0]: http://www.loremipsum.com
+  [1]: http://www.dolorsitamet.com
+-----------------------------------------------
+
+Given:
+  [penatibus](http://www.loremipsum.com) et magnis dis parturient montes
+Execute (Link at start of line):
+  call mdlink#ConvertSingleLink()
+
+Expect:
+  [penatibus][0] et magnis dis parturient montes
+
+  ## Links
+
+  [0]: http://www.loremipsum.com
+-----------------------------------------------
+
+Given:
+  Cum sociis natoque [penatibus](http://www.loremipsum.com)
+Execute (Link at end of line):
+  call mdlink#ConvertSingleLink()
+
+Expect:
+  Cum sociis natoque [penatibus][0]
+
+  ## Links
+
+  [0]: http://www.loremipsum.com
+-----------------------------------------------
+
+Given:
+  [penatibus](http://www.loremipsum.com) et [magnis](http://www.dolorsitamet.com)
+Execute (Two links, one at start of line, one at end of line):
+  call mdlink#ConvertSingleLink()
+  call mdlink#ConvertSingleLink()
+
+Expect:
+  [penatibus][0] et [magnis][1]
+
+  ## Links
+
+  [0]: http://www.loremipsum.com
+  [1]: http://www.dolorsitamet.com
+-----------------------------------------------
+
+Given:
+  Cum sociis natoque [penatibus](http://www.loremipsum.com) et [magnis](http://www.dolorsitamet.com) dis [parturient](http://www.adipiscingelitipsum.com) montes,
+Execute (Three links):
+  call mdlink#ConvertSingleLink()
+  call mdlink#ConvertSingleLink()
+  call mdlink#ConvertSingleLink()
+
+Expect:
+  Cum sociis natoque [penatibus][0] et [magnis][1] dis [parturient][2] montes,
+
+  ## Links
+
+  [0]: http://www.loremipsum.com
+  [1]: http://www.dolorsitamet.com
+  [2]: http://www.adipiscingelitipsum.com
+-----------------------------------------------
+
+" NOTE the * character causes issues, so is not included here
+Given:
+  Cum sociis natoque [penatibus](http://www.lorem-ipsum.com/foo_bar.html?bar=baz+alpha$bravo!charlie'delta,echo%foxtrot) et magnis
+Execute (Link containing special characters):
+  call mdlink#ConvertSingleLink()
+
+Expect:
+  Cum sociis natoque [penatibus][0] et magnis
+
+  ## Links
+
+  [0]: http://www.lorem-ipsum.com/foo_bar.html?bar=baz+alpha$bravo!charlie'delta,echo%foxtrot
+-----------------------------------------------

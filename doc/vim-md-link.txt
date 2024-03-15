@@ -1,0 +1,183 @@
+*vim-md-link.txt* Convert inline Markdown links to reference links
+
+                                                                     *md-link*
+               _                               _       _ _       _~
+        __   _(_)_ __ ___        _ __ ___   __| |     | (_)_ __ | | __~
+        \ \ / / | '_ ` _ \ _____| '_ ` _ \ / _` |_____| | | '_ \| |/ /~
+         \ V /| | | | | | |_____| | | | | | (_| |_____| | | | | |   <~
+          \_/ |_|_| |_| |_|     |_| |_| |_|\__,_|     |_|_|_| |_|_|\_\~
+
+
+Version: 0.1.0
+Author:  qadzek
+License: MIT
+
+==============================================================================
+CONTENTS                                                    *md-link-contents*
+
+    1. Introduction ......... |md-link-introduction|
+    2. Usage ................ |md-link-usage|
+    3. Mappings ............. |md-link-mappings|
+    4. Configuration ........ |md-link-configuration|
+    5. Bugs ................. |md-link-bugs|
+    6. Contributing ......... |md-link-contributing|
+    7. Changelog ............ |md-link-changelog|
+    8. Credits .............. |md-link-credits|
+
+==============================================================================
+INTRODUCTION                                            *md-link-introduction*
+
+Reference links allow for cleaner Markdown documents. Storing URLs at
+the bottom of your document helps maintain the flow of the body of the text.
+However, managing them manually can be tedious. This plugin for Vim and Neovim
+helps in converting these links, navigating between the document body and the
+reference section, quickly previewing hidden URLs, and deleting unnecessary
+links from the reference section.
+
+The main command will convert >
+  # Notes
+
+  [Vim](https://www.vim.org) and [Neovim](https://neovim.io) are text editors.
+<
+into >
+  # Notes
+
+  [Vim][0] and [Neovim][1] are text editors.
+
+  ## Links
+
+  [0]: https://www.vim.org
+  [1]: https://neovim.io
+>
+A heading is used to mark the divide between the document body and the
+reference section. It will be automatically added if needed.
+
+Terminology~
+
+  - inline link:               `[Vim](https://www.vim.org)`
+  - reference link:            `[Vim][0]`
+  - label:                     `[0]`
+  - link reference definition: `[0]: https://www.vim.org`
+  - heading:                   `## Links`
+  - document body:     part of buffer above heading, containing the main text
+  - reference section: part of buffer below heading, containing link reference
+                       definitions
+
+For more information, see the CommonMark Specification at
+https://spec.commonmark.org/0.31.2/#links
+
+==============================================================================
+USAGE                                                          *md-link-usage*
+
+The vim-md-link plugin exposes the following commands:
+
+:MdLinkConvertSingle                                    *:MdLinkConvertSingle*
+    Convert one inline link on the current line of the document body to a
+    reference link. Add a heading below the document body if needed. If there
+    are multiple links on the current line, pick the (first) link that is
+    positioned on the cursor or behind the cursor.
+
+:MdLinkConvertSingleInsert                        *:MdLinkConvertSingleInsert*
+    Same as above, intended for use with an Insert mode mapping. Return to
+    Insert mode and position the cursor just outside the reference link.
+
+:MdLinkConvertAll                                          *:MdLinkConvertAll*
+    Convert all inline links in the document body to reference links. Add a
+    heading below the document body if needed.
+
+:MdLinkJump                                                      *:MdLinkJump*
+    Move the cursor from a reference link within the document body to a
+    corresponding link reference definition in the reference section, and the
+    other way around.
+
+:MdLinkPeek                                                      *:MdLinkPeek*
+    For a reference link within the document body, show a preview of the
+    corresponding link reference definition.
+
+:MdLinkDeleteUnneededRefs                          *:MdLinkDeleteUnneededRefs*
+    Test for every link reference definition if its label is present in the
+    document body. If it isn't, delete the link reference definition.
+
+==============================================================================
+MAPPINGS                                                    *md-link-mappings*
+
+By default, no mappings are specified, in order to avoid conflicts with
+existing key bindings. Some suggestions for your `.vimrc`:
+>
+  augroup vim_md_link
+    autocmd!
+    autocmd Filetype markdown :call MdLinkAddKeyBindings()
+  augroup END
+
+  function! MdLinkAddKeyBindings()
+    nnoremap <buffer> <LocalLeader>s        :MdLinkConvertSingle<CR>
+    inoremap <buffer> <C-g>            <Esc>:MdLinkConvertSingleInsert<CR>
+    nnoremap <buffer> <LocalLeader>a        :MdLinkConvertAll<CR>
+    nnoremap <buffer> <LocalLeader>j        :MdLinkJump<CR>
+    nnoremap <buffer> <LocalLeader>p        :MdLinkPeek<CR>
+    nnoremap <buffer> <LocalLeader>d        :MdLinkDeleteUnneededRefs<CR>
+  endfunction
+<
+To ensure these bindings are only applied for Markdown files, they are wrapped
+in an |autocmd| group.
+
+Any combination should work, but `<LocalLeader>` is a natural choice, as this
+is a filetype plugin (it only works for Markdown documents). By default, if it
+is not set or empty, a backslash is used. To view the current <LocalLeader>:
+`echo maplocalleader` . To set <LocalLeader> explicitly to, for example, the
+backslash character: `let maplocalleader = "\\"` . See `:help maplocalleader`
+for more information.
+
+==============================================================================
+CONFIGURATION                                          *md-link-configuration*
+
+                                                           *g:md_link_heading*
+By default, the heading `## Links` will be used to mark the divide between the
+document body and the reference section. To modify this heading, add something
+like this to your `.vimrc`:
+  `let g:md_link_heading = '## My Resources'`
+
+                                                       *g:md_link_start_index*
+By default, the first converted link gets a label of 0. To change this:
+  `let g:md_link_start_index = 100`
+
+==============================================================================
+ISSUES                                                        *md-link-issues*
+
+- Using a blank line as heading is currently not supported.
+- When converting an inline link to a reference link, a link reference
+  definition will be created, even if the same URL were already present in the
+  reference section. It would be better if the same label were reused.
+- The presence of more than one heading can cause issues.
+- URLs containing the `*` character are not supported.
+
+==============================================================================
+CONTRIBUTING                                            *md-link-contributing*
+
+Pull requests are welcome.
+The Vint linter, the Vader test framework and the Google Style Guide are being
+used.
+
+https://github.com/Vimjas/vint
+https://github.com/junegunn/vader.vim
+https://google.github.io/styleguide/vimscriptguide.xml
+https://google.github.io/styleguide/vimscriptfull.xml
+
+To analyze the code for issues: `vint **/*.vim`
+To execute the tests: `./test/run_tests.sh`
+
+==============================================================================
+CHANGELOG                                                  *md-link-changelog*
+
+0.1.0	2024-03-15
+        - Initial version
+
+==============================================================================
+CREDITS                                                      *md-link-credits*
+
+Learn Vimscript the Hard Way by Steve Losh:
+https://learnvimscriptthehardway.stevelosh.com/
+
+==============================================================================
+
+vim:tw=78:ts=8:ft=help:norl:
