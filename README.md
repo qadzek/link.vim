@@ -60,12 +60,12 @@ The following is an example that you can copy to you `.vimrc`. By default,
   augroup END
 
   function! MdLinkAddKeyBindings()
-    nnoremap <buffer> <LocalLeader>s        :MdLinkConvertSingle<CR>
-    inoremap <buffer> <C-g>            <Esc>:MdLinkConvertSingleInsert<CR>
-    nnoremap <buffer> <LocalLeader>a        :MdLinkConvertAll<CR>
-    nnoremap <buffer> <LocalLeader>j        :MdLinkJump<CR>
-    nnoremap <buffer> <LocalLeader>p        :MdLinkPeek<CR>
-    nnoremap <buffer> <LocalLeader>d        :MdLinkDeleteUnneededRefs<CR>
+    nnoremap <buffer> <silent> <LocalLeader>s   :MdLinkConvertSingle<CR>
+    nnoremap <buffer> <silent> <LocalLeader>a   :MdLinkConvertAll<CR>
+    nnoremap <buffer> <silent> <LocalLeader>j   :MdLinkJump<CR>
+    nnoremap <buffer> <silent> <LocalLeader>p   :MdLinkPeek<CR>
+    nnoremap <buffer> <silent> <LocalLeader>d   :MdLinkDeleteUnneededRefs<CR>
+    inoremap <buffer> <silent> <C-g>       <Esc>:MdLinkConvertSingleInsert<CR>
   endfunction
 ```
 
