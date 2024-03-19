@@ -3,7 +3,8 @@
 `vim-md-link` is a plugin for Vim/Neovim that keeps long URLs out of your way
 in Markdown documents.
 
-In essence, this plugin converts
+It accomplishes this by converting inline Markdown links into reference links.
+For instance, the following:
 
 ```md
 # Notes
@@ -11,7 +12,7 @@ In essence, this plugin converts
 [Vim](https://www.vim.org) and [Neovim](https://neovim.io) are text editors.
 ```
 
-into
+will be turned into
 
 ```md
 # Notes
@@ -44,8 +45,9 @@ Plug 'qadzek/vim-md-link'
 ```vim
 :MdLinkConvertSingle         " Convert the link under the cursor
 :MdLinkConvertAll            " Convert all links in the document
-:MdLinkJump                  " Jump to and from the references
+:MdLinkOpen                  " Open a link in the browser
 :MdLinkPeek                  " Get a preview of the URL
+:MdLinkJump                  " Jump to and from the references
 :MdLinkDeleteUnneededRefs    " Delete references that are no longer needed
 ```
 
@@ -62,8 +64,9 @@ The following is an example that you can copy to you `.vimrc`. By default,
   function! MdLinkAddKeyBindings()
     nnoremap <buffer> <silent> <LocalLeader>s   :MdLinkConvertSingle<CR>
     nnoremap <buffer> <silent> <LocalLeader>a   :MdLinkConvertAll<CR>
-    nnoremap <buffer> <silent> <LocalLeader>j   :MdLinkJump<CR>
+    nnoremap <buffer> <silent> <LocalLeader>o   :MdLinkOpen<CR>
     nnoremap <buffer> <silent> <LocalLeader>p   :MdLinkPeek<CR>
+    nnoremap <buffer> <silent> <LocalLeader>j   :MdLinkJump<CR>
     nnoremap <buffer> <silent> <LocalLeader>d   :MdLinkDeleteUnneededRefs<CR>
     inoremap <buffer> <silent> <C-g>       <Esc>:MdLinkConvertSingleInsert<CR>
   endfunction

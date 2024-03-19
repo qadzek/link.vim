@@ -85,14 +85,18 @@ The vim-md-link plugin exposes the following commands:
     Convert all inline links in the document body to reference links. Add a
     heading below the document body if needed.
 
-:MdLinkJump                                                      *:MdLinkJump*
-    Move the cursor from a reference link within the document body to a
-    corresponding link reference definition in the reference section, and the
-    other way around.
+:MdLinkOpen                                                      *:MdLinkOpen*
+    For a reference link within the document body, open the URL of the
+    corresponding link reference definition in the default browser.
 
 :MdLinkPeek                                                      *:MdLinkPeek*
     For a reference link within the document body, show a preview of the
     corresponding link reference definition.
+
+:MdLinkJump                                                      *:MdLinkJump*
+    Move the cursor from a reference link within the document body to a
+    corresponding link reference definition in the reference section, and the
+    other way around.
 
 :MdLinkDeleteUnneededRefs                          *:MdLinkDeleteUnneededRefs*
     Test for every link reference definition if its label is present in the
@@ -112,6 +116,7 @@ existing key bindings. Some suggestions for your `.vimrc`:
   function! MdLinkAddKeyBindings()
     nnoremap <buffer> <silent> <LocalLeader>s   :MdLinkConvertSingle<CR>
     nnoremap <buffer> <silent> <LocalLeader>a   :MdLinkConvertAll<CR>
+    nnoremap <buffer> <silent> <LocalLeader>o   :MdLinkOpen<CR>
     nnoremap <buffer> <silent> <LocalLeader>j   :MdLinkJump<CR>
     nnoremap <buffer> <silent> <LocalLeader>p   :MdLinkPeek<CR>
     nnoremap <buffer> <silent> <LocalLeader>d   :MdLinkDeleteUnneededRefs<CR>

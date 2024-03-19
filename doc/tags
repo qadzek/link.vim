@@ -3,6 +3,7 @@
 :MdLinkConvertSingleInsert	vim-md-link.txt	/*:MdLinkConvertSingleInsert*
 :MdLinkDeleteUnneededRefs	vim-md-link.txt	/*:MdLinkDeleteUnneededRefs*
 :MdLinkJump	vim-md-link.txt	/*:MdLinkJump*
+:MdLinkOpen	vim-md-link.txt	/*:MdLinkOpen*
 :MdLinkPeek	vim-md-link.txt	/*:MdLinkPeek*
 g:md_link_heading	vim-md-link.txt	/*g:md_link_heading*
 g:md_link_start_index	vim-md-link.txt	/*g:md_link_start_index*

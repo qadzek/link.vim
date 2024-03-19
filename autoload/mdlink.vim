@@ -108,9 +108,9 @@ function! mdlink#Jump(type = 'jump') abort
   endif
   let l:heading_line_nr = mdlink#GetHeadingLineNr(l:heading_text)
 
-  " No peeking from reference section
-  if a:type ==# 'peek' && l:orig_line_nr >= l:heading_line_nr
-    echom g:mdlink#err_msg['no_peek_from_ref']
+  " No opening/peeking from reference section
+  if (a:type ==# 'open' || a:type ==# 'peek') && l:orig_line_nr >= l:heading_line_nr
+    echom g:mdlink#err_msg['not_from_ref']
     call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
     return
   endif
@@ -128,12 +128,54 @@ function! mdlink#Jump(type = 'jump') abort
     return
   endif
 
+  " Open URL from corresponding link reference definition in browser
+  if a:type ==# 'open'
+    let l:ref_link = mdlink#ParseReferenceSection(l:line_nr, 'one')[0]
+    let l:url = l:ref_link['destination']
+
+    " Add protocol if required
+    if l:url =~# '^www'
+      let l:url = 'https://' . l:url
+    endif
+
+    " Not a valid URL
+    if l:url !~# '^http'
+      echom g:mdlink#err_msg['no_valid_url'] . ': ' . l:url
+      call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
+      return
+    endif
+
+    " Decide which command to use, based on the OS
+    let l:os = mdlink#GetOperatingSystem()
+    if l:os ==? 'Darwin'
+      let l:cmd = 'open'
+    elseif l:os ==? 'Linux'
+      let l:cmd = 'xdg-open'
+    elseif l:os ==? 'Windows'
+      let l:cmd = 'start'
+    endif
+
+    """ Open URL in browser
+    " Capture the command's output and remove trailing newline
+    let l:output = substitute( system(l:cmd . ' ' . l:url), '\n\+$', '', '' )
+    if v:shell_error != 0
+      echom g:mdlink#err_msg['open_in_browser_failed'] . l:output
+    endif
+
+    call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
+  endif
+
   " Display corresponding link reference definition
   if a:type ==# 'peek'
     let l:line_content = getline('.')
     call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
     echom l:line_content
   endif
+endfunction
+
+" Open the URL from the corresponding reference link definition in the browser
+function! mdlink#Open() abort
+  call mdlink#Jump('open')
 endfunction
 
 " Get a preview of the corresponding reference link definition
@@ -328,6 +370,7 @@ function! mdlink#AddReference(label, url) abort
 endfunction
 
 " Parse the reference section, in its entirety or just one line
+" Return a list of dictionaries
 function! mdlink#ParseReferenceSection(start_line_nr, type) abort
   if a:type ==# 'all' " This type isn't used at the moment
     let l:cur_line_nr = a:start_line_nr + 1
@@ -493,6 +536,16 @@ function! mdlink#VimwikiRefLinksRefresh() abort
   call vimwiki#markdown_base#scan_reflinks()
 endfunction
 
+" Return the operating system: 'Darwin', 'Linux' or 'Windows'
+function! mdlink#GetOperatingSystem() abort
+  " https://vi.stackexchange.com/a/2577/50213
+  if has('win64') || has('win32') || has('win16')
+    return 'Windows'
+  else
+    return substitute(system('uname'), '\n', '', '')
+  endif
+endfunction
+
 " Default values, can be overridden by vimrc
 let s:defaults = {
   \ 'heading': '## Links',
@@ -511,8 +564,12 @@ let g:mdlink#err_msg = {
     \ 'No link reference definition in the format of "[3]: ..." found on this line',
   \ 'no_label_ref_section':
     \ 'The following label was not found in the reference section: ',
-  \ 'no_peek_from_ref':
-    \ 'Peeking is only possible from the document body',
+  \ 'not_from_ref':
+    \ 'This action is only possible from the document body, not from the reference section',
   \ 'no_reference_link':
     \ 'No reference link in the format of "[foo][3]" found on this line',
+  \ 'no_valid_url':
+    \ 'Not a valid URL',
+  \ 'open_in_browser_failed':
+    \ 'Failed to open the URL, because of this error: ',
   \ }
