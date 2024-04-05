@@ -78,8 +78,14 @@ The vim-md-link plugin exposes the following commands:
     positioned on the cursor or behind the cursor.
 
 :MdLinkConvertSingleInsert                        *:MdLinkConvertSingleInsert*
-    Same as above, intended for use with an Insert mode mapping. Return to
+    Same as above; intended to be used with an Insert mode mapping. Return to
     Insert mode and position the cursor just outside the reference link.
+
+:MdLinkConvertRange                                      *:MdLinkConvertRange*
+    Convert all inline links within a range to reference links. Add a
+    heading below the document body if needed. Intended to be used after
+    selecting lines in Visual mode `:'<,'>MdLinkConvertRange` or with an
+    explicit range `:5,12 MdLinkConvertRange`
 
 :MdLinkConvertAll                                          *:MdLinkConvertAll*
     Convert all inline links in the document body to reference links. Add a
@@ -115,12 +121,13 @@ existing key bindings. Some suggestions for your `.vimrc`:
 
   function! MdLinkAddKeyBindings()
     nnoremap <buffer> <silent> <LocalLeader>s   :MdLinkConvertSingle<CR>
+    inoremap <buffer> <silent> <C-g>       <Esc>:MdLinkConvertSingleInsert<CR>
+    vnoremap <buffer> <silent> <LocalLeader>r   :MdLinkConvertRange<CR>
     nnoremap <buffer> <silent> <LocalLeader>a   :MdLinkConvertAll<CR>
     nnoremap <buffer> <silent> <LocalLeader>o   :MdLinkOpen<CR>
     nnoremap <buffer> <silent> <LocalLeader>j   :MdLinkJump<CR>
     nnoremap <buffer> <silent> <LocalLeader>p   :MdLinkPeek<CR>
     nnoremap <buffer> <silent> <LocalLeader>d   :MdLinkDeleteUnneededRefs<CR>
-    inoremap <buffer> <silent> <C-g>       <Esc>:MdLinkConvertSingleInsert<CR>
   endfunction
 <
 To ensure these bindings are only applied for Markdown files, they are wrapped
@@ -173,6 +180,12 @@ To execute the tests: `./test/run_tests.sh`
 
 ==============================================================================
 CHANGELOG                                                  *md-link-changelog*
+
+0.3.0   2024-04-05
+        - Add :MdLinkConvertRange
+
+0.2.0   2024-03-19
+        - Add :MdLinkOpen
 
 0.1.0	2024-03-15
         - Initial version

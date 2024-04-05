@@ -51,25 +51,38 @@ function! mdlink#ConvertSingleLink(mode = 'normal') abort
   endif
 endfunction
 
-" Convert all inline links to reference links in the document body
-function! mdlink#ConvertAllLinks() abort
+" Convert inline links  to reference links within a range
+function! mdlink#ConvertRange(type = 'range') abort range
   let [l:orig_line_nr, l:orig_col_nr, l:orig_fold_option] = mdlink#Initialize()
 
   let l:heading_text = mdlink#GetHeadingText()
   let l:is_heading_present = mdlink#IsHeadingPresent(l:heading_text)
+  let l:heading_line_nr = mdlink#GetHeadingLineNr(l:heading_text)
 
   let l:new_label_nr = mdlink#GetNewLabelNumber(l:is_heading_present)
   let l:start_label_nr = l:new_label_nr
 
-  " Determine lines to scan for links
-  let l:cur_line_nr = 1
-  if l:is_heading_present
-    let l:max_line_nr = mdlink#GetHeadingLineNr(l:heading_text)
-  else
-    let l:max_line_nr = line('$')
+  " Determine lines to scan for links: entire document body, or within a range
+  if a:type ==# 'all'
+    let l:cur_line_nr = 1
+    if l:is_heading_present
+      let l:max_line_nr = l:heading_line_nr
+    else
+      let l:max_line_nr = line('$')
+    endif
+
+  elseif a:type ==# 'range'
+    let l:cur_line_nr = a:firstline
+    let l:max_line_nr = a:lastline
+
+    if l:is_heading_present && a:lastline > l:heading_line_nr
+      echom g:mdlink#err_msg['not_include_ref']
+      call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
+      return
+    endif
   endif
 
-  " Loop over all lines from first line until heading
+  " Loop over all lines within the range/from first line until heading
   while l:cur_line_nr <= l:max_line_nr
     let l:all_links_on_line = mdlink#ParseLineInBodyFor('inline', l:cur_line_nr)
 
@@ -93,6 +106,11 @@ function! mdlink#ConvertAllLinks() abort
 
   call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
   echom l:new_label_nr - l:start_label_nr . ' inline links were converted'
+endfunction
+
+" Convert all inline links to reference links in the document body
+function! mdlink#ConvertAllLinks() abort
+  call mdlink#ConvertRange('all')
 endfunction
 
 " Jump between a reference link and the corresponding link reference definition
@@ -566,6 +584,8 @@ let g:mdlink#err_msg = {
     \ 'The following label was not found in the reference section: ',
   \ 'not_from_ref':
     \ 'This action is only possible from the document body, not from the reference section',
+  \ 'not_include_ref':
+    \ 'The range cannot include (parts of) the reference section',
   \ 'no_reference_link':
     \ 'No reference link in the format of "[foo][3]" found on this line',
   \ 'no_valid_url':

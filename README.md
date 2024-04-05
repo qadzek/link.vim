@@ -44,6 +44,7 @@ Plug 'qadzek/vim-md-link'
 
 ```vim
 :MdLinkConvertSingle         " Convert the link under the cursor
+:MdLinkConvertRange          " Convert all links within a range
 :MdLinkConvertAll            " Convert all links in the document
 :MdLinkOpen                  " Open a link in the browser
 :MdLinkPeek                  " Get a preview of the URL
@@ -63,12 +64,13 @@ The following is an example that you can copy to you `.vimrc`. By default,
 
   function! MdLinkAddKeyBindings()
     nnoremap <buffer> <silent> <LocalLeader>s   :MdLinkConvertSingle<CR>
+    inoremap <buffer> <silent> <C-g>       <Esc>:MdLinkConvertSingleInsert<CR>
+    vnoremap <buffer> <silent> <LocalLeader>r   :MdLinkConvertRange<CR>
     nnoremap <buffer> <silent> <LocalLeader>a   :MdLinkConvertAll<CR>
     nnoremap <buffer> <silent> <LocalLeader>o   :MdLinkOpen<CR>
     nnoremap <buffer> <silent> <LocalLeader>p   :MdLinkPeek<CR>
     nnoremap <buffer> <silent> <LocalLeader>j   :MdLinkJump<CR>
     nnoremap <buffer> <silent> <LocalLeader>d   :MdLinkDeleteUnneededRefs<CR>
-    inoremap <buffer> <silent> <C-g>       <Esc>:MdLinkConvertSingleInsert<CR>
   endfunction
 ```
 

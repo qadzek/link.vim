@@ -1,4 +1,5 @@
 :MdLinkConvertAll	vim-md-link.txt	/*:MdLinkConvertAll*
+:MdLinkConvertRange	vim-md-link.txt	/*:MdLinkConvertRange*
 :MdLinkConvertSingle	vim-md-link.txt	/*:MdLinkConvertSingle*
 :MdLinkConvertSingleInsert	vim-md-link.txt	/*:MdLinkConvertSingleInsert*
 :MdLinkDeleteUnneededRefs	vim-md-link.txt	/*:MdLinkDeleteUnneededRefs*
