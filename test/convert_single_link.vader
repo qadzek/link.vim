@@ -1,18 +1,18 @@
-Given:
+Given markdown:
   Cum sociis natoque penatibus et magnis dis parturient montes,
 Execute (No link):
-  call mdlink#ConvertSingleLink()
+  MdLinkConvertSingle
 
-Expect:
+Expect markdown:
   Cum sociis natoque penatibus et magnis dis parturient montes,
 -------------------------------------------------------------------
 
-Given:
+Given markdown:
   Cum sociis natoque [penatibus](http://www.loremipsum.com) et magnis dis parturient montes,
 Execute (Single link):
-  call mdlink#ConvertSingleLink()
+  MdLinkConvertSingle
 
-Expect:
+Expect markdown:
   Cum sociis natoque [penatibus][0] et magnis dis parturient montes,
 
   ## Links
@@ -20,13 +20,13 @@ Expect:
   [0]: http://www.loremipsum.com
 -------------------------------------------------------------------
 
-Given:
+Given markdown:
   Cum sociis natoque [penatibus](http://www.loremipsum.com) et [magnis](http://www.dolorsitamet.com) dis parturient montes,
 Execute (Two links):
-  call mdlink#ConvertSingleLink()
-  call mdlink#ConvertSingleLink()
+  MdLinkConvertSingle
+  MdLinkConvertSingle
 
-Expect:
+Expect markdown:
   Cum sociis natoque [penatibus][0] et [magnis][1] dis parturient montes,
 
   ## Links
@@ -35,12 +35,12 @@ Expect:
   [1]: http://www.dolorsitamet.com
 -----------------------------------------------
 
-Given:
+Given markdown:
   [penatibus](http://www.loremipsum.com) et magnis dis parturient montes
 Execute (Link at start of line):
-  call mdlink#ConvertSingleLink()
+  MdLinkConvertSingle
 
-Expect:
+Expect markdown:
   [penatibus][0] et magnis dis parturient montes
 
   ## Links
@@ -48,12 +48,12 @@ Expect:
   [0]: http://www.loremipsum.com
 -----------------------------------------------
 
-Given:
+Given markdown:
   Cum sociis natoque [penatibus](http://www.loremipsum.com)
 Execute (Link at end of line):
-  call mdlink#ConvertSingleLink()
+  MdLinkConvertSingle
 
-Expect:
+Expect markdown:
   Cum sociis natoque [penatibus][0]
 
   ## Links
@@ -61,13 +61,13 @@ Expect:
   [0]: http://www.loremipsum.com
 -----------------------------------------------
 
-Given:
+Given markdown:
   [penatibus](http://www.loremipsum.com) et [magnis](http://www.dolorsitamet.com)
 Execute (Two links, one at start of line, one at end of line):
-  call mdlink#ConvertSingleLink()
-  call mdlink#ConvertSingleLink()
+  MdLinkConvertSingle
+  MdLinkConvertSingle
 
-Expect:
+Expect markdown:
   [penatibus][0] et [magnis][1]
 
   ## Links
@@ -76,14 +76,14 @@ Expect:
   [1]: http://www.dolorsitamet.com
 -----------------------------------------------
 
-Given:
+Given markdown:
   Cum sociis natoque [penatibus](http://www.loremipsum.com) et [magnis](http://www.dolorsitamet.com) dis [parturient](http://www.adipiscingelitipsum.com) montes,
 Execute (Three links):
-  call mdlink#ConvertSingleLink()
-  call mdlink#ConvertSingleLink()
-  call mdlink#ConvertSingleLink()
+  MdLinkConvertSingle
+  MdLinkConvertSingle
+  MdLinkConvertSingle
 
-Expect:
+Expect markdown:
   Cum sociis natoque [penatibus][0] et [magnis][1] dis [parturient][2] montes,
 
   ## Links
@@ -94,12 +94,12 @@ Expect:
 -----------------------------------------------
 
 " NOTE the * character causes issues, so is not included here
-Given:
+Given markdown:
   Cum sociis natoque [penatibus](http://www.lorem-ipsum.com/foo_bar.html?bar=baz+alpha$bravo!charlie'delta,echo%foxtrot) et magnis
 Execute (Link containing special characters):
-  call mdlink#ConvertSingleLink()
+  MdLinkConvertSingle
 
-Expect:
+Expect markdown:
   Cum sociis natoque [penatibus][0] et magnis
 
   ## Links

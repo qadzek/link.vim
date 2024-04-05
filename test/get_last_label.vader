@@ -1,4 +1,4 @@
-Given;
+Given markdown;
 # A consectetuer nunc justo ac nisl.
 
 ## Nam vitae purus
@@ -21,7 +21,7 @@ Execute (Last line contains label):
   AssertEqual expected, actual
 -----------------------------------------------
 
-Given;
+Given markdown;
 # A consectetuer nunc justo ac nisl.
 
 ## Nam vitae purus
@@ -45,7 +45,7 @@ Execute (Last but one line contains label, last line is blank):
   AssertEqual expected, actual
 -----------------------------------------------
 
-Given;
+Given markdown;
 # A consectetuer nunc justo ac nisl.
 
 ## Nam vitae purus
@@ -61,7 +61,7 @@ Execute (No heading, no labels):
   AssertEqual expected, actual
 -----------------------------------------------
 
-Given;
+Given markdown;
 # A consectetuer nunc justo ac nisl.
 
 ## Nam vitae purus
@@ -83,7 +83,7 @@ Execute (Labels, but no heading):
   AssertEqual expected, actual
 -----------------------------------------------
 
-Given;
+Given markdown;
 # A consectetuer nunc justo ac nisl.
 
 ## Nam vitae purus
@@ -102,7 +102,7 @@ Execute (Heading, but no labels):
   AssertEqual expected, actual
 -----------------------------------------------
 
-Given;
+Given markdown;
 # A consectetuer nunc justo ac nisl.
 
 ## Nam vitae purus

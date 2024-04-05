@@ -3,7 +3,7 @@ Execute ():
   Log 'Cursor at top'
 ==============================================
 
-Given;
+Given markdown;
 # A consectetuer nunc justo ac nisl.
 
 ## Nam vitae purus
@@ -15,9 +15,9 @@ Execute (No heading):
   let expected = 0
   let actual = mdlink#GetHeadingLineNr('## Links')
   AssertEqual expected, actual
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given;
+Given markdown;
 # A consectetuer nunc justo ac nisl.
 
 ## Nam vitae purus
@@ -31,9 +31,9 @@ Execute (Heading on very last line):
   let expected = 9
   let actual = mdlink#GetHeadingLineNr('## Links')
   AssertEqual expected, actual
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given;
+Given markdown;
 # A consectetuer nunc justo ac nisl.
 
 ## Nam vitae purus
@@ -48,9 +48,9 @@ Execute (Heading on last but one line, last one is blank):
   let expected = 9
   let actual = mdlink#GetHeadingLineNr('## Links')
   AssertEqual expected, actual
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given;
+Given markdown;
 # A consectetuer nunc justo ac nisl.
 
 ## Nam vitae purus
@@ -73,14 +73,14 @@ Execute (Two headings):
   let expected = 13
   let actual = mdlink#GetHeadingLineNr('## Links')
   AssertEqual expected, actual
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ==============================================
 Execute ():
   Log 'Cursor at bottom'
 ==============================================
 
-Given;
+Given markdown;
 # A consectetuer nunc justo ac nisl.
 
 ## Nam vitae purus
@@ -93,9 +93,9 @@ Execute (No heading):
   let expected = 0
   let actual = mdlink#GetHeadingLineNr('## Links')
   AssertEqual expected, actual
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given;
+Given markdown;
 # A consectetuer nunc justo ac nisl.
 
 ## Nam vitae purus
@@ -110,9 +110,9 @@ Execute (Heading on very last line):
   let expected = 9
   let actual = mdlink#GetHeadingLineNr('## Links')
   AssertEqual expected, actual
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given;
+Given markdown;
 # A consectetuer nunc justo ac nisl.
 
 ## Nam vitae purus
@@ -128,9 +128,9 @@ Execute (Heading on last but one line, last one is blank):
   let expected = 9
   let actual = mdlink#GetHeadingLineNr('## Links')
   AssertEqual expected, actual
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given;
+Given markdown;
 # A consectetuer nunc justo ac nisl.
 
 ## Nam vitae purus
@@ -154,14 +154,14 @@ Execute (Two headings):
   let expected = 13
   let actual = mdlink#GetHeadingLineNr('## Links')
   AssertEqual expected, actual
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ==============================================
 Execute ():
   Log 'Cursor in middle'
 ==============================================
 
-Given;
+Given markdown;
 # A consectetuer nunc justo ac nisl.
 
 ## Nam vitae purus
@@ -174,9 +174,9 @@ Execute (No heading):
   let expected = 0
   let actual = mdlink#GetHeadingLineNr('## Links')
   AssertEqual expected, actual
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given;
+Given markdown;
 # A consectetuer nunc justo ac nisl.
 
 ## Nam vitae purus
@@ -191,9 +191,9 @@ Execute (Heading on very last line):
   let expected = 9
   let actual = mdlink#GetHeadingLineNr('## Links')
   AssertEqual expected, actual
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given;
+Given markdown;
 # A consectetuer nunc justo ac nisl.
 
 ## Nam vitae purus
@@ -209,9 +209,9 @@ Execute (Heading on last but one line, last one is blank):
   let expected = 9
   let actual = mdlink#GetHeadingLineNr('## Links')
   AssertEqual expected, actual
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given;
+Given markdown;
 # A consectetuer nunc justo ac nisl.
 
 ## Nam vitae purus
@@ -235,4 +235,4 @@ Execute (Two headings):
   let expected = 13
   let actual = mdlink#GetHeadingLineNr('## Links')
   AssertEqual expected, actual
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

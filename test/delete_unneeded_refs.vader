@@ -5,7 +5,7 @@ Execute (Delete two links):
   call mdlink#DeleteUnneededRefs('test')
 
   let expected_msg = '2 links have been deleted from the reference section'
-  let actual_msg = split( execute('messages'), '\n')[-1] 
+  let actual_msg = split( execute('messages'), '\n' )[-1]
   AssertEqual expected_msg, actual_msg
 
   " Line previously containing [2]

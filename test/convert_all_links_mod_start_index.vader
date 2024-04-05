@@ -7,9 +7,9 @@ After:
 
 Execute (Change label start index):
   let g:md_link_start_index = 100
-  call mdlink#ConvertAllLinks()
+  MdLinkConvertAll
 
-Expect:
+Expect markdown:
   Sapien ac iaculis feugiat, [lacus][100] lacus accumsan
   lorem, quis volutpat justo turpis ac mauris.
 

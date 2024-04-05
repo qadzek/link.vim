@@ -1,4 +1,4 @@
-Given:
+Given markdown:
   # A consectetuer nunc justo ac nisl.
   
   ## Nam vitae purus
@@ -9,7 +9,7 @@ Given:
 Execute (No heading present):
   call mdlink#AddHeading('## My Resources')
 
-Expect:
+Expect markdown:
   # A consectetuer nunc justo ac nisl.
   
   ## Nam vitae purus

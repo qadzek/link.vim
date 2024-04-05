@@ -1,4 +1,4 @@
-Given:
+Given markdown:
   Sapien ac iaculis feugiat, lacus lacus accumsan lorem, quis volutpat justo
   turpis ac mauris.
 
@@ -13,9 +13,9 @@ Given:
   fringilla ac, turpis. Duis ac erat. Etiam consequat. Integer sed est eu elit
   pellentesque dapibus. Duis venenatis magna feugiat.
 Execute (No links):
-  call mdlink#ConvertAllLinks()
+  MdLinkConvertAll
 
-Expect:
+Expect markdown:
   Sapien ac iaculis feugiat, lacus lacus accumsan lorem, quis volutpat justo
   turpis ac mauris.
 
@@ -29,9 +29,9 @@ Expect:
   sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget, lobortis ac,
   fringilla ac, turpis. Duis ac erat. Etiam consequat. Integer sed est eu elit
   pellentesque dapibus. Duis venenatis magna feugiat.
--------------------------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given:
+Given markdown:
   Sapien ac iaculis feugiat, [lacus](http://lacus.org/lacus) lacus accumsan
   lorem, quis volutpat justo turpis ac mauris.
 
@@ -48,9 +48,9 @@ Given:
   Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque dapibus.
   Duis venenatis magna feugiat.
 Execute (Multiple links, no heading):
-  call mdlink#ConvertAllLinks()
+  MdLinkConvertAll
 
-Expect:
+Expect markdown:
   Sapien ac iaculis feugiat, [lacus][0] lacus accumsan
   lorem, quis volutpat justo turpis ac mauris.
 
@@ -78,9 +78,9 @@ Expect:
   [6]: https://pellentesque.com
   [7]: www.fringilla.com
   [8]: http://turpis.net
--------------------------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given:
+Given markdown:
   Sapien ac iaculis feugiat, [lacus](http://lacus.org/lacus) lacus accumsan
   lorem, quis volutpat justo turpis ac mauris.
 
@@ -101,9 +101,9 @@ Given:
   
 
 Execute (Multiple links, heading present, no references yet):
-  call mdlink#ConvertAllLinks()
+  MdLinkConvertAll
 
-Expect:
+Expect markdown:
   Sapien ac iaculis feugiat, [lacus][0] lacus accumsan
   lorem, quis volutpat justo turpis ac mauris.
 
@@ -131,9 +131,9 @@ Expect:
   [6]: https://pellentesque.com
   [7]: www.fringilla.com
   [8]: http://turpis.net
--------------------------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given:
+Given markdown:
   Sapien ac iaculis feugiat, [lacus][0] lacus accumsan
   lorem, quis volutpat justo turpis ac mauris.
 
@@ -156,9 +156,9 @@ Given:
   [1]: https://pellentesque.com
 
 Execute (Multiple links, heading and references present):
-  call mdlink#ConvertAllLinks()
+  MdLinkConvertAll
 
-Expect:
+Expect markdown:
   Sapien ac iaculis feugiat, [lacus][0] lacus accumsan
   lorem, quis volutpat justo turpis ac mauris.
 
@@ -186,4 +186,4 @@ Expect:
   [6]: www.nec.com
   [7]: www.fringilla.com
   [8]: http://turpis.net
--------------------------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

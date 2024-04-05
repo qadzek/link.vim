@@ -3,7 +3,7 @@ Execute ():
   Log 'Cursor at top'
 ==============================================
 
-Given;
+Given markdown;
 # A consectetuer nunc justo ac nisl.
 
 ## Nam vitae purus
@@ -17,7 +17,7 @@ Execute (No heading):
   AssertEqual expected, actual
 -----------------------------------------------
 
-Given;
+Given markdown;
 # A consectetuer nunc justo ac nisl.
 
 ## Nam vitae purus
@@ -33,7 +33,7 @@ Execute (Heading on very last line):
   AssertEqual expected, actual
 -----------------------------------------------
 
-Given;
+Given markdown;
 # A consectetuer nunc justo ac nisl.
 
 ## Nam vitae purus
@@ -50,7 +50,7 @@ Execute (Heading on last but one line, last one is blank):
   AssertEqual expected, actual
 -----------------------------------------------
 
-Given;
+Given markdown;
 # A consectetuer nunc justo ac nisl.
 
 ## Nam vitae purus
@@ -80,7 +80,7 @@ Execute ():
   Log 'Cursor at bottom'
 ==============================================
 
-Given;
+Given markdown;
 # A consectetuer nunc justo ac nisl.
 
 ## Nam vitae purus
@@ -95,7 +95,7 @@ Execute (No heading):
   AssertEqual expected, actual
 -----------------------------------------------
 
-Given;
+Given markdown;
 # A consectetuer nunc justo ac nisl.
 
 ## Nam vitae purus
@@ -112,7 +112,7 @@ Execute (Heading on very last line):
   AssertEqual expected, actual
 -----------------------------------------------
 
-Given;
+Given markdown;
 # A consectetuer nunc justo ac nisl.
 
 ## Nam vitae purus
@@ -130,7 +130,7 @@ Execute (Heading on last but one line, last one is blank):
   AssertEqual expected, actual
 -----------------------------------------------
 
-Given;
+Given markdown;
 # A consectetuer nunc justo ac nisl.
 
 ## Nam vitae purus
@@ -161,7 +161,7 @@ Execute ():
   Log 'Cursor in middle'
 ==============================================
 
-Given;
+Given markdown;
 # A consectetuer nunc justo ac nisl.
 
 ## Nam vitae purus
@@ -176,7 +176,7 @@ Execute (No heading):
   AssertEqual expected, actual
 -----------------------------------------------
 
-Given;
+Given markdown;
 # A consectetuer nunc justo ac nisl.
 
 ## Nam vitae purus
@@ -193,7 +193,7 @@ Execute (Heading on very last line):
   AssertEqual expected, actual
 -----------------------------------------------
 
-Given;
+Given markdown;
 # A consectetuer nunc justo ac nisl.
 
 ## Nam vitae purus
@@ -211,7 +211,7 @@ Execute (Heading on last but one line, last one is blank):
   AssertEqual expected, actual
 -----------------------------------------------
 
-Given;
+Given markdown;
 # A consectetuer nunc justo ac nisl.
 
 ## Nam vitae purus

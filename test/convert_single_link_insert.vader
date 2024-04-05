@@ -1,20 +1,20 @@
 === Insert X to mark cursor position ===
 
-Given:
+Given markdown:
   [Penatibus](http://www.loremipsum.com) et [magnis](http://www.dolorsitamet.com) dis [parturient](http://www.adipiscingelitipsum.com) montes,
 Execute (Link at start of line):
   call mdlink#ConvertSingleLink('insert')
   normal! iX
 
-Expect:
+Expect markdown:
   [Penatibus][0]X et [magnis](http://www.dolorsitamet.com) dis [parturient](http://www.adipiscingelitipsum.com) montes,
 
   ## Links
 
   [0]: http://www.loremipsum.com
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given:
+Given markdown:
   [Penatibus](http://www.loremipsum.com) et [magnis](http://www.dolorsitamet.com) dis [parturient](http://www.adipiscingelitipsum.com)
 Execute (Link at end of line):
   normal! $
@@ -22,25 +22,25 @@ Execute (Link at end of line):
   " Use a instead of i because we are at the end of the line
   normal! aX
 
-Expect:
+Expect markdown:
   [Penatibus](http://www.loremipsum.com) et [magnis](http://www.dolorsitamet.com) dis [parturient][0]X
 
   ## Links
 
   [0]: http://www.adipiscingelitipsum.com
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given:
+Given markdown:
   [Penatibus](http://www.loremipsum.com) et [magnis](http://www.dolorsitamet.com) dis [parturient](http://www.adipiscingelitipsum.com) montes,
 Execute (Cursor in middle of second link):
   normal! 2f)3b
   call mdlink#ConvertSingleLink('insert')
   normal! iX
 
-Expect:
+Expect markdown:
   [Penatibus](http://www.loremipsum.com) et [magnis][0]X dis [parturient](http://www.adipiscingelitipsum.com) montes,
 
   ## Links
 
   [0]: http://www.dolorsitamet.com
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
