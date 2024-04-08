@@ -181,8 +181,11 @@ To execute the tests: `./test/run_tests.sh`
 ==============================================================================
 CHANGELOG                                                  *md-link-changelog*
 
+0.3.1   2024-04-08
+        - Fix too lenient regex for inline links (#4)
+
 0.3.0   2024-04-05
-        - Add :MdLinkConvertRange
+        - Add :MdLinkConvertRange (#2)
 
 0.2.0   2024-03-19
         - Add :MdLinkOpen
@@ -195,6 +198,9 @@ CREDITS                                                      *md-link-credits*
 
 Learn Vimscript the Hard Way by Steve Losh:
 https://learnvimscriptthehardway.stevelosh.com/
+
+Contributors and their GitHub usernames:
+- Enno (@ferdinandyb)
 
 ==============================================================================
 

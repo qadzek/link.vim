@@ -38,8 +38,8 @@ Given markdown:
   Duis velit [magna](www.magna.com), scelerisque
   [vitae](https://vitae.net/index.html), varius ut, aliquam vel, justo. Proin ac
   augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
-  Ut [sem](www.sem.com) [nunc](nunc.com), vestibulum [nec](www.nec.com), sodales
-  vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
+  Ut [sem](www.sem.com) [nunc](ftp://nunc.com), vestibulum [nec](www.nec.com),
+  sodales vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
 
   Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
   [pellentesque](https://pellentesque.com) diam metus ut nulla. Vestibulum eu
@@ -57,8 +57,8 @@ Expect markdown:
   Duis velit [magna][0], scelerisque
   [vitae][1], varius ut, aliquam vel, justo. Proin ac
   augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
-  Ut [sem][2] [nunc][3], vestibulum [nec][4], sodales
-  vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
+  Ut [sem][2] [nunc][3], vestibulum [nec][4],
+  sodales vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
 
   Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
   [pellentesque][5] diam metus ut nulla. Vestibulum eu
@@ -72,7 +72,7 @@ Expect markdown:
   [0]: www.magna.com
   [1]: https://vitae.net/index.html
   [2]: www.sem.com
-  [3]: nunc.com
+  [3]: ftp://nunc.com
   [4]: www.nec.com
   [5]: https://pellentesque.com
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -84,8 +84,8 @@ Given markdown:
   Duis velit [magna](www.magna.com), scelerisque
   [vitae](https://vitae.net/index.html), varius ut, aliquam vel, justo. Proin ac
   augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
-  Ut [sem](www.sem.com) [nunc](nunc.com), vestibulum [nec](www.nec.com), sodales
-  vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
+  Ut [sem](www.sem.com) [nunc](ftp://nunc.com), vestibulum [nec](www.nec.com),
+  sodales vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
 
   Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
   [pellentesque](https://pellentesque.com) diam metus ut nulla. Vestibulum eu
@@ -107,8 +107,8 @@ Expect markdown:
   Duis velit [magna][0], scelerisque
   [vitae][1], varius ut, aliquam vel, justo. Proin ac
   augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
-  Ut [sem][2] [nunc][3], vestibulum [nec][4], sodales
-  vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
+  Ut [sem][2] [nunc][3], vestibulum [nec][4],
+  sodales vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
 
   Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
   [pellentesque][5] diam metus ut nulla. Vestibulum eu
@@ -122,7 +122,7 @@ Expect markdown:
   [0]: www.magna.com
   [1]: https://vitae.net/index.html
   [2]: www.sem.com
-  [3]: nunc.com
+  [3]: ftp://nunc.com
   [4]: www.nec.com
   [5]: https://pellentesque.com
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -134,8 +134,8 @@ Given markdown:
   Duis velit [magna](www.magna.com), scelerisque
   [vitae](https://vitae.net/index.html), varius ut, aliquam vel, justo. Proin ac
   augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
-  Ut [sem](www.sem.com) [nunc](nunc.com), vestibulum [nec](www.nec.com), sodales
-  vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
+  Ut [sem](www.sem.com) [nunc](ftp://nunc.com), vestibulum [nec](www.nec.com),
+  sodales vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
 
   Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
   [pellentesque][1] diam metus ut nulla. Vestibulum eu
@@ -159,8 +159,8 @@ Expect markdown:
   Duis velit [magna][2], scelerisque
   [vitae][3], varius ut, aliquam vel, justo. Proin ac
   augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
-  Ut [sem][4] [nunc][5], vestibulum [nec][6], sodales
-  vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
+  Ut [sem][4] [nunc][5], vestibulum [nec][6],
+  sodales vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
 
   Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
   [pellentesque][1] diam metus ut nulla. Vestibulum eu
@@ -176,7 +176,7 @@ Expect markdown:
   [2]: www.magna.com
   [3]: https://vitae.net/index.html
   [4]: www.sem.com
-  [5]: nunc.com
+  [5]: ftp://nunc.com
   [6]: www.nec.com
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

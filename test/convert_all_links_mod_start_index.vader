@@ -16,8 +16,8 @@ Expect markdown:
   Duis velit [magna][101], scelerisque
   [vitae][102], varius ut, aliquam vel, justo. Proin ac
   augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
-  Ut [sem][103] [nunc][104], vestibulum [nec][105], sodales
-  vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
+  Ut [sem][103] [nunc][104], vestibulum [nec][105],
+  sodales vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
 
   Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
   [pellentesque][106] diam metus ut nulla. Vestibulum eu
@@ -32,7 +32,7 @@ Expect markdown:
   [101]: www.magna.com
   [102]: https://vitae.net/index.html
   [103]: www.sem.com
-  [104]: nunc.com
+  [104]: ftp://nunc.com
   [105]: www.nec.com
   [106]: https://pellentesque.com
   [107]: www.fringilla.com

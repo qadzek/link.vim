@@ -328,7 +328,9 @@ endfunction
 " of total match
 function! mdlink#ParseLineInBodyFor(type, line_nr) abort
   if a:type ==# 'inline'
-    let l:regex = '\v' . '\[(' . '[^]]+' . ')\]' . '\((' . '[^)]+' . ')\)'
+    " URL should start with a protocol, e.g. `http://`, or with `www`
+    let l:regex = '\v' . '\[(' . '[^]]+' . ')\]' .
+          \ '\((' . '%([a-zA-Z0-9.-]{2,12}:\/\/|www\.)' . '[^)]+' . ')\)'
   elseif a:type ==# 'reference'
     let l:regex = '\v' . '\[(' . '[^]]+' . ')\]' . '\[(' . '[^]]+' . ')\]'
   else
