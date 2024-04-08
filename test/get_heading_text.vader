@@ -1,15 +1,30 @@
 Before:
   unlet! g:md_link_heading
+  unlet! b:md_link_heading
 After:
   unlet! g:md_link_heading
+  unlet! b:md_link_heading
 
 Execute (Use default heading):
   let expected = '## Links'
   let actual = mdlink#GetHeadingText()
   AssertEqual expected, actual
 
-Execute (Change default heading):
-  let g:md_link_heading = '## My Resources'
-  let expected = '## My Resources'
+Execute (Modify global heading):
+  let g:md_link_heading = '# My Resources'
+  let expected = g:md_link_heading
+  let actual = mdlink#GetHeadingText()
+  AssertEqual expected, actual
+
+Execute (Modify local heading):
+  let b:md_link_heading = 'Links:'
+  let expected = b:md_link_heading
+  let actual = mdlink#GetHeadingText()
+  AssertEqual expected, actual
+
+Execute (Modify local and global heading):
+  let b:md_link_heading = 'Links:'
+  let g:md_link_heading = '# My Resources'
+  let expected = b:md_link_heading
   let actual = mdlink#GetHeadingText()
   AssertEqual expected, actual

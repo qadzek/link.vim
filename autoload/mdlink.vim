@@ -276,9 +276,10 @@ endfunction
 
 " HEADING ========================================================== {{{1
 
-" Return heading specified in vimrc, or the default heading
+" Return buffer-local heading, or the global heading, or the default heading
 function! mdlink#GetHeadingText() abort
-  return get(b:, 'md_link_heading', get(g:, 'md_link_heading', s:defaults['heading']))
+  return get(b:, 'md_link_heading',
+        \ get(g:, 'md_link_heading', s:defaults['heading']))
 endfunction
 
 " Return <line_nr> if buffer contains heading, else 0

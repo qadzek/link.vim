@@ -6,6 +6,7 @@
 :MdLinkJump	vim-md-link.txt	/*:MdLinkJump*
 :MdLinkOpen	vim-md-link.txt	/*:MdLinkOpen*
 :MdLinkPeek	vim-md-link.txt	/*:MdLinkPeek*
+b:md_link_heading	vim-md-link.txt	/*b:md_link_heading*
 g:md_link_heading	vim-md-link.txt	/*g:md_link_heading*
 g:md_link_start_index	vim-md-link.txt	/*g:md_link_start_index*
 md-link	vim-md-link.txt	/*md-link*
@@ -14,6 +15,7 @@ md-link-configuration	vim-md-link.txt	/*md-link-configuration*
 md-link-contents	vim-md-link.txt	/*md-link-contents*
 md-link-contributing	vim-md-link.txt	/*md-link-contributing*
 md-link-credits	vim-md-link.txt	/*md-link-credits*
+md-link-extensions	vim-md-link.txt	/*md-link-extensions*
 md-link-introduction	vim-md-link.txt	/*md-link-introduction*
 md-link-issues	vim-md-link.txt	/*md-link-issues*
 md-link-mappings	vim-md-link.txt	/*md-link-mappings*
