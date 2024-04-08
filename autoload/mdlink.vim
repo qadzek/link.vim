@@ -51,7 +51,7 @@ function! mdlink#ConvertSingleLink(mode = 'normal') abort
   endif
 endfunction
 
-" Convert inline links  to reference links within a range
+" Convert inline links to reference links within a range, possibly entire buffer
 function! mdlink#ConvertRange() abort range
   let [l:orig_line_nr, l:orig_col_nr, l:orig_fold_option] = mdlink#Initialize()
 
@@ -62,17 +62,16 @@ function! mdlink#ConvertRange() abort range
   let l:new_label_nr = mdlink#GetNewLabelNumber(l:is_heading_present)
   let l:start_label_nr = l:new_label_nr
 
+  " Range of lines to operate on
   let l:cur_line_nr = a:firstline
   let l:max_line_nr = a:lastline
 
-  if l:is_heading_present && a:lastline > l:heading_line_nr
-    echom g:mdlink#err_msg['not_include_ref']
-    call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
-    return
+  " Limit range to line containing heading, so reference section stays untouched
+  if l:is_heading_present && l:max_line_nr > l:heading_line_nr
+    let l:max_line_nr = l:heading_line_nr
   endif
 
-
-  " Loop over all lines within the range/from first line until heading
+  " Loop over all lines within the range
   while l:cur_line_nr <= l:max_line_nr
     let l:all_links_on_line = mdlink#ParseLineInBodyFor('inline', l:cur_line_nr)
 
@@ -261,9 +260,10 @@ endfunction
 
 " HEADING ========================================================== {{{1
 
-" Return heading specified in vimrc, or the default heading
+" Return buffer-local heading, or the global heading, or the default heading
 function! mdlink#GetHeadingText() abort
-  return get(g:, 'md_link_heading', s:defaults['heading'])
+  return get(b:, 'md_link_heading',
+        \ get(g:, 'md_link_heading', s:defaults['heading']))
 endfunction
 
 " Return <line_nr> if buffer contains heading, else 0
@@ -571,8 +571,6 @@ let g:mdlink#err_msg = {
     \ 'The following label was not found in the reference section: ',
   \ 'not_from_ref':
     \ 'This action is only possible from the document body, not from the reference section',
-  \ 'not_include_ref':
-    \ 'The range cannot include (parts of) the reference section',
   \ 'no_reference_link':
     \ 'No reference link in the format of "[foo][3]" found on this line',
   \ 'no_valid_url':
