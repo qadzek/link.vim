@@ -187,8 +187,8 @@ Given markdown:
   Duis velit [magna](www.magna.com), scelerisque
   [vitae](https://vitae.net/index.html), varius ut, aliquam vel, justo. Proin ac
   augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
-  Ut [sem](www.sem.com) [nunc](nunc.com), vestibulum [nec](www.nec.com), sodales
-  vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
+  Ut [sem](www.sem.com) [nunc](ftp://nunc.com), vestibulum [nec](www.nec.com),
+  sodales vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
 
   Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
   [pellentesque][1] diam metus ut nulla. Vestibulum eu
@@ -202,9 +202,33 @@ Given markdown:
   [0]: http://lacus.org/lacus
   [1]: https://pellentesque.com
 
-Execute (Invalid conversion, range includes reference section):
-  3,19 MdLinkConvertRange
-  let expected = mdlink#err_msg['not_include_ref']
-  let actual = split( execute('messages'), '\n')[-1]
-  AssertEqual expected, actual
+Execute (Range includes reference section):
+  7,19 MdLinkConvertRange
+
+Expect markdown:
+  Sapien ac iaculis feugiat, [lacus][0] lacus accumsan
+  lorem, quis volutpat justo turpis ac mauris.
+
+  Duis velit [magna](www.magna.com), scelerisque
+  [vitae](https://vitae.net/index.html), varius ut, aliquam vel, justo. Proin ac
+  augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
+  Ut [sem][2] [nunc][3], vestibulum [nec][4],
+  sodales vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
+
+  Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
+  [pellentesque][1] diam metus ut nulla. Vestibulum eu
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  lobortis ac, [fringilla][5] ac, [turpis][6].
+  Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque dapibus.
+  Duis venenatis magna feugiat.
+
+  ## Links
+
+  [0]: http://lacus.org/lacus
+  [1]: https://pellentesque.com
+  [2]: www.sem.com
+  [3]: ftp://nunc.com
+  [4]: www.nec.com
+  [5]: www.fringilla.com
+  [6]: http://turpis.net
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
