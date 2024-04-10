@@ -55,6 +55,11 @@ endfunction
 function! mdlink#ConvertRange() abort range
   let [l:orig_line_nr, l:orig_col_nr, l:orig_fold_option] = mdlink#Initialize()
 
+  " Use cursor position before range function moves cursor to first line of
+  " range: https://vi.stackexchange.com/questions/6036/
+  let [l:orig_line_nr, l:orig_col_nr] = b:init_cur_pos
+  unlet b:init_cur_pos
+
   let l:heading_text = mdlink#GetHeadingText()
   let l:is_heading_present = mdlink#IsHeadingPresent(l:heading_text)
   let l:heading_line_nr = mdlink#GetHeadingLineNr(l:heading_text)

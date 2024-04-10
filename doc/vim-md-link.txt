@@ -207,6 +207,9 @@ To execute the tests: `./test/run_tests.sh`
 ==============================================================================
 CHANGELOG                                                  *md-link-changelog*
 
+0.4.1   2024-04-10
+        - Fix cursor position not getting restored (#9)
+
 0.4.0   2024-04-08
         - Allow buffer-local heading (#7)
 
