@@ -7,8 +7,9 @@ cd "${0%/*}" || exit 1
 
 show_help_and_exit() {
   cat <<EOF >&2
-Usage: $(basename "$0") -e <vim/nvim> [-o output.txt] [-f file.vader]
+Usage: $(basename "$0") -e <vim/nvim> [-w ] [-o output.txt] [-f file.vader]
   -e: editor to be used for the tests ('vim' or 'nvim')
+  -w: watch modus (run tests continuously; exit if a test fails)
   -o: write output to file; optional; by default, output will be shown inside
       Vim/Neovim
   -f: test file(s) to be run; optional; default is all *.vader files; if used,
@@ -17,7 +18,7 @@ EOF
   exit 1
 }
 
-while getopts ':e:o:f' OPTION; do
+while getopts ':e:wo:f' OPTION; do
   case "$OPTION" in
     e)
       editor_name="$OPTARG"
@@ -28,6 +29,11 @@ while getopts ':e:o:f' OPTION; do
 
       printf "Running tests in: %s\n" "$editor_name"
       editor=$(command -v "$editor_name")
+      ;;
+
+    w)
+      watch_modus=true
+      export VADER_OUTPUT_FILE=/dev/null
       ;;
 
     o)
@@ -63,12 +69,30 @@ else
   printf "Running tests in specified files: %s\n" "$test_files"
 fi
 
-if [[ "$output_to_file" == true ]]; then
+if [[ "$output_to_file" == true ]] || [[ "$watch_modus" == true ]]; then
   vader_cmd="Vader!"
 else
   vader_cmd="Vader"
 fi
 
-# -N         No-compatible mode
-# -u {vimrc} Use the commands in the file {vimrc} for initializations
-"$editor" -N -u mini.vimrc +"${vader_cmd} ${test_files}"
+if [[ "$watch_modus" == true ]]; then
+  printf '\nRunning tests in background...\n'
+  printf 'Script will exit in case a test fails\n'
+  sleep 1
+
+  while true; do
+    clear
+
+    if "$editor" -N -u mini.vimrc +"${vader_cmd} ${test_files}"; then
+      sleep 1
+    else
+      printf "\e[31mFailure\e[0m\n\a"
+      break
+    fi
+  done
+
+else
+  # -N         No-compatible mode
+  # -u {vimrc} Use the commands in the file {vimrc} for initializations
+  "$editor" -N -u mini.vimrc +"${vader_cmd} ${test_files}"
+fi
