@@ -17,9 +17,10 @@ sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
 [3]: http://www.adipiscingelitipsumdolorsitamet.com
 Execute (Last line contains label):
   let expected = 3
-  let actual = mdlink#GetLastLabel()
+  let actual = mdlink#GetLastLabel('label_nr')
   AssertEqual expected, actual
------------------------------------------------
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown;
 # A consectetuer nunc justo ac nisl.
@@ -41,9 +42,10 @@ sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
 
 Execute (Last but one line contains label, last line is blank):
   let expected = 3
-  let actual = mdlink#GetLastLabel()
+  let actual = mdlink#GetLastLabel('label_nr')
   AssertEqual expected, actual
------------------------------------------------
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown;
 # A consectetuer nunc justo ac nisl.
@@ -57,9 +59,10 @@ Praesent semper magna. In eu justo. Nunc vitae risus nec
 sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
 Execute (No heading, no labels):
   let expected = -1
-  let actual = mdlink#GetLastLabel()
+  let actual = mdlink#GetLastLabel('label_nr')
   AssertEqual expected, actual
------------------------------------------------
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown;
 # A consectetuer nunc justo ac nisl.
@@ -79,9 +82,10 @@ sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
 
 Execute (Labels, but no heading):
   let expected = 3
-  let actual = mdlink#GetLastLabel()
+  let actual = mdlink#GetLastLabel('label_nr')
   AssertEqual expected, actual
------------------------------------------------
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown;
 # A consectetuer nunc justo ac nisl.
@@ -98,9 +102,10 @@ sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
 
 Execute (Heading, but no labels):
   let expected = -1
-  let actual = mdlink#GetLastLabel()
+  let actual = mdlink#GetLastLabel('label_nr')
   AssertEqual expected, actual
------------------------------------------------
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown;
 # A consectetuer nunc justo ac nisl.
@@ -118,6 +123,55 @@ sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
 foo bar baz
 Execute (Heading, regular text instead of labels):
   let expected = -1
-  let actual = mdlink#GetLastLabel()
+  let actual = mdlink#GetLastLabel('label_nr')
   AssertEqual expected, actual
------------------------------------------------
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown;
+# A consectetuer nunc justo ac nisl.
+
+## Nam vitae purus
+
+Cum sociis natoque penatibus et magnis dis parturient montes,
+nascetur ridiculus mus.
+
+Praesent semper magna. In eu justo. Nunc vitae risus nec
+sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+
+## Links
+
+[0]: http://www.loremipsumdolorsitamet.com
+[1]: http://www.ipsumloremconsecteturadipiscing.com
+[2]: http://www.dolorsitametconsecteturadipiscingelit.com
+[3]: http://www.adipiscingelitipsumdolorsitamet.com
+Execute (Heading and labels):
+  let expected = 3
+  let actual = mdlink#GetLastLabel('label_nr')
+  AssertEqual expected, actual
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown;
+# A consectetuer nunc justo ac nisl.
+
+## Nam vitae purus
+
+Cum sociis natoque penatibus et magnis dis parturient montes,
+nascetur ridiculus mus.
+
+## Links
+
+[0]: http://www.loremipsumdolorsitamet.com
+[1]: http://www.ipsumloremconsecteturadipiscing.com
+[2]: http://www.dolorsitametconsecteturadipiscingelit.com
+[3]: http://www.adipiscingelitipsumdolorsitamet.com
+
+Praesent semper magna. In eu justo. Nunc vitae risus nec
+sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+Execute (Heading and labels, text continues below labels):
+  let expected = 3
+  let actual = mdlink#GetLastLabel('label_nr')
+  AssertEqual expected, actual
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -1,3 +1,9 @@
+Before:
+  unlet! b:md_link_heading_before
+After:
+  unlet! b:md_link_heading_before
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Given markdown:
   # A consectetuer nunc justo ac nisl.
   
@@ -20,4 +26,72 @@ Expect markdown:
   
   ## My Resources
   
-------------------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given mail:
+  Hi Recipient,
+  
+  I hope this email finds you well.
+  
+  Best regards,
+  Your Name
+  
+  --
+  Your Job Title
+  Your Company Name
+  Your Contact Information
+Execute (Put heading before a signature (mail buffer)):
+  let b:md_link_heading_before = '^--'
+  call mdlink#AddHeading('Links:')
+
+Expect mail:
+  Hi Recipient,
+  
+  I hope this email finds you well.
+  
+  Best regards,
+  Your Name
+  
+  Links:
+
+
+  --
+  Your Job Title
+  Your Company Name
+  Your Contact Information
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given gitcommit:
+  Git commit title
+
+  Git commit body
+  Body continued
+
+  # Please enter the commit message for your changes. Lines starting
+  # with '#' will be ignored, and an empty message aborts the commit.
+  #
+  # On branch main
+  # Changes to be committed:
+  #	modified:   foo.txt
+  #
+Execute (Put heading before comments (gitcommit buffer)):
+  let b:md_link_heading_before = '# Please enter'
+  call mdlink#AddHeading('Links:')
+
+Expect gitcommit:
+  Git commit title
+
+  Git commit body
+  Body continued
+
+  Links:
+
+
+  # Please enter the commit message for your changes. Lines starting
+  # with '#' will be ignored, and an empty message aborts the commit.
+  #
+  # On branch main
+  # Changes to be committed:
+  #	modified:   foo.txt
+  #
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

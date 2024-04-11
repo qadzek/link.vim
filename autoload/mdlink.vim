@@ -1,6 +1,7 @@
 " MAIN FUNCTIONS =================================================== {{{1
 
 " Convert one inline link to a reference link on the current line
+" NOTE single
 function! mdlink#ConvertSingleLink(mode = 'normal') abort
   let [l:orig_line_nr, l:orig_col_nr, l:orig_fold_option] = mdlink#Initialize()
   let l:cur_line_content = getline('.')
@@ -83,15 +84,29 @@ function! mdlink#ConvertRange() abort range
     " Loop over all inline links on current line
     for l:link in l:all_links_on_line
 
-      if !l:is_heading_present
+      " Last label line number is known
+      if exists('l:last_label_line_nr')
+        let l:last_label_line_nr += 1
+
+      " Last label line number is unknown, so look it up
+      elseif l:is_heading_present
+        let l:last_label_line_nr = mdlink#GetLastLabel('line_nr')
+
+      " No heading
+      else
         call mdlink#AddHeading(l:heading_text)
         let l:is_heading_present = 1
+        let l:last_label_line_nr = mdlink#GetHeadingLineNr(l:heading_text) + 1
       endif
 
       let l:cur_line_content = getline(l:cur_line_nr)
+
       call mdlink#ReplaceLink(l:cur_line_content, l:link['full_link'],
             \ l:link['link_text'], l:new_label_nr, l:cur_line_nr)
-      call mdlink#AddReference(l:new_label_nr, l:link['destination'])
+
+      call mdlink#AddReference(l:new_label_nr, l:link['destination'],
+            \ l:last_label_line_nr)
+
       let l:new_label_nr += 1
     endfor
 
@@ -289,8 +304,22 @@ endfunction
 
 " Add the specified heading to the buffer
 function! mdlink#AddHeading(heading_text) abort
+  normal! G$
+
+  " Move to a line matching a pattern, before adding the heading
+  if exists('b:md_link_heading_before')
+    " Cannot find pattern: show message
+    if search(b:md_link_heading_before, 'bcWz') == 0
+      echom g:mdlink#err_msg['no_heading_pattern'] .. b:md_link_heading_before
+
+    " Can find pattern: move 2 lines up
+    else
+      normal! 2k
+    endif
+  endif
+
   " Add a blank line above and below the heading
-  call append('$', [ '', a:heading_text, ''  ])
+  call append('.', [ '', a:heading_text, ''  ])
 endfunction
 
 " DOCUMENT BODY ==================================================== {{{1
@@ -374,9 +403,9 @@ endfunction
 " REFERENCE SECTION ================================================ {{{1
 
 " Add a link reference definition to the reference section
-function! mdlink#AddReference(label, url) abort
+function! mdlink#AddReference(label, url, last_label_line_nr = '$') abort
   let l:new_line_content = '[' . a:label . ']: ' . a:url
-  call append('$', l:new_line_content)
+  call append(a:last_label_line_nr, l:new_line_content)
 endfunction
 
 " Parse the reference section, in its entirety or just one line
@@ -423,7 +452,7 @@ endfunction
 " Determine new label number
 function! mdlink#GetNewLabelNumber(is_heading_present) abort
   if a:is_heading_present
-    return mdlink#GetLastLabel() + 1
+    return mdlink#GetLastLabel('label_nr') + 1
   endif
 
   return mdlink#GetLabelStartIndex()
@@ -434,13 +463,25 @@ function! mdlink#GetLabelStartIndex() abort
   return get(g:, 'md_link_start_index', s:defaults['start_index'])
 endfunction
 
+" Types: 'line_nr' or 'label_nr'
+" 'label_nr':
 " Return last label number in reference section, e.g. 3 for [3]: http://foo.com
 " Return -1 if not found
-function! mdlink#GetLastLabel() abort
+" 'line_nr':
+" Return line number of last label in reference section
+" Return last line number of buffer if not found
+function! mdlink#GetLastLabel(type ) abort
   let l:regex = '\v^\s*\[\zs\d+\ze\]:\s+'
 
   " Go to start of last non-blank line
-  silent execute "normal! G$?.\<CR>0"
+  " silent execute "normal! G$?.\<CR>0"
+
+  normal! G$
+  call search(l:regex, 'bcW')
+
+  if a:type ==# 'line_nr'
+    return line('.')
+  endif
 
   " Get number between square brackets
   let l:last_line_content = getline('.')
@@ -582,4 +623,6 @@ let g:mdlink#err_msg = {
     \ 'Not a valid URL',
   \ 'open_in_browser_failed':
     \ 'Failed to open the URL, because of this error: ',
+  \ 'no_heading_pattern':
+    \ 'Failed to detect heading pattern: ',
   \ }
