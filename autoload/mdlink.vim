@@ -557,6 +557,58 @@ function! mdlink#JumpToBody(orig_line_nr, heading_line_nr) abort
   return l:body_line_nr
 endfunction
 
+" EXTENSIONS ======================================================= {{{1
+
+" Pre-process, then convert all, then post-process
+function! mdlink#ProcessConvert() abort
+  let [l:orig_line_nr, l:orig_col_nr, l:orig_fold_option] = mdlink#Initialize()
+
+  call mdlink#ProcessUrls('pre')
+
+  let b:init_cur_pos = [1, 1]
+  % call mdlink#ConvertRange()
+
+  call mdlink#ProcessUrls('post')
+
+  call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
+endfunction
+
+" Pre- or post-process URLs
+function! mdlink#ProcessUrls(type) abort
+  let l:heading_text = mdlink#GetHeadingText()
+  let l:is_heading_present = mdlink#IsHeadingPresent(l:heading_text)
+
+  " Determine last line to process
+  if l:is_heading_present
+    let l:max_line_nr = mdlink#GetHeadingLineNr(l:heading_text) - 1
+  else
+    let l:max_line_nr = line('$')
+  endif
+
+  let l:cur_line_nr = 1
+
+  " Loop over lines and substitute
+  while l:cur_line_nr <= l:max_line_nr
+    let l:cur_line_content = getline(l:cur_line_nr)
+
+    " Pre-process: convert plaintext URLs to Markdown format
+    " E.g. `foo https://bar.com` becomes `foo [bar](https://bar.com)`
+    if a:type ==# 'pre'
+      let l:new_line_content = substitute( l:cur_line_content,
+            \ '\v([a-zA-Z0-9.-]{2,12}:\/\/|www\.)([^.]+)\S+', '[\2](\0)', 'g' )
+
+    " Post-process: remove link text from reference link, only keep link label
+    " E.g. `foo [bar][5]` becomes `foo [5]`
+    elseif a:type ==# 'post'
+      let l:new_line_content = substitute( l:cur_line_content,
+            \ '\v\[[^]]+\](\[\d+\])', '\1', 'g' )
+    endif
+
+    call setline(l:cur_line_nr, l:new_line_content)
+    let l:cur_line_nr += 1
+  endwhile
+endfunction
+
 " HELPERS ========================================================== {{{1
 
 " Return list of original line number, column number and folding option

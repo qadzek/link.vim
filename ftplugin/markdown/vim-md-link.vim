@@ -11,3 +11,7 @@ command -buffer        MdLinkPeek                  :call mdlink#Peek()
 command -buffer        MdLinkJump                  :call mdlink#Jump()
 
 command -buffer        MdLinkDeleteUnneededRefs    :call mdlink#DeleteUnneededRefs()
+
+command -buffer        MdLinkPreProcessUrls        :call mdlink#ProcessUrls('pre')
+command -buffer        MdLinkPostProcessUrls       :call mdlink#ProcessUrls('post')
+command -buffer        MdLinkProcessConvert        :call mdlink#ProcessConvert()
