@@ -70,12 +70,8 @@ function! mdlink#ConvertRange() abort range
 
   " Range of lines to operate on
   let l:cur_line_nr = a:firstline
-  let l:max_line_nr = a:lastline
-
-  " Limit range to line containing heading, so reference section stays untouched
-  if l:is_heading_present && l:max_line_nr > l:heading_line_nr
-    let l:max_line_nr = l:heading_line_nr
-  endif
+  " let l:max_line_nr = a:lastline
+  let l:max_line_nr = mdlink#LimitRangeToHeading(l:is_heading_present, l:heading_line_nr, a:lastline)
 
   " Loop over all lines within the range
   while l:cur_line_nr <= l:max_line_nr
@@ -560,35 +556,28 @@ endfunction
 " EXTENSIONS ======================================================= {{{1
 
 " Pre-process, then convert all, then post-process
-function! mdlink#ProcessConvert() abort
+function! mdlink#ProcessConvert() abort range
   let [l:orig_line_nr, l:orig_col_nr, l:orig_fold_option] = mdlink#Initialize()
+  let [l:orig_line_nr, l:orig_col_nr] = b:init_cur_pos
 
-  call mdlink#ProcessUrls('pre')
+  execute a:firstline .. ',' .. a:lastline .. 'call mdlink#ProcessUrls("pre")'
 
-  let b:init_cur_pos = [1, 1]
-  % call mdlink#ConvertRange()
+  execute a:firstline .. ',' .. a:lastline .. 'call mdlink#ConvertRange()'
 
-  call mdlink#ProcessUrls('post')
+  execute a:firstline .. ',' .. a:lastline .. 'call mdlink#ProcessUrls("post")'
 
   call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
 endfunction
 
 " Pre- or post-process URLs
-function! mdlink#ProcessUrls(type) abort
+function! mdlink#ProcessUrls(type) abort range
   let l:heading_text = mdlink#GetHeadingText()
   let l:is_heading_present = mdlink#IsHeadingPresent(l:heading_text)
-
-  " Determine last line to process
-  if l:is_heading_present
-    let l:max_line_nr = mdlink#GetHeadingLineNr(l:heading_text) - 1
-  else
-    let l:max_line_nr = line('$')
-  endif
-
-  let l:cur_line_nr = 1
+  let l:heading_line_nr = mdlink#GetHeadingLineNr(l:heading_text)
+  let l:max_line_nr = mdlink#LimitRangeToHeading(l:is_heading_present, l:heading_line_nr, a:lastline)
 
   " Loop over lines and substitute
-  while l:cur_line_nr <= l:max_line_nr
+  for l:cur_line_nr in range(a:firstline, l:max_line_nr)
     let l:cur_line_content = getline(l:cur_line_nr)
 
     " Pre-process: convert plaintext URLs to Markdown format
@@ -606,7 +595,7 @@ function! mdlink#ProcessUrls(type) abort
 
     call setline(l:cur_line_nr, l:new_line_content)
     let l:cur_line_nr += 1
-  endwhile
+endfor
 endfunction
 
 " HELPERS ========================================================== {{{1
@@ -625,6 +614,15 @@ function! mdlink#Finalize(orig_line_nr, orig_col_nr, orig_fold_option) abort
   call cursor(a:orig_line_nr, a:orig_col_nr)
   let &l:foldenable = a:orig_fold_option
   call mdlink#VimwikiRefLinksRefresh()
+endfunction
+
+" Limit range to line containing heading, so reference section stays untouched
+function! mdlink#LimitRangeToHeading(is_heading_present, heading_line_nr, range_end_line_nr) abort range
+  if a:is_heading_present && a:range_end_line_nr > a:heading_line_nr
+    return a:heading_line_nr
+  endif
+
+  return a:range_end_line_nr
 endfunction
 
 " Fix Vimwiki bug where newly created reference links don't work instantly
