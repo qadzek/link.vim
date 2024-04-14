@@ -59,6 +59,6 @@ sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
 Execute (No 'http' or 'www'):
   call cursor(5, 1)
   MdLinkOpen
-  let expected = g:mdlink#err_msg['no_valid_url'] . ': loremipsum.com'
+  let expected = g:mdlink#err_msg['no_valid_url'] .. ': loremipsum.com'
   let actual = split( execute('messages'), '\n')[-1]
   AssertEqual expected, actual

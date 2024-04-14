@@ -68,13 +68,10 @@ function! mdlink#ConvertRange() abort range
   let l:new_label_nr = mdlink#GetNewLabelNumber(l:is_heading_present)
   let l:start_label_nr = l:new_label_nr
 
-  " Range of lines to operate on
-  let l:cur_line_nr = a:firstline
-  " let l:max_line_nr = a:lastline
   let l:max_line_nr = mdlink#LimitRangeToHeading(l:is_heading_present, l:heading_line_nr, a:lastline)
 
   " Loop over all lines within the range
-  while l:cur_line_nr <= l:max_line_nr
+  for l:cur_line_nr in range(a:firstline, l:max_line_nr)
     let l:all_links_on_line = mdlink#ParseLineInBodyFor('inline', l:cur_line_nr)
 
     " Loop over all inline links on current line
@@ -105,12 +102,10 @@ function! mdlink#ConvertRange() abort range
 
       let l:new_label_nr += 1
     endfor
-
-    let l:cur_line_nr += 1
-  endwhile
+endfor
 
   call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
-  echom l:new_label_nr - l:start_label_nr . ' inline links were converted'
+  echom l:new_label_nr - l:start_label_nr .. ' inline links were converted'
 endfunction
 
 " Jump between a reference link and the corresponding link reference definition
@@ -153,12 +148,12 @@ function! mdlink#Jump(type = 'jump') abort
 
     " Add protocol if required
     if l:url =~# '^www'
-      let l:url = 'https://' . l:url
+      let l:url = 'https://' .. l:url
     endif
 
     " Not a valid URL
     if l:url !~# '^http'
-      echom g:mdlink#err_msg['no_valid_url'] . ': ' . l:url
+      echom g:mdlink#err_msg['no_valid_url'] .. ': ' .. l:url
       call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
       return
     endif
@@ -175,9 +170,9 @@ function! mdlink#Jump(type = 'jump') abort
 
     """ Open URL in browser
     " Capture the command's output and remove trailing newline
-    let l:output = substitute( system(l:cmd . ' ' . l:url), '\n\+$', '', '' )
+    let l:output = substitute( system(l:cmd .. ' ' .. l:url), '\n\+$', '', '' )
     if v:shell_error != 0
-      echom g:mdlink#err_msg['open_in_browser_failed'] . l:output
+      echom g:mdlink#err_msg['open_in_browser_failed'] .. l:output
     endif
 
     call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
@@ -225,17 +220,14 @@ function! mdlink#DeleteUnneededRefs(env = 'production') abort
   let l:all_labels = []
 
   " Loop over all lines from first line until heading
-  let l:cur_line_nr = 1
-  while l:cur_line_nr < l:heading_line_nr
+  for l:cur_line_nr in range(1, l:heading_line_nr - 1)
     let l:all_links_on_line = mdlink#ParseLineInBodyFor('reference', l:cur_line_nr)
 
     " Loop over all links on current line
     for l:link in l:all_links_on_line
       call add(l:all_labels, l:link['destination'])
     endfor
-
-    let l:cur_line_nr += 1
-  endwhile
+  endfor
 
   """ Loop over all link reference definitions in the reference section
   let l:cur_line_nr = l:heading_line_nr + 1
@@ -264,13 +256,13 @@ function! mdlink#DeleteUnneededRefs(env = 'production') abort
 
     " No corresponding label in the document body
     "  Delete line to black hole register
-    execute l:cur_line_nr . ' delete _'
+    execute l:cur_line_nr .. ' delete _'
     let l:delete_count += 1
     " Line number shouldn't be increased, as a line was just removed
     let l:cur_line_nr -= 1
   endwhile
 
-  echom l:delete_count . ' links have been deleted from the reference section'
+  echom l:delete_count .. ' links have been deleted from the reference section'
   call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
 endfunction
 
@@ -289,7 +281,7 @@ function! mdlink#GetHeadingLineNr(heading) abort
 
   " Search *b*ackward, accept a match at *c*ursor position, do *n*ot move
   " cursor, start search at cursor instead of *z*ero
-  return search('^' . a:heading . '\s*$', 'bcnz')
+  return search('^' .. a:heading .. '\s*$', 'bcnz')
 endfunction
 
 " Return 1 if heading is present in buffer, else 0
@@ -344,10 +336,10 @@ endfunction
 function! mdlink#ParseLineInBodyFor(type, line_nr) abort
   if a:type ==# 'inline'
     " URL should start with a protocol, e.g. `http://`, or with `www`
-    let l:regex = '\v' . '\[(' . '[^]]+' . ')\]' .
-          \ '\((' . '%([a-zA-Z0-9.-]{2,12}:\/\/|www\.)' . '[^)]+' . ')\)'
+    let l:regex = '\v' .. '\[(' .. '[^]]+' .. ')\]' .
+          \ '\((' .. '%([a-zA-Z0-9.-]{2,12}:\/\/|www\.)' .. '[^)]+' .. ')\)'
   elseif a:type ==# 'reference'
-    let l:regex = '\v' . '\[(' . '[^]]+' . ')\]' . '\[(' . '[^]]+' . ')\]'
+    let l:regex = '\v' .. '\[(' .. '[^]]+' .. ')\]' .. '\[(' .. '[^]]+' .. ')\]'
   else
     throw 'Invalid type'
   endif
@@ -367,7 +359,7 @@ function! mdlink#ParseLineInBodyFor(type, line_nr) abort
     endif
 
     " First character is considered as 0
-    let l:match_start = match(l:line_content, '\V' . l:match_list[0]) + 1
+    let l:match_start = match(l:line_content, '\V' .. l:match_list[0]) + 1
 
     let l:total_len = strlen(l:match_list[0])
 
@@ -390,7 +382,7 @@ endfunction
 function! mdlink#ReplaceLink(line_content, full_link, link_text, label, line_nr) abort
   " NOTE URLs containing the * character are not supported
   let l:esc_full_link = escape(a:full_link, '[]')
-  let l:ref_link = '[' . a:link_text . '][' . a:label . ']'
+  let l:ref_link = '[' .. a:link_text .. '][' .. a:label .. ']'
   let l:new_line_content = substitute(a:line_content, l:esc_full_link,
         \ l:ref_link, '')
   call setline(a:line_nr, l:new_line_content)
@@ -400,7 +392,7 @@ endfunction
 
 " Add a link reference definition to the reference section
 function! mdlink#AddReference(label, url, last_label_line_nr = '$') abort
-  let l:new_line_content = '[' . a:label . ']: ' . a:url
+  let l:new_line_content = '[' .. a:label .. ']: ' .. a:url
   call append(a:last_label_line_nr, l:new_line_content)
 endfunction
 
@@ -420,9 +412,9 @@ function! mdlink#ParseReferenceSection(start_line_nr, type) abort
   let l:regex = '\v^\s*\[(\d+)\]:\s+(\S+)'
 
   " Loop over one line, or over all lines from heading until last line
-  while l:cur_line_nr <= l:last_line_nr
+
+  for l:cur_line_nr in range(l:cur_line_nr, l:last_line_nr)
     let l:cur_line_content = getline(l:cur_line_nr)
-    let l:cur_line_nr += 1
 
     let l:match_list = matchlist(l:cur_line_content, l:regex)
 
@@ -438,7 +430,7 @@ function! mdlink#ParseReferenceSection(start_line_nr, type) abort
           \ }
 
     call add(l:all_link_reference_definitions, l:link_ref_def)
-  endwhile
+  endfor
 
   return l:all_link_reference_definitions
 endfunction
@@ -507,7 +499,7 @@ function! mdlink#JumpToReferenceSection(orig_line_nr, orig_col_nr, heading_line_
   let l:link = mdlink#PickClosestLink(l:all_links, a:orig_col_nr)
   let l:label = l:link['destination']
 
-  let l:regex = '\v^\s*\[' . l:label . '\]:\s+\S+'
+  let l:regex = '\v^\s*\[' .. l:label .. '\]:\s+\S+'
 
   " Start search at heading
   call cursor(a:heading_line_nr, 1)
@@ -520,7 +512,7 @@ function! mdlink#JumpToReferenceSection(orig_line_nr, orig_col_nr, heading_line_
   normal! W
 
   if l:ref_line_nr == 0
-    echom g:mdlink#err_msg['no_label_ref_section'] . l:label
+    echom g:mdlink#err_msg['no_label_ref_section'] .. l:label
   endif
 
   " 0 in case of no match
@@ -543,10 +535,10 @@ function! mdlink#JumpToBody(orig_line_nr, heading_line_nr) abort
   " Start search at first line
   call cursor(1, 1)
   " Stop search at heading
-  let l:body_line_nr = search('\v\]\[' . l:label . '\]', 'cWe', a:heading_line_nr)
+  let l:body_line_nr = search('\v\]\[' .. l:label .. '\]', 'cWe', a:heading_line_nr)
 
   if l:body_line_nr == 0
-    echom 'Could not find the label ' . l:label . ' in the document body'
+    echom 'Could not find the label ' .. l:label .. ' in the document body'
   endif
 
   " 0 in case of no match

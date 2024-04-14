@@ -27,6 +27,6 @@ Execute (Invalid peek, from below heading):
 Execute (Invalid peek, label [9] not found in reference section):
   call cursor(16, 1)
   MdLinkPeek
-  let expected = mdlink#err_msg['no_label_ref_section'] . '9'
+  let expected = mdlink#err_msg['no_label_ref_section'] .. '9'
   let actual = split( execute('messages'), '\n')[-1]
   AssertEqual expected, actual
