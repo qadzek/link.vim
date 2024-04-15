@@ -1,59 +1,9 @@
 " MAIN FUNCTIONS =================================================== {{{1
 
-" Convert one inline link to a reference link on the current line
-" NOTE single
-function! mdlink#ConvertSingleLink(mode = 'normal') abort
-  let [l:orig_line_nr, l:orig_col_nr, l:orig_fold_option] = mdlink#Initialize()
-  let l:cur_line_content = getline('.')
-
-  let l:all_links_on_line = mdlink#ParseLineInBodyFor('inline', l:orig_line_nr)
-
-  if len(l:all_links_on_line) == 0
-    echom g:mdlink#err_msg['no_inline_link']
-    return
-  endif
-
-  " Add heading if needed
-  let l:heading_text = mdlink#GetHeadingText()
-  let l:is_heading_present = mdlink#IsHeadingPresent(l:heading_text)
-  if !l:is_heading_present
-    call mdlink#AddHeading(l:heading_text)
-  endif
-
-  let l:new_label_nr = mdlink#GetNewLabelNumber(l:is_heading_present)
-
-  " Determine which link to convert, if there are multiple on the current line
-  let l:link = mdlink#PickClosestLink(l:all_links_on_line, l:orig_col_nr)
-
-  call mdlink#ReplaceLink(l:cur_line_content, l:link['full_link'],
-        \ l:link['link_text'], l:new_label_nr, l:orig_line_nr)
-  call mdlink#AddReference(l:new_label_nr, l:link['destination'])
-
-  call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
-
-  if a:mode ==# 'insert'
-    " Move to end of reference link: first to start, then to 2nd ]
-    call cursor(l:orig_line_nr, l:link['col_start'])
-    normal! 2f]
-
-    " Determine if link is at the very end of the line
-    let l:orig_line_len = strlen(l:cur_line_content)
-    let l:sum = l:link['col_start'] + l:link['length'] - 1
-
-    " Return to insert mode
-    " Link is at the very end of the line
-    if l:sum == l:orig_line_len
-      startinsert!
-    " Link is in the middle of the line
-    else
-      normal! l
-      startinsert
-    endif
-  endif
-endfunction
-
-" Convert inline links to reference links within a range, possibly entire buffer
-function! mdlink#ConvertRange() abort range
+" Convert inline links to reference links within a range
+" Types : 'multiple-links', 'single-link'
+" Modes : 'normal', 'insert'
+function! mdlink#Convert(type = 'multiple-links', mode = 'normal') abort range
   let [l:orig_line_nr, l:orig_col_nr, l:orig_fold_option] = mdlink#Initialize()
 
   " Use cursor position before range function moves cursor to first line of
@@ -73,6 +23,18 @@ function! mdlink#ConvertRange() abort range
   " Loop over all lines within the range
   for l:cur_line_nr in range(a:firstline, l:max_line_nr)
     let l:all_links_on_line = mdlink#ParseLineInBodyFor('inline', l:cur_line_nr)
+
+    " Display error when trying to convert a single link but there is none
+    if a:type ==# 'single-link' && len(l:all_links_on_line) == 0
+      echom g:mdlink#err_msg['no_inline_link']
+      call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
+      return
+    endif
+
+    " Limit list of links to one link when converting a single inline link
+    if a:type ==# 'single-link'
+      let l:all_links_on_line = [ mdlink#PickClosestLink(l:all_links_on_line, l:orig_col_nr) ]
+    endif
 
     " Loop over all inline links on current line
     for l:link in l:all_links_on_line
@@ -101,11 +63,36 @@ function! mdlink#ConvertRange() abort range
             \ l:last_label_line_nr)
 
       let l:new_label_nr += 1
-    endfor
-endfor
+    endfor " End looping over all links on current line
+  endfor " End looping over all lines
 
   call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
-  echom l:new_label_nr - l:start_label_nr .. ' inline links were converted'
+
+  " Display how many links were converted
+  if a:type !=# 'single-link'
+    echom l:new_label_nr - l:start_label_nr .. ' inline links were converted'
+  endif
+
+  " Move cursor when function is called from Insert mode, to allow user to
+  " continue typing after the converted link
+  if a:type ==# 'single-link' && a:mode ==# 'insert'
+    " Move to end of reference link: first to start, then to 2nd ]
+    call cursor(l:orig_line_nr, l:link['col_start'])
+    normal! 2f]
+
+    " Determine if link is at the very end of the line
+    let l:orig_line_len = strlen(l:cur_line_content)
+    let l:sum = l:link['col_start'] + l:link['length'] - 1
+
+    " Return to insert mode; link is at the very end of the line
+    if l:sum == l:orig_line_len
+      startinsert!
+    " Return to insert mode; link is in the middle of the line
+    else
+      normal! l
+      startinsert
+    endif
+  endif
 endfunction
 
 " Jump between a reference link and the corresponding link reference definition
@@ -554,7 +541,7 @@ function! mdlink#ProcessConvert() abort range
 
   execute a:firstline .. ',' .. a:lastline .. 'call mdlink#ProcessUrls("pre")'
 
-  execute a:firstline .. ',' .. a:lastline .. 'call mdlink#ConvertRange()'
+  execute a:firstline .. ',' .. a:lastline .. 'call mdlink#Convert()'
 
   execute a:firstline .. ',' .. a:lastline .. 'call mdlink#ProcessUrls("post")'
 
@@ -587,7 +574,7 @@ function! mdlink#ProcessUrls(type) abort range
 
     call setline(l:cur_line_nr, l:new_line_content)
     let l:cur_line_nr += 1
-endfor
+  endfor
 endfunction
 
 " HELPERS ========================================================== {{{1
@@ -641,30 +628,30 @@ endfunction
 
 " Default values, can be overridden by vimrc
 let s:defaults = {
-  \ 'heading': '## Links',
-  \ 'start_index': 0,
-  \ }
+      \ 'heading': '## Links',
+      \ 'start_index': 0,
+      \ }
 
 " Error messages
 let g:mdlink#err_msg = {
-  \ 'no_corresponding_ref':
-    \ 'No corresponding label found in the references section',
-  \ 'no_heading':
-    \ 'No heading found',
-  \ 'no_inline_link':
-    \ 'No inline link in the format of "[foo](http://bar.com)" found on this line',
-  \ 'no_link_ref_definition':
-    \ 'No link reference definition in the format of "[3]: ..." found on this line',
-  \ 'no_label_ref_section':
-    \ 'The following label was not found in the reference section: ',
-  \ 'not_from_ref':
-    \ 'This action is only possible from the document body, not from the reference section',
-  \ 'no_reference_link':
-    \ 'No reference link in the format of "[foo][3]" found on this line',
-  \ 'no_valid_url':
-    \ 'Not a valid URL',
-  \ 'open_in_browser_failed':
-    \ 'Failed to open the URL, because of this error: ',
-  \ 'no_heading_pattern':
-    \ 'Failed to detect heading pattern: ',
-  \ }
+      \ 'no_corresponding_ref':
+      \ 'No corresponding label found in the references section',
+      \ 'no_heading':
+      \ 'No heading found',
+      \ 'no_inline_link':
+      \ 'No inline link in the format of "[foo](http://bar.com)" found on this line',
+      \ 'no_link_ref_definition':
+      \ 'No link reference definition in the format of "[3]: ..." found on this line',
+      \ 'no_label_ref_section':
+      \ 'The following label was not found in the reference section: ',
+      \ 'not_from_ref':
+      \ 'This action is only possible from the document body, not from the reference section',
+      \ 'no_reference_link':
+      \ 'No reference link in the format of "[foo][3]" found on this line',
+      \ 'no_valid_url':
+      \ 'Not a valid URL',
+      \ 'open_in_browser_failed':
+      \ 'Failed to open the URL, because of this error: ',
+      \ 'no_heading_pattern':
+      \ 'Failed to detect heading pattern: ',
+      \ }
