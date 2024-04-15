@@ -21,6 +21,9 @@ function! mdlink#Convert(type = 'multiple-links', mode = 'normal') abort range
 
   " Loop over all lines within the range
   for l:cur_line_nr in range(a:firstline, l:max_line_nr)
+    if mdlink#SkipLine(l:cur_line_nr)
+      continue
+    endif
 
     let l:all_links_on_line = mdlink#ParseLineInBodyFor('inline', l:cur_line_nr)
 
@@ -559,6 +562,10 @@ function! mdlink#ProcessUrls(type) abort range
 
   " Loop over lines and substitute
   for l:cur_line_nr in range(a:firstline, l:max_line_nr)
+    if mdlink#SkipLine(l:cur_line_nr)
+      continue
+    endif
+
     let l:cur_line_content = getline(l:cur_line_nr)
 
     " Pre-process: convert plaintext links to Markdown format
@@ -604,6 +611,16 @@ function! mdlink#LimitRangeToHeading(is_heading_present, heading_line_nr, range_
   endif
 
   return a:range_end_line_nr
+endfunction
+
+" Return 1 if line should be skipped, else 0
+function! mdlink#SkipLine(cur_line_nr) abort
+  if exists('b:md_link_skip_line') &&
+        \ match(getline(a:cur_line_nr), b:md_link_skip_line) >= 0
+    return 1
+  endif
+
+  return 0
 endfunction
 
 " Fix Vimwiki bug where newly created reference links don't work instantly
