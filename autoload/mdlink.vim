@@ -11,9 +11,8 @@ function! mdlink#Convert(type = 'multiple-links', mode = 'normal') abort range
   let [l:orig_line_nr, l:orig_col_nr] = b:init_cur_pos
   unlet b:init_cur_pos
 
-  let l:heading_text = mdlink#GetHeadingText()
-  let l:is_heading_present = mdlink#IsHeadingPresent(l:heading_text)
-  let l:heading_line_nr = mdlink#GetHeadingLineNr(l:heading_text)
+  let [ l:heading_text, l:is_heading_present, l:heading_line_nr ] =
+        \ mdlink#GetHeadingInfo()
 
   let l:new_label_nr = mdlink#GetNewLabelNumber(l:is_heading_present)
   let l:start_label_nr = l:new_label_nr
@@ -22,6 +21,7 @@ function! mdlink#Convert(type = 'multiple-links', mode = 'normal') abort range
 
   " Loop over all lines within the range
   for l:cur_line_nr in range(a:firstline, l:max_line_nr)
+
     let l:all_links_on_line = mdlink#ParseLineInBodyFor('inline', l:cur_line_nr)
 
     " Display error when trying to convert a single link but there is none
@@ -70,7 +70,7 @@ function! mdlink#Convert(type = 'multiple-links', mode = 'normal') abort range
 
   " Display how many links were converted
   if a:type !=# 'single-link'
-    echom l:new_label_nr - l:start_label_nr .. ' inline links were converted'
+    echom l:new_label_nr - l:start_label_nr .. ' links were converted'
   endif
 
   " Move cursor when function is called from Insert mode, to allow user to
@@ -99,14 +99,12 @@ endfunction
 function! mdlink#Jump(type = 'jump') abort
   let [l:orig_line_nr, l:orig_col_nr, l:orig_fold_option] = mdlink#Initialize()
 
-  let l:heading_text = mdlink#GetHeadingText()
-  let l:is_heading_present = mdlink#IsHeadingPresent(l:heading_text)
+  let [l:is_heading_present, l:heading_line_nr] = mdlink#GetHeadingInfo()[1:2]
   if !l:is_heading_present
     echom g:mdlink#err_msg['no_heading']
     call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
     return
   endif
-  let l:heading_line_nr = mdlink#GetHeadingLineNr(l:heading_text)
 
   " No opening/peeking from reference section
   if (a:type ==# 'open' || a:type ==# 'peek') && l:orig_line_nr >= l:heading_line_nr
@@ -194,14 +192,12 @@ function! mdlink#DeleteUnneededRefs(env = 'production') abort
 
   let [l:orig_line_nr, l:orig_col_nr, l:orig_fold_option] = mdlink#Initialize()
 
-  let l:heading_text = mdlink#GetHeadingText()
-  let l:is_heading_present = mdlink#IsHeadingPresent(l:heading_text)
+  let [l:is_heading_present, l:heading_line_nr] = mdlink#GetHeadingInfo()[1:2]
   if !l:is_heading_present
     echom g:mdlink#err_msg['no_heading']
     call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
     return
   endif
-  let l:heading_line_nr = mdlink#GetHeadingLineNr(l:heading_text)
 
   """ Store all reference links from the document body
   let l:all_labels = []
@@ -275,6 +271,14 @@ endfunction
 function! mdlink#IsHeadingPresent(heading) abort
   let l:line_nr = mdlink#GetHeadingLineNr(a:heading)
   return l:line_nr > 0
+endfunction
+
+" Return list of heading text, if heading is present, heading line number
+function! mdlink#GetHeadingInfo() abort
+  let l:heading_text = mdlink#GetHeadingText()
+  let l:is_heading_present = mdlink#IsHeadingPresent(l:heading_text)
+  let l:heading_line_nr = mdlink#GetHeadingLineNr(l:heading_text)
+  return [ l:heading_text, l:is_heading_present, l:heading_line_nr ]
 endfunction
 
 " Add the specified heading to the buffer
@@ -534,7 +538,7 @@ endfunction
 
 " EXTENSIONS ======================================================= {{{1
 
-" Pre-process, then convert all, then post-process
+" Pre-process, then convert, then post-process; all withing a range
 function! mdlink#ProcessConvert() abort range
   let [l:orig_line_nr, l:orig_col_nr, l:orig_fold_option] = mdlink#Initialize()
   let [l:orig_line_nr, l:orig_col_nr] = b:init_cur_pos
@@ -550,16 +554,14 @@ endfunction
 
 " Pre- or post-process URLs
 function! mdlink#ProcessUrls(type) abort range
-  let l:heading_text = mdlink#GetHeadingText()
-  let l:is_heading_present = mdlink#IsHeadingPresent(l:heading_text)
-  let l:heading_line_nr = mdlink#GetHeadingLineNr(l:heading_text)
+  let [l:is_heading_present, l:heading_line_nr] = mdlink#GetHeadingInfo()[1:2]
   let l:max_line_nr = mdlink#LimitRangeToHeading(l:is_heading_present, l:heading_line_nr, a:lastline)
 
   " Loop over lines and substitute
   for l:cur_line_nr in range(a:firstline, l:max_line_nr)
     let l:cur_line_content = getline(l:cur_line_nr)
 
-    " Pre-process: convert plaintext URLs to Markdown format
+    " Pre-process: convert plaintext links to Markdown format
     " E.g. `foo https://bar.com` becomes `foo [bar](https://bar.com)`
     if a:type ==# 'pre'
       let l:new_line_content = substitute( l:cur_line_content,
