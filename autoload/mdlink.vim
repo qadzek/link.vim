@@ -445,14 +445,14 @@ function! mdlink#GetLabelStartIndex() abort
   return get(g:, 'md_link_start_index', s:defaults['start_index'])
 endfunction
 
-" Types: 'line_nr' or 'label_nr'
+" Types : 'line_nr' or 'label_nr'
 " 'label_nr':
 " Return last label number in reference section, e.g. 3 for [3]: http://foo.com
 " Return -1 if not found
 " 'line_nr':
 " Return line number of last label in reference section
 " Return last line number of buffer if not found
-function! mdlink#GetLastLabel(type ) abort
+function! mdlink#GetLastLabel(type) abort
   let l:regex = '\v^\s*\[\zs\d+\ze\]:\s+'
 
   " Go to start of last non-blank line

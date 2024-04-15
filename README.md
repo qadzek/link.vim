@@ -28,11 +28,15 @@ will be turned into
 `vim-md-link` works well with [Vimwiki][0], but is useful for all Markdown
 documents containing long URLs. Even this `README.md` file uses it!
 
+`:help md-link-extensions` shows how this plugin can be extended to other
+filetypes, not just Markdown documents. The [Wiki][1] contains some examples
+provided by users.
+
 ## Installation
 
 Use your favorite plugin manager to install this plugin.
 
-For instance, if you use [vim-plug][1]:
+For instance, if you use [vim-plug][2]:
 
 ```vim
 Plug 'qadzek/vim-md-link'
@@ -81,11 +85,8 @@ For more details, such as configuration options, run `:help md-link`.
 Questions, suggestions, comments, feature requests... everything is welcome in
 the "Issues" tab.
 
-View the [Wiki][2] and the help pages to learn how this plugin can be extended
-to other filetypes, not just Markdown documents.
-
 If you would like to contribute, see `:help md-link`.
 
 [0]: https://github.com/vimwiki/vimwiki
-[1]: https://github.com/junegunn/vim-plug
-[2]: https://github.com/qadzek/vim-md-link/wiki
+[1]: https://github.com/qadzek/vim-md-link/wiki
+[2]: https://github.com/junegunn/vim-plug

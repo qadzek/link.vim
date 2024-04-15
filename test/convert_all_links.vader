@@ -2,10 +2,14 @@ Before:
   unlet! g:md_link_heading
   unlet! b:md_link_heading
   unlet! b:md_link_heading_before
+  unlet! b:md_link_skip_line
 After:
   unlet! g:md_link_heading
   unlet! b:md_link_heading
   unlet! b:md_link_heading_before
+  unlet! b:md_link_skip_line
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown:
   Sapien ac iaculis feugiat, lacus lacus accumsan lorem, quis volutpat justo
@@ -242,7 +246,6 @@ Given mail:
   Your Contact Information
 Execute (Mail buffer):
   let b:md_link_heading = 'Links:'
-  " let b:md_link_heading_before = '\v\n^--'
   let b:md_link_heading_before = '^--'
   MdLinkConvertAll
 
@@ -279,7 +282,6 @@ Given gitcommit:
   #
 Execute (gitcommit buffer):
   let b:md_link_heading = 'Links:'
-  " let b:md_link_heading_before = '\v\n^# Please enter'
   let b:md_link_heading_before = '^# Please enter'
   MdLinkConvertAll
 
@@ -301,3 +303,49 @@ Expect gitcommit:
   #	modified:   foo.txt
   #
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown:
+  Sapien ac iaculis feugiat, [lacus](http://lacus.org/lacus) lacus accumsan
+  lorem, quis volutpat justo turpis ac mauris.
+
+  Duis velit [magna](www.magna.com), scelerisque
+  > [vitae](https://vitae.net/index.html), varius ut, aliquam vel, justo. Proin
+  > augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat.
+  > Ut [sem](www.sem.com) [nunc](ftp://nunc.com), vestibulum [nec](www.nec.com),
+  sodales vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
+
+  Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
+  [pellentesque](https://pellentesque.com) diam metus ut nulla. Vestibulum eu
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  lobortis ac, [fringilla](www.fringilla.com) ac, [turpis](http://turpis.net).
+  Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque dapibus.
+  Duis venenatis magna feugiat.
+Execute (Skip some lines):
+  let b:md_link_skip_line = '^>'
+  MdLinkConvertAll
+
+Expect markdown:
+  Sapien ac iaculis feugiat, [lacus][0] lacus accumsan
+  lorem, quis volutpat justo turpis ac mauris.
+
+  Duis velit [magna][1], scelerisque
+  > [vitae](https://vitae.net/index.html), varius ut, aliquam vel, justo. Proin
+  > augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat.
+  > Ut [sem](www.sem.com) [nunc](ftp://nunc.com), vestibulum [nec](www.nec.com),
+  sodales vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
+
+  Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
+  [pellentesque][2] diam metus ut nulla. Vestibulum eu
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  lobortis ac, [fringilla][3] ac, [turpis][4].
+  Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque dapibus.
+  Duis venenatis magna feugiat.
+
+  ## Links
+
+  [0]: http://lacus.org/lacus
+  [1]: www.magna.com
+  [2]: https://pellentesque.com
+  [3]: www.fringilla.com
+  [4]: http://turpis.net
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -6,7 +6,15 @@
 :MdLinkJump	vim-md-link.txt	/*:MdLinkJump*
 :MdLinkOpen	vim-md-link.txt	/*:MdLinkOpen*
 :MdLinkPeek	vim-md-link.txt	/*:MdLinkPeek*
+:MdLinkPostProcessUrls	vim-md-link.txt	/*:MdLinkPostProcessUrls*
+:MdLinkPostProcessUrlsAll	vim-md-link.txt	/*:MdLinkPostProcessUrlsAll*
+:MdLinkPreProcessUrls	vim-md-link.txt	/*:MdLinkPreProcessUrls*
+:MdLinkPreProcessUrlsAll	vim-md-link.txt	/*:MdLinkPreProcessUrlsAll*
+:MdLinkProcessConvert	vim-md-link.txt	/*:MdLinkProcessConvert*
+:MdLinkProcessConvertAll	vim-md-link.txt	/*:MdLinkProcessConvertAll*
 b:md_link_heading	vim-md-link.txt	/*b:md_link_heading*
+b:md_link_heading_before	vim-md-link.txt	/*b:md_link_heading_before*
+b:md_link_skip_line	vim-md-link.txt	/*b:md_link_skip_line*
 g:md_link_heading	vim-md-link.txt	/*g:md_link_heading*
 g:md_link_start_index	vim-md-link.txt	/*g:md_link_start_index*
 md-link	vim-md-link.txt	/*md-link*
