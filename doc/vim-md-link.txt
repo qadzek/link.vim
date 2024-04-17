@@ -186,8 +186,8 @@ section, elsewhere. E.g. for a `gitcommit` buffer:
   `let b:md_link_heading_before = '^# Please enter the commit message'`
 
                                                          *b:md_link_skip_line*
-Inside the `ftplugin` file, you can specify a pattern that prevents links from
-being converted on matching lines. E.g. to skip blockquotes:
+By default, links in lines matching |commentstring| are not converted. Inside
+the `ftplugin` file, you can modify this pattern. E.g. to skip blockquotes:
   `let b:md_link_skip_line = '^>'`
 
 As other filetypes don't use Markdown inline links, e.g.
@@ -245,7 +245,7 @@ To execute the tests: `./test/run_tests.sh`
 ==============================================================================
 CHANGELOG                                                  *md-link-changelog*
 
-0.5.0   2024-04-15
+0.5.0   2024-04-17
         - Allow positioning of reference section
         - Add pre- and post-processing of plaintext links
         - Allow lines to be skipped if pattern matches

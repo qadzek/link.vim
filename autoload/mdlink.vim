@@ -615,12 +615,15 @@ endfunction
 
 " Return 1 if line should be skipped, else 0
 function! mdlink#SkipLine(cur_line_nr) abort
-  if exists('b:md_link_skip_line') &&
-        \ match(getline(a:cur_line_nr), b:md_link_skip_line) >= 0
-    return 1
+  "Custom pattern
+  if exists('b:md_link_skip_line')
+    let l:regex = b:md_link_skip_line
+  else
+    " Default
+    let l:regex = '\V\^' .. substitute( escape(&commentstring, '\'), '%s', '\\.\\*', 'g' ) .. '\$'
   endif
 
-  return 0
+  return match( getline(a:cur_line_nr), l:regex ) >= 0
 endfunction
 
 " Fix Vimwiki bug where newly created reference links don't work instantly

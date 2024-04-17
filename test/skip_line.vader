@@ -1,0 +1,95 @@
+Before:
+  unlet! b:md_link_heading
+  unlet! b:md_link_skip_line
+After:
+  unlet! b:md_link_heading
+  unlet! b:md_link_skip_line
+
+Given javascript:
+  // filler
+  const url = ' www.magna.com '
+
+  // this is a comment: https://vitae.net/index.html
+Execute (Use default (commentstring) to skip lines; JavaScript):
+
+  let b:md_link_heading = 'Links:'
+  let b:init_cur_pos = [1, 1]
+
+  1,$call mdlink#ProcessConvert()
+
+Expect javascript:
+  // filler
+  const url = ' [0] '
+
+  // this is a comment: https://vitae.net/index.html
+
+  Links:
+
+  [0]: www.magna.com
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown:
+  Filler
+  Not a comment: www.magna.com
+
+  <!-- this is a comment: https://vitae.net/index.html -->
+
+  Continued
+
+  > Blockquote: http://lacus.org/lacus
+
+  End
+Execute (Use default (commentstring) to skip lines; Markdown):
+
+  let b:init_cur_pos = [1, 1]
+  1,$call mdlink#ProcessConvert()
+
+Expect markdown:
+  Filler
+  Not a comment: [0]
+
+  <!-- this is a comment: https://vitae.net/index.html -->
+
+  Continued
+
+  > Blockquote: [1]
+
+  End
+
+  ## Links
+
+  [0]: www.magna.com
+  [1]: http://lacus.org/lacus
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown:
+  Not a comment: www.magna.com
+
+  <!-- this is a comment: https://vitae.net/index.html -->
+
+  Continued
+
+  > Blockquote: http://lacus.org/lacus
+
+  End
+Execute (Use custom pattern to skip lines; Markdown):
+  let b:md_link_skip_line = '^>'
+  let b:init_cur_pos = [1, 1]
+  1,$call mdlink#ProcessConvert()
+
+Expect markdown:
+  Not a comment: [0]
+
+  <!-- this is a comment: [1] -->
+
+  Continued
+
+  > Blockquote: http://lacus.org/lacus
+
+  End
+
+  ## Links
+
+  [0]: www.magna.com
+  [1]: https://vitae.net/index.html
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
