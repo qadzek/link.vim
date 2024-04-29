@@ -1,10 +1,9 @@
 # vim-md-link
 
-`vim-md-link` is a plugin for Vim/Neovim that keeps long URLs out of your way
-in Markdown documents.
+`vim-md-link` is a plugin for Vim/Neovim that keeps long URLs out of your way.
 
-It accomplishes this by converting inline Markdown links into reference links.
-For instance, the following:
+It accomplishes this by converting inline links into reference links.
+For instance, in Markdown, the following:
 
 ```md
 # Notes
@@ -25,12 +24,29 @@ will be turned into
 [1]: https://neovim.io
 ```
 
-`vim-md-link` works well with [Vimwiki][0], but is useful for all Markdown
-documents containing long URLs. Even this `README.md` file uses it!
+In an E-Mail
+
+```
+Vim https://www.vim.org and Neovim https://neovim.io are text editors.
+```
+
+will be turned into
+
+```
+Vim [0] and Neovim [1] are text editors.
+
+Links:
+
+[0]: https://www.vim.org
+[1]: https://neovim.io
+```
+
+`vim-md-link` works well with [Vimwiki][0], but is useful for all
+text files containing long URLs. Even this `README.md` file uses it!
 
 `:help md-link-extensions` shows how this plugin can be extended to other
-filetypes, not just Markdown documents. The [Wiki][1] contains some examples
-provided by users.
+filetypes, not just Mails or Markdown documents, but also, say, Gitcommits.
+The [Wiki][1] contains some examples provided by users.
 
 ## Installation
 
