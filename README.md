@@ -1,9 +1,11 @@
 # vim-md-link
 
-`vim-md-link` is a plugin for Vim/Neovim that keeps long URLs out of your way.
+`vim-md-link` is a plugin for Vim and Neovim that keeps long URLs out of your
+way. It started as a plugin for Markdown documents (hence its name) but can now
+handle links in other filetypes as well.
 
-It accomplishes this by converting inline links into reference links.
-For instance, in Markdown, the following:
+Inline links will be moved to a reference section. For instance, the following
+Markdown document:
 
 ```md
 # Notes
@@ -23,30 +25,6 @@ will be turned into
 [0]: https://www.vim.org
 [1]: https://neovim.io
 ```
-
-In an E-Mail
-
-```
-Vim https://www.vim.org and Neovim https://neovim.io are text editors.
-```
-
-will be turned into
-
-```
-Vim [0] and Neovim [1] are text editors.
-
-Links:
-
-[0]: https://www.vim.org
-[1]: https://neovim.io
-```
-
-`vim-md-link` works well with [Vimwiki][0], but is useful for all
-text files containing long URLs. Even this `README.md` file uses it!
-
-`:help md-link-extensions` shows how this plugin can be extended to other
-filetypes, not just Mails or Markdown documents, but also, say, Gitcommits.
-The [Wiki][1] contains some examples provided by users.
 
 ## Installation
 
@@ -96,10 +74,54 @@ The following is an example that you can copy to you `.vimrc`. By default,
 
 For more details, such as configuration options, run `:help md-link`.
 
+## Extensions
+
+`vim-md-link` was originally designed for Markdown documents (including
+[Vimwiki][0]). Even this `README.md` file uses it!
+
+`:help md-link-extensions` shows how this plugin can be extended to other
+filetypes, e.g. to `mail` buffers. This means that the following email
+
+```text
+Hi John,
+
+I hope this email finds you well. Did you know that Vim was created by Bram
+Moolenaar? https://en.wikipedia.org/wiki/Bram_Moolenaar
+
+He released it as charityware, so you are encouraged to make a donation for
+children in Uganda. https://vimhelp.org/uganda.txt.html
+
+Best regards,
+Jane
+```
+
+can be converted to
+
+```text
+Hi John,
+
+I hope this email finds you well. Did you know that Vim was created by Bram
+Moolenaar? [0]
+
+He released it as charityware, so you are encouraged to make a donation for
+children in Uganda. [1]
+
+Best regards,
+Jane
+
+Links:
+
+[0]: https://en.wikipedia.org/wiki/Bram_Moolenaar
+[1]: https://vimhelp.org/uganda.txt.html
+```
+
+The [Wiki][1] contains some snippets provided by users, for instance on how to
+extend this plugin to `gitcommit` buffers.
+
 ## Misc
 
 Questions, suggestions, comments, feature requests... everything is welcome in
-the "Issues" tab.
+the _Issues_ tab.
 
 If you would like to contribute, see `:help md-link`.
 
