@@ -3,11 +3,13 @@ Before:
   unlet! b:md_link_heading
   unlet! b:md_link_heading_before
   unlet! b:md_link_skip_line
+  unlet! g:md_link_start_index
 After:
   unlet! g:md_link_heading
   unlet! b:md_link_heading
   unlet! b:md_link_heading_before
   unlet! b:md_link_skip_line
+  unlet! g:md_link_start_index
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -232,78 +234,6 @@ Execute (Cursor should not move):
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given mail:
-  Hi Recipient,
-  
-  I hope this [email](https://email.com) finds you well.
-  
-  Best regards,
-  Your Name
-  
-  --
-  Your Job Title
-  Your Company Name
-  Your Contact Information
-Execute (Mail buffer):
-  let b:md_link_heading = 'Links:'
-  let b:md_link_heading_before = '^--'
-  MdLinkConvertAll
-
-Expect mail:
-  Hi Recipient,
-  
-  I hope this [email][0] finds you well.
-  
-  Best regards,
-  Your Name
-  
-  Links:
-
-  [0]: https://email.com
-
-  --
-  Your Job Title
-  Your Company Name
-  Your Contact Information
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Given gitcommit:
-  Git commit title
-
-  Git [commit](https://comm.it) body
-  Body continued
-
-  # Please enter the commit message for your changes. Lines starting
-  # with '#' will be ignored, and an empty message aborts the commit.
-  #
-  # On branch main
-  # Changes to be committed:
-  #	modified:   foo.txt
-  #
-Execute (gitcommit buffer):
-  let b:md_link_heading = 'Links:'
-  let b:md_link_heading_before = '^# Please enter'
-  MdLinkConvertAll
-
-Expect gitcommit:
-  Git commit title
-
-  Git [commit][0] body
-  Body continued
-
-  Links:
-
-  [0]: https://comm.it
-
-  # Please enter the commit message for your changes. Lines starting
-  # with '#' will be ignored, and an empty message aborts the commit.
-  #
-  # On branch main
-  # Changes to be committed:
-  #	modified:   foo.txt
-  #
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 Given markdown:
   Sapien ac iaculis feugiat, [lacus](http://lacus.org/lacus) lacus accumsan
   lorem, quis volutpat justo turpis ac mauris.
@@ -349,3 +279,53 @@ Expect markdown:
   [3]: www.fringilla.com
   [4]: http://turpis.net
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown:
+  Sapien ac iaculis feugiat, [lacus](http://lacus.org/lacus) lacus accumsan
+  lorem, quis volutpat justo turpis ac mauris.
+  
+  Duis velit [magna](www.magna.com), scelerisque
+  [vitae](https://vitae.net/index.html), varius ut, aliquam vel, justo. Proin ac
+  augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
+  Ut [sem](www.sem.com) [nunc](ftp://nunc.com), vestibulum [nec](www.nec.com),
+  sodales vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
+  
+  Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
+  [pellentesque](https://pellentesque.com) diam metus ut nulla. Vestibulum eu
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  lobortis ac, [fringilla](www.fringilla.com) ac, [turpis](http://turpis.net).
+  Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque dapibus.
+  Duis venenatis magna feugiat.
+~~~~~~~~~~~~~
+Execute (Change label start index):
+  let g:md_link_start_index = 100
+  MdLinkConvertAll
+~~~~~~~~~~~~~
+Expect markdown:
+  Sapien ac iaculis feugiat, [lacus][100] lacus accumsan
+  lorem, quis volutpat justo turpis ac mauris.
+
+  Duis velit [magna][101], scelerisque
+  [vitae][102], varius ut, aliquam vel, justo. Proin ac
+  augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
+  Ut [sem][103] [nunc][104], vestibulum [nec][105],
+  sodales vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
+
+  Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
+  [pellentesque][106] diam metus ut nulla. Vestibulum eu
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  lobortis ac, [fringilla][107] ac, [turpis][108].
+  Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque dapibus.
+  Duis venenatis magna feugiat.
+
+  ## Links
+
+  [100]: http://lacus.org/lacus
+  [101]: www.magna.com
+  [102]: https://vitae.net/index.html
+  [103]: www.sem.com
+  [104]: ftp://nunc.com
+  [105]: www.nec.com
+  [106]: https://pellentesque.com
+  [107]: www.fringilla.com
+  [108]: http://turpis.net

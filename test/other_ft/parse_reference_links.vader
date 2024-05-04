@@ -1,0 +1,195 @@
+Given mail:
+  Cum sociis natoque penatibus et magnis dis parturient montes,
+
+Execute (No link):
+  let expected = []
+  let actual = mdlink#ParseLineInBodyFor('reference', 1)
+  AssertEqual expected, actual
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given mail:
+  Cum sociis natoque penatibus [3] et magnis dis parturient montes,
+
+Execute (Single link):
+  let expected = [
+    \ {
+    \ 'full_link': '[3]',
+    \ 'link_text': '',
+    \ 'destination': '3',
+    \ 'length': 3,
+    \ 'col_start': 30,
+    \ }
+  \ ]
+  let actual = mdlink#ParseLineInBodyFor('reference', 1)
+  AssertEqual expected, actual
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given mail:
+  Cum sociis natoque penatibus [3] et magnis [5] dis parturient montes,
+
+Execute (Two links):
+  let expected = [
+    \ {
+    \ 'full_link': '[3]',
+    \ 'link_text': '',
+    \ 'destination': '3',
+    \ 'length': 3,
+    \ 'col_start': 30,
+    \ },
+    \ {
+    \ 'full_link': '[5]',
+    \ 'link_text': '',
+    \ 'destination': '5',
+    \ 'length': 3,
+    \ 'col_start': 44,
+    \ }
+  \ ]
+  let actual = mdlink#ParseLineInBodyFor('reference', 1)
+  AssertEqual expected, actual
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given mail:
+  [3] et magnis dis parturient montes
+
+Execute (Link at start of line):
+  let expected = [
+    \ {
+    \ 'full_link': '[3]',
+    \ 'link_text': '',
+    \ 'destination': '3',
+    \ 'length': 3,
+    \ 'col_start': 1,
+    \ }
+  \ ]
+  let actual = mdlink#ParseLineInBodyFor('reference', 1)
+  AssertEqual expected, actual
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given mail:
+  Cum sociis natoque penatibus [3]
+
+Execute (Link at end of line):
+  let expected = [
+    \ {
+    \ 'full_link': '[3]',
+    \ 'link_text': '',
+    \ 'destination': '3',
+    \ 'length': 3,
+    \ 'col_start': 30,
+    \ }
+  \ ]
+  let actual = mdlink#ParseLineInBodyFor('reference', 1)
+  AssertEqual expected, actual
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given mail:
+  [3] et [5]
+
+Execute (Two links, one at start of line, one at end of line):
+  let expected = [
+    \ {
+    \ 'full_link': '[3]',
+    \ 'link_text': '',
+    \ 'destination': '3',
+    \ 'length': 3,
+    \ 'col_start': 1,
+    \ },
+    \ {
+    \ 'full_link': '[5]',
+    \ 'link_text': '',
+    \ 'destination': '5',
+    \ 'length': 3,
+    \ 'col_start': 8,
+    \ }
+  \ ]
+  let actual = mdlink#ParseLineInBodyFor('reference', 1)
+  AssertEqual expected, actual
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given mail:
+  Cum sociis natoque penatibus [0] et magnis [1] dis parturient [2] montes,
+
+Execute (Three links):
+  let expected = [
+    \ {
+    \ 'full_link': '[0]',
+    \ 'link_text': '',
+    \ 'destination': '0',
+    \ 'length': 3,
+    \ 'col_start': 30,
+    \ },
+    \ {
+    \ 'full_link': '[1]',
+    \ 'link_text': '',
+    \ 'destination': '1',
+    \ 'length': 3,
+    \ 'col_start': 44,
+    \ },
+    \ {
+    \ 'full_link': '[2]',
+    \ 'link_text': '',
+    \ 'destination': '2',
+    \ 'length': 3,
+    \ 'col_start': 63,
+    \ }
+  \ ]
+  let actual = mdlink#ParseLineInBodyFor('reference', 1)
+  AssertEqual expected, actual
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given mail:
+  Ultrices posuere cubilia Curae; Curabitur consequat leo et dui. Aenean ligula mi, interdum a, dolor. volutpat. Donec [0] odio. Quisque nunc. Integer [1] cursus feugiat [2] magna
+
+Execute (Long line):
+  let expected = [
+    \ {
+    \ 'full_link': '[0]',
+    \ 'link_text': '',
+    \ 'destination': '0',
+    \ 'length': 3,
+    \ 'col_start': 118,
+    \ },
+    \ {
+    \ 'full_link': '[1]',
+    \ 'link_text': '',
+    \ 'destination': '1',
+    \ 'length': 3,
+    \ 'col_start': 150,
+    \ },
+    \ {
+    \ 'full_link': '[2]',
+    \ 'link_text': '',
+    \ 'destination': '2',
+    \ 'length': 3,
+    \ 'col_start': 169,
+    \ }
+  \ ]
+  let actual = mdlink#ParseLineInBodyFor('reference', 1)
+  AssertEqual expected, actual
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given mail:
+  volutpat. www.donec.org odio. Quisque nunc. Integer [0] cursus www.feugi.at magna
+
+Execute (Mix of inline and reference links):
+  let expected = [
+    \ {
+    \ 'full_link': '[0]',
+    \ 'link_text': '',
+    \ 'destination': '0',
+    \ 'length': 3,
+    \ 'col_start': 53,
+    \ },
+  \ ]
+  let actual = mdlink#ParseLineInBodyFor('reference', 1)
+  AssertEqual expected, actual
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

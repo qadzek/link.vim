@@ -1,8 +1,13 @@
+Before:
+  let g:md_link_testing_env = 1
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Execute (Delete two links):
   edit resources/pirate-converted.md
 
   " Links [2] and [5] will be deleted
-  call mdlink#DeleteUnneededRefs('test')
+  call mdlink#Delete()
 
   let expected_msg = '2 links have been deleted from the reference section'
   let actual_msg = split( execute('messages'), '\n' )[-1]
@@ -25,3 +30,5 @@ Execute (Delete two links):
   call cursor(1, 1)
   let line_nr_label_5 = search('\[5\]', 'cnW')
   AssertEqual 0, line_nr_label_5
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -1,0 +1,74 @@
+Before:
+  unlet! b:md_link_skip_line
+After:
+  unlet! b:md_link_skip_line
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown:
+  Filler
+  Not a comment: [magna](www.magna.com)
+
+  <!-- this is a comment: [vitae](https://vitae.net/index.html) -->
+
+  Continued
+
+  > Blockquote: [lacus](http://lacus.org/lacus)
+
+  End
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Execute (Use default (commentstring) to skip lines):
+
+  MdLinkConvertAll
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Expect markdown:
+  Filler
+  Not a comment: [magna][0]
+
+  <!-- this is a comment: [vitae](https://vitae.net/index.html) -->
+
+  Continued
+
+  > Blockquote: [lacus][1]
+
+  End
+
+  ## Links
+
+  [0]: www.magna.com
+  [1]: http://lacus.org/lacus
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown:
+  Filler
+  Not a comment: [magna](www.magna.com)
+
+  <!-- this is a comment: [vitae](https://vitae.net/index.html) -->
+
+  Continued
+
+  > Blockquote: [lacus](http://lacus.org/lacus)
+
+  End
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Execute (Use custom pattern to skip lines):
+  let b:md_link_skip_line = '^>'
+  MdLinkConvertAll
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Expect markdown:
+  Filler
+  Not a comment: [magna][0]
+
+  <!-- this is a comment: [vitae][1] -->
+
+  Continued
+
+  > Blockquote: [lacus](http://lacus.org/lacus)
+
+  End
+
+  ## Links
+
+  [0]: www.magna.com
+  [1]: https://vitae.net/index.html
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

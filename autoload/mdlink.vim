@@ -8,8 +8,13 @@ function! mdlink#Convert(type = 'multiple-links', mode = 'normal') abort range
 
   " Use cursor position before range function moves cursor to first line of
   " range: https://vi.stackexchange.com/questions/6036/
-  let [l:orig_line_nr, l:orig_col_nr] = b:init_cur_pos
-  unlet b:init_cur_pos
+  if exists('b:init_cur_pos')
+    let [l:orig_line_nr, l:orig_col_nr] = b:init_cur_pos
+    unlet b:init_cur_pos
+  else
+    " Default for tests
+    let [l:orig_line_nr, l:orig_col_nr] = [1, 1]
+  endif
 
   let [ l:heading_text, l:is_heading_present, l:heading_line_nr ] =
         \ mdlink#GetHeadingInfo()
@@ -17,10 +22,17 @@ function! mdlink#Convert(type = 'multiple-links', mode = 'normal') abort range
   let l:new_label_nr = mdlink#GetNewLabelNumber(l:is_heading_present)
   let l:start_label_nr = l:new_label_nr
 
-  let l:max_line_nr = mdlink#LimitRangeToHeading(l:is_heading_present, l:heading_line_nr, a:lastline)
+  let l:max_line_nr = mdlink#LimitRangeToHeading(l:is_heading_present,
+        \ l:heading_line_nr, a:lastline)
 
   " Loop over all lines within the range
   for l:cur_line_nr in range(a:firstline, l:max_line_nr)
+
+    " Necessary if reference section is repositioned
+    if l:is_heading_present && l:cur_line_nr >= l:heading_line_nr
+      break
+    endif
+
     if mdlink#SkipLine(l:cur_line_nr)
       continue
     endif
@@ -54,7 +66,8 @@ function! mdlink#Convert(type = 'multiple-links', mode = 'normal') abort range
       else
         call mdlink#AddHeading(l:heading_text)
         let l:is_heading_present = 1
-        let l:last_label_line_nr = mdlink#GetHeadingLineNr(l:heading_text) + 1
+        let l:heading_line_nr = mdlink#GetHeadingLineNr(l:heading_text)
+        let l:last_label_line_nr = l:heading_line_nr + 1
       endif
 
       let l:cur_line_content = getline(l:cur_line_nr)
@@ -80,8 +93,14 @@ function! mdlink#Convert(type = 'multiple-links', mode = 'normal') abort range
   " continue typing after the converted link
   if a:type ==# 'single-link' && a:mode ==# 'insert'
     " Move to end of reference link: first to start, then to 2nd ]
+
     call cursor(l:orig_line_nr, l:link['col_start'])
-    normal! 2f]
+
+    if mdlink#IsFiletypeMarkdown()
+      normal! 2f]
+    else
+      normal! f]
+    endif
 
     " Determine if link is at the very end of the line
     let l:orig_line_len = strlen(l:cur_line_content)
@@ -185,8 +204,8 @@ function! mdlink#Peek() abort
 endfunction
 
 " Delete link reference definitions that are no longer needed
-function! mdlink#DeleteUnneededRefs(env = 'production') abort
-  if a:env ==# 'production'
+function! mdlink#Delete() abort
+  if ! exists('g:md_link_testing_env')
     let l:reply = confirm('Delete links in reference section that are no longer needed?', "&Yes\n&No", 3)
     if l:reply != 1
       return
@@ -290,6 +309,7 @@ function! mdlink#AddHeading(heading_text) abort
 
   " Move to a line matching a pattern, before adding the heading
   if exists('b:md_link_heading_before')
+
     " Cannot find pattern: show message
     if search(b:md_link_heading_before, 'bcWz') == 0
       echom g:mdlink#err_msg['no_heading_pattern'] .. b:md_link_heading_before
@@ -329,11 +349,30 @@ endfunction
 " of total match
 function! mdlink#ParseLineInBodyFor(type, line_nr) abort
   if a:type ==# 'inline'
-    " URL should start with a protocol, e.g. `http://`, or with `www`
-    let l:regex = '\v' .. '\[(' .. '[^]]+' .. ')\]' .
-          \ '\((' .. '%([a-zA-Z0-9.-]{2,12}:\/\/|www\.)' .. '[^)]+' .. ')\)'
+    " Match http://, ftp://, www. etc.
+    let l:protocol = '[a-zA-Z0-9.-]{2,12}:\/\/|www\.'
+
+    " Match [foo](https://bar.com)
+    if mdlink#IsFiletypeMarkdown()
+      let l:regex = '\v' .. '\[(' .. '[^]]+' .. ')\]' .
+          \ '\((' .. '%(' .. l:protocol .. ')' .. '[^)]+' .. ')\)'
+
+    " Match https://bar.com
+    else
+      " '()' ensures the right match ends up in the right subgroup
+      let l:regex = '\v' .. '()' .. '(%(' .. l:protocol .. ')' .. '\S+)'
+  endif
+
   elseif a:type ==# 'reference'
-    let l:regex = '\v' .. '\[(' .. '[^]]+' .. ')\]' .. '\[(' .. '[^]]+' .. ')\]'
+    " Match [foo][3]
+    if mdlink#IsFiletypeMarkdown()
+      let l:regex = '\v' .. '\[(' .. '[^]]+' .. ')\]' .. '\[(' .. '[^]]+' .. ')\]'
+
+    " Match [3]
+    else
+      let l:regex = '\v' .. '()' .. '\[(' .. '[^]]+' .. ')\]'
+    endif
+
   else
     throw 'Invalid type'
   endif
@@ -376,7 +415,13 @@ endfunction
 function! mdlink#ReplaceLink(line_content, full_link, link_text, label, line_nr) abort
   " NOTE URLs containing the * character are not supported
   let l:esc_full_link = escape(a:full_link, '[]')
-  let l:ref_link = '[' .. a:link_text .. '][' .. a:label .. ']'
+
+  if mdlink#IsFiletypeMarkdown()
+    let l:ref_link = '[' .. a:link_text .. '][' .. a:label .. ']'
+  else
+    let l:ref_link = '[' .. a:label .. ']'
+endif
+
   let l:new_line_content = substitute(a:line_content, l:esc_full_link,
         \ l:ref_link, '')
   call setline(a:line_nr, l:new_line_content)
@@ -529,7 +574,7 @@ function! mdlink#JumpToBody(orig_line_nr, heading_line_nr) abort
   " Start search at first line
   call cursor(1, 1)
   " Stop search at heading
-  let l:body_line_nr = search('\v\]\[' .. l:label .. '\]', 'cWe', a:heading_line_nr)
+  let l:body_line_nr = search('\v\[' .. l:label .. '\]', 'cWe', a:heading_line_nr)
 
   if l:body_line_nr == 0
     echom 'Could not find the label ' .. l:label .. ' in the document body'
@@ -537,53 +582,6 @@ function! mdlink#JumpToBody(orig_line_nr, heading_line_nr) abort
 
   " 0 in case of no match
   return l:body_line_nr
-endfunction
-
-" EXTENSIONS ======================================================= {{{1
-
-" Pre-process, then convert, then post-process; all withing a range
-function! mdlink#ProcessConvert() abort range
-  let [l:orig_line_nr, l:orig_col_nr, l:orig_fold_option] = mdlink#Initialize()
-  let [l:orig_line_nr, l:orig_col_nr] = b:init_cur_pos
-
-  execute a:firstline .. ',' .. a:lastline .. 'call mdlink#ProcessUrls("pre")'
-
-  execute a:firstline .. ',' .. a:lastline .. 'call mdlink#Convert()'
-
-  execute a:firstline .. ',' .. a:lastline .. 'call mdlink#ProcessUrls("post")'
-
-  call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
-endfunction
-
-" Pre- or post-process URLs
-function! mdlink#ProcessUrls(type) abort range
-  let [l:is_heading_present, l:heading_line_nr] = mdlink#GetHeadingInfo()[1:2]
-  let l:max_line_nr = mdlink#LimitRangeToHeading(l:is_heading_present, l:heading_line_nr, a:lastline)
-
-  " Loop over lines and substitute
-  for l:cur_line_nr in range(a:firstline, l:max_line_nr)
-    if mdlink#SkipLine(l:cur_line_nr)
-      continue
-    endif
-
-    let l:cur_line_content = getline(l:cur_line_nr)
-
-    " Pre-process: convert plaintext links to Markdown format
-    " E.g. `foo https://bar.com` becomes `foo [bar](https://bar.com)`
-    if a:type ==# 'pre'
-      let l:new_line_content = substitute( l:cur_line_content,
-            \ '\v([a-zA-Z0-9.-]{2,12}:\/\/|www\.)([^.]+)\S+', '[\2](\0)', 'g' )
-
-    " Post-process: remove link text from reference link, only keep link label
-    " E.g. `foo [bar][5]` becomes `foo [5]`
-    elseif a:type ==# 'post'
-      let l:new_line_content = substitute( l:cur_line_content,
-            \ '\v\[[^]]+\](\[\d+\])', '\1', 'g' )
-    endif
-
-    call setline(l:cur_line_nr, l:new_line_content)
-    let l:cur_line_nr += 1
-  endfor
 endfunction
 
 " HELPERS ========================================================== {{{1
@@ -648,6 +646,11 @@ function! mdlink#GetOperatingSystem() abort
   endif
 endfunction
 
+function! mdlink#IsFiletypeMarkdown() abort
+  " NOTE This assumes that Vimwiki uses Markdown syntax
+  return &filetype =~# 'markdown' || &filetype =~# 'vimwiki'
+endfunction
+
 " Default values, can be overridden by vimrc
 let s:defaults = {
       \ 'heading': '## Links',
@@ -661,7 +664,7 @@ let g:mdlink#err_msg = {
       \ 'no_heading':
       \ 'No heading found',
       \ 'no_inline_link':
-      \ 'No inline link in the format of "[foo](http://bar.com)" found on this line',
+      \ 'No inline link found on this line in the format of "[foo](http://bar.com)" (Markdown) or "http://bar.com" (other)',
       \ 'no_link_ref_definition':
       \ 'No link reference definition in the format of "[3]: ..." found on this line',
       \ 'no_label_ref_section':
@@ -669,7 +672,7 @@ let g:mdlink#err_msg = {
       \ 'not_from_ref':
       \ 'This action is only possible from the document body, not from the reference section',
       \ 'no_reference_link':
-      \ 'No reference link in the format of "[foo][3]" found on this line',
+      \ 'No reference link found on this line in the format of "[foo][3]" (Markdown) or "[3]" (other)',
       \ 'no_valid_url':
       \ 'Not a valid URL',
       \ 'open_in_browser_failed':

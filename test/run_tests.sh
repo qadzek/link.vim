@@ -57,7 +57,7 @@ shift "$((OPTIND - 1))"
 
 # Decide if all tests should be run or only one or more particular test(s)
 if [[ "$all_tests" != false ]]; then
-  test_files='*'
+  test_files='**/*'
   printf "Running tests in all: *.vader files\n"
 
 else
@@ -83,7 +83,7 @@ if [[ "$watch_modus" == true ]]; then
   while true; do
     clear
 
-    if "$editor" -N -u mini.vimrc +"${vader_cmd} ${test_files}"; then
+    if "$editor" -N -u minimal.vimrc +"${vader_cmd} ${test_files}"; then
       sleep 1
     else
       printf "\e[31mFailure\e[0m\n\a"
@@ -94,5 +94,5 @@ if [[ "$watch_modus" == true ]]; then
 else
   # -N         No-compatible mode
   # -u {vimrc} Use the commands in the file {vimrc} for initializations
-  "$editor" -N -u mini.vimrc +"${vader_cmd} ${test_files}"
+  "$editor" -N -u minimal.vimrc +"${vader_cmd} ${test_files}"
 fi

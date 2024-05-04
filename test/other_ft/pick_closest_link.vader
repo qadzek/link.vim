@@ -1,0 +1,163 @@
+Given mail:
+  http://www.loremipsum.com et http://www.dolorsitamet.com dis http://www.adipiscingelitipsum.com montes,
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Execute (First out of three links, cursor on first char):
+  let b:init_cur_pos = [1, 1]
+  call mdlink#Convert('single-link')
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Expect mail:
+  [0] et http://www.dolorsitamet.com dis http://www.adipiscingelitipsum.com montes,
+
+  ## Links
+
+  [0]: http://www.loremipsum.com
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given mail:
+  http://www.loremipsum.com et magnis http://www.dolorsitamet.com dis parturient http://www.adipiscingelitipsum.com montes,
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Execute (Second out of three links, cursor on first char):
+  let b:init_cur_pos = [1, 41]
+  call mdlink#Convert('single-link')
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Expect mail:
+  http://www.loremipsum.com et magnis [0] dis parturient http://www.adipiscingelitipsum.com montes,
+
+  ## Links
+
+  [0]: http://www.dolorsitamet.com
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given mail:
+  http://www.loremipsum.com et http://www.dolorsitamet.com dis http://www.adipiscingelitipsum.com montes,
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Execute (Third out of three links, cursor on first char):
+  let b:init_cur_pos = [1, 62]
+  call mdlink#Convert('single-link')
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Expect mail:
+  http://www.loremipsum.com et http://www.dolorsitamet.com dis [0] montes,
+
+  ## Links
+
+  [0]: http://www.adipiscingelitipsum.com
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given mail:
+  http://www.loremipsum.com et http://www.dolorsitamet.com dis http://www.adipiscingelitipsum.com montes,
+Execute (First out of three links, cursor on last char):
+  let b:init_cur_pos = [1, 25]
+  call mdlink#Convert('single-link')
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Expect mail:
+  [0] et http://www.dolorsitamet.com dis http://www.adipiscingelitipsum.com montes,
+
+  ## Links
+
+  [0]: http://www.loremipsum.com
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given mail:
+  http://www.loremipsum.com et http://www.dolorsitamet.com dis http://www.adipiscingelitipsum.com montes,
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Execute (Second out of three links, cursor on last char):
+  let b:init_cur_pos = [1, 56]
+  call mdlink#Convert('single-link')
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Expect mail:
+  http://www.loremipsum.com et [0] dis http://www.adipiscingelitipsum.com montes,
+
+  ## Links
+
+  [0]: http://www.dolorsitamet.com
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given mail:
+  http://www.loremipsum.com et http://www.dolorsitamet.com dis http://www.adipiscingelitipsum.com montes,
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Execute (Third out of three links, cursor on last char):
+  let b:init_cur_pos = [1, 95]
+  call mdlink#Convert('single-link')
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Expect mail:
+  http://www.loremipsum.com et http://www.dolorsitamet.com dis [0] montes,
+
+  ## Links
+
+  [0]: http://www.adipiscingelitipsum.com
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given mail:
+  http://www.loremipsum.com et http://www.dolorsitamet.com dis http://www.adipiscingelitipsum.com montes,
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Execute (Cursor between first and second link):
+  let b:init_cur_pos = [1, 28]
+  call mdlink#Convert('single-link')
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Expect mail:
+  http://www.loremipsum.com et [0] dis http://www.adipiscingelitipsum.com montes,
+
+  ## Links
+
+  [0]: http://www.dolorsitamet.com
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given mail:
+  http://www.loremipsum.com et http://www.dolorsitamet.com dis http://www.adipiscingelitipsum.com montes,
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Execute (Cursor inside second link):
+  let b:init_cur_pos = [1, 38]
+  call mdlink#Convert('single-link')
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Expect mail:
+  http://www.loremipsum.com et [0] dis http://www.adipiscingelitipsum.com montes,
+
+  ## Links
+
+  [0]: http://www.dolorsitamet.com
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given mail:
+  http://www.loremipsum.com et http://www.dolorsitamet.com dis http://www.adipiscingelitipsum.com montes,
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Execute (Cursor just before second link):
+  let b:init_cur_pos = [1, 29]
+  call mdlink#Convert('single-link')
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Expect mail:
+  http://www.loremipsum.com et [0] dis http://www.adipiscingelitipsum.com montes,
+
+  ## Links
+
+  [0]: http://www.dolorsitamet.com
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given mail:
+  http://www.loremipsum.com et http://www.dolorsitamet.com dis http://www.adipiscingelitipsum.com montes,
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Execute (Cursor just after second link):
+  let b:init_cur_pos = [1, 57]
+  call mdlink#Convert('single-link')
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Expect mail:
+  http://www.loremipsum.com et http://www.dolorsitamet.com dis [0] montes,
+
+  ## Links
+
+  [0]: http://www.adipiscingelitipsum.com
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given mail:
+  http://www.loremipsum.com et http://www.dolorsitamet.com dis http://www.adipiscingelitipsum.com
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Execute (Cursor on last char of last link, no trailing chars):
+  let b:init_cur_pos = [1, 95]
+  call mdlink#Convert('single-link')
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Expect mail:
+  http://www.loremipsum.com et http://www.dolorsitamet.com dis [0]
+
+  ## Links
+
+  [0]: http://www.adipiscingelitipsum.com
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -22,21 +22,6 @@ command -buffer -bar        MdLinkJump                  :call mdlink#Jump()
 
 " Delete ----------------------------------------------------------- {{{1
 
-command -buffer -bar        MdLinkDeleteUnneededRefs
-      \ :call mdlink#DeleteUnneededRefs()
+command -buffer -bar        MdLinkDelete                :call mdlink#Delete()
 
-" Pre- and post-process -------------------------------------------- {{{1
-
-command -buffer -bar -range MdLinkPreProcessUrls
-      \ :<line1>,<line2>call mdlink#ProcessUrls('pre')
-
-command -buffer -bar -range MdLinkPostProcessUrls
-      \ :<line1>,<line2>call mdlink#ProcessUrls('post')
-
-command -buffer -bar -range MdLinkProcessConvert
-      \ let b:init_cur_pos = getcurpos()[1:2] |
-      \ :<line1>,<line2>call mdlink#ProcessConvert()
-
-command -buffer -bar        MdLinkPreProcessUrlsAll     :% MdLinkPreProcessUrls
-command -buffer -bar        MdLinkPostProcessUrlsAll    :% MdLinkPostProcessUrls
-command -buffer -bar        MdLinkProcessConvertAll     :% MdLinkProcessConvert
+" vim:fdm=marker

@@ -6,7 +6,8 @@ Execute (No link):
   let actual = mdlink#ParseLineInBodyFor('reference', 1)
   AssertEqual expected, actual
 
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Given markdown;
 Cum sociis natoque [penatibus][3] et magnis dis parturient montes,
 
@@ -23,7 +24,7 @@ Execute (Single link):
   let actual = mdlink#ParseLineInBodyFor('reference', 1)
   AssertEqual expected, actual
 
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown;
 Cum sociis natoque [penatibus][3] et [magnis][5] dis parturient montes,
@@ -48,7 +49,7 @@ Execute (Two links):
   let actual = mdlink#ParseLineInBodyFor('reference', 1)
   AssertEqual expected, actual
 
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown;
 [penatibus][3] et magnis dis parturient montes
@@ -66,7 +67,7 @@ Execute (Link at start of line):
   let actual = mdlink#ParseLineInBodyFor('reference', 1)
   AssertEqual expected, actual
 
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown;
 Cum sociis natoque [penatibus][3]
@@ -84,7 +85,7 @@ Execute (Link at end of line):
   let actual = mdlink#ParseLineInBodyFor('reference', 1)
   AssertEqual expected, actual
 
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown;
 [penatibus][3] et [magnis][5]
@@ -109,7 +110,7 @@ Execute (Two links, one at start of line, one at end of line):
   let actual = mdlink#ParseLineInBodyFor('reference', 1)
   AssertEqual expected, actual
 
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown;
 Cum sociis natoque [penatibus][0] et [magnis][1] dis [parturient][2] montes,
@@ -141,7 +142,7 @@ Execute (Three links):
   let actual = mdlink#ParseLineInBodyFor('reference', 1)
   AssertEqual expected, actual
 
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown;
 Ultrices posuere cubilia Curae; Curabitur consequat leo et dui. Aenean ligula mi, interdum a, dolor. volutpat. [Donec][0] odio. Quisque nunc. [Integer][1] cursus [feugiat][2] magna
@@ -173,7 +174,7 @@ Execute (Long line):
   let actual = mdlink#ParseLineInBodyFor('reference', 1)
   AssertEqual expected, actual
 
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown;
 volutpat. [Donec](www.donec.org) odio. Quisque nunc. [Integer][0] cursus [feugiat](www.feugi.at) magna
@@ -191,4 +192,4 @@ Execute (Mix of inline and reference links):
   let actual = mdlink#ParseLineInBodyFor('reference', 1)
   AssertEqual expected, actual
 
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

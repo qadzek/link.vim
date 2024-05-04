@@ -5,18 +5,18 @@ After:
   unlet! b:md_link_heading
   unlet! b:md_link_skip_line
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Given javascript:
   // filler
   const url = ' www.magna.com '
 
   // this is a comment: https://vitae.net/index.html
+~~~~~
 Execute (Use default (commentstring) to skip lines; JavaScript):
-
   let b:md_link_heading = 'Links:'
-  let b:init_cur_pos = [1, 1]
-
-  1,$call mdlink#ProcessConvert()
-
+  % call mdlink#Convert()
+~~~~~
 Expect javascript:
   // filler
   const url = ' [0] '
@@ -28,7 +28,7 @@ Expect javascript:
   [0]: www.magna.com
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given markdown:
+Given html:
   Filler
   Not a comment: www.magna.com
 
@@ -39,12 +39,11 @@ Given markdown:
   > Blockquote: http://lacus.org/lacus
 
   End
-Execute (Use default (commentstring) to skip lines; Markdown):
-
-  let b:init_cur_pos = [1, 1]
-  1,$call mdlink#ProcessConvert()
-
-Expect markdown:
+~~~~~
+Execute (Use default (commentstring) to skip lines; HTML):
+  % call mdlink#Convert()
+~~~~~
+Expect html:
   Filler
   Not a comment: [0]
 
@@ -62,7 +61,7 @@ Expect markdown:
   [1]: http://lacus.org/lacus
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given markdown:
+Given html:
   Not a comment: www.magna.com
 
   <!-- this is a comment: https://vitae.net/index.html -->
@@ -72,12 +71,12 @@ Given markdown:
   > Blockquote: http://lacus.org/lacus
 
   End
-Execute (Use custom pattern to skip lines; Markdown):
+~~~~~
+Execute (Use custom pattern to skip lines; HTML):
   let b:md_link_skip_line = '^>'
-  let b:init_cur_pos = [1, 1]
-  1,$call mdlink#ProcessConvert()
-
-Expect markdown:
+  % call mdlink#Convert()
+~~~~~
+Expect html:
   Not a comment: [0]
 
   <!-- this is a comment: [1] -->

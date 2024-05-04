@@ -8,7 +8,7 @@
           \_/ |_|_| |_| |_|     |_| |_| |_|\__,_|     |_|_|_| |_|_|\_\~
 
 
-Version: 0.5.0
+Version: 1.0.0
 Author:  qadzek
 License: MIT
 
@@ -107,7 +107,7 @@ The vim-md-link plugin exposes the following commands:
     corresponding link reference definition in the reference section, and the
     other way around.
 
-:MdLinkDeleteUnneededRefs                          *:MdLinkDeleteUnneededRefs*
+:MdLinkDelete                                                  *:MdLinkDelete*
     Test for every link reference definition if its label is present in the
     document body. If it isn't, delete the link reference definition.
 
@@ -130,7 +130,7 @@ existing key bindings. Some suggestions for your `.vimrc`:
     nnoremap <buffer> <silent> <LocalLeader>o   :MdLinkOpen<CR>
     nnoremap <buffer> <silent> <LocalLeader>j   :MdLinkJump<CR>
     nnoremap <buffer> <silent> <LocalLeader>p   :MdLinkPeek<CR>
-    nnoremap <buffer> <silent> <LocalLeader>d   :MdLinkDeleteUnneededRefs<CR>
+    nnoremap <buffer> <silent> <LocalLeader>d   :MdLinkDelete<CR>
   endfunction
 <
 To ensure these bindings are only applied for Markdown files, they are wrapped
@@ -159,17 +159,25 @@ By default, the first converted link gets a label of 0. To change this:
 ==============================================================================
 EXTENSIONS                                                *md-link-extensions*
 
-By default, this plugin only operates on Markdown buffers.
+By default, this plugin only operates on Markdown buffers, containing inline
+links in the Markdown format, e.g. `[Vim](https://www.vim.org)`
 
-To make this plugin's commands available to other filetypes, such as a plain
-text file (`filetype=text`), create `~/.vim/ftplugin/text.vim` with the
-following contents:
+It's possible to extend the plugin to other filetypes, containing plaintext
+links, e.g. `Try Vim as your editor: https://www.vim.org`
+
+To make this plugin's commands available to for instance `mail` buffers,
+create `~/.vim/ftplugin/mail.vim` with the following contents:
 >
   if !empty(findfile('ftplugin/markdown/vim-md-link.vim', &runtimepath))
     runtime ftplugin/markdown/vim-md-link.vim
   endif
 
   if exists(':MdLinkConvertAll') != 2 | finish | endif
+<
+To use the suggested key bindings for additional filetypes, add the filetype
+to the line mentioned in |md-link-mappings|:
+>
+  autocmd Filetype markdown,mail,gitcommit :call MdLinkAddKeyBindings()
 <
                                                            *b:md_link_heading*
 Inside the `ftplugin` file, you can specify the heading that will mark the
@@ -189,30 +197,6 @@ section, elsewhere. E.g. for a `gitcommit` buffer:
 By default, links in lines matching |commentstring| are not converted. Inside
 the `ftplugin` file, you can modify this pattern. E.g. to skip blockquotes:
   `let b:md_link_skip_line = '^>'`
-
-As other filetypes don't use Markdown inline links, e.g.
-`[Vim](https://www.vim.org)`, but rather plaintext links, e.g.
-`Try Vim as your editor: https://www.vim.org`, several commands help handling
-these links. You probably want to use `:MdLinkProcessConvertAll` to
-pre-process the links by converting them to Markdown format, then convert them
-to reference links and finally post-process them by removing the link text.
-
-:MdLinkPreProcessUrls                                  *:MdLinkPreProcessUrls*
-:MdLinkPreProcessUrlsAll                            *:MdLinkPreProcessUrlsAll*
-    Convert plaintext links to Markdown format on a range of lines/on all
-    lines. `Try Neovim as your editor: https://neovim.io` becomes
-    `Try Neovim as your editor: [neovim](https://neovim.io)`
-
-:MdLinkPostProcessUrls                                *:MdLinkPostProcessUrls*
-:MdLinkPostProcessUrlsAll                          *:MdLinkPostProcessUrlsAll*
-    Remove the link text from reference links on a range of lines/on all
-    lines. `Try Neovim as your editor: [neovim][3]` becomes
-    `Try Neovim as your editor: [3]`
-
-:MdLinkProcessConvert                                  *:MdLinkProcessConvert*
-:MdLinkProcessConvertAll                            *:MdLinkProcessConvertAll*
-    Combine pre-processing, converting and post-processing on a range of
-    lines/on all lines.
 
 For examples of how users have extended this plugin, for instance to
 `gitcommit` buffers, see the Wiki:
@@ -244,6 +228,11 @@ To execute the tests: `./test/run_tests.sh`
 
 ==============================================================================
 CHANGELOG                                                  *md-link-changelog*
+
+1.0.0   2024-05-04
+        - Remove pre- and post-processing commands             BREAKING CHANGE
+        - Add native support for plaintext links
+        - Rename :MdLinkDeleteUnneededRefs                     BREAKING CHANGE
 
 0.5.0   2024-04-17
         - Allow positioning of reference section

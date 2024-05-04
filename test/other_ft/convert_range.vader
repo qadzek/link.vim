@@ -1,0 +1,115 @@
+Before:
+  unlet! g:md_link_heading
+  unlet! b:md_link_heading
+  unlet! b:md_link_heading_before
+  unlet! b:md_link_skip_line
+After:
+  unlet! g:md_link_heading
+  unlet! b:md_link_heading
+  unlet! b:md_link_heading_before
+  unlet! b:md_link_skip_line
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given mail:
+  www.bar.com
+  Fluke furl ftp://ftp.bar.net scuttle coffer
+  file://path/to/file.txt hang the jib spyglass driver crack Jennys tea cup.
+  Quarterdeck run a http://www.bar.com
+  rig Jolly Roger https://bar.org gangway http://192.0.2.1 no prey,
+  no pay pirate quarter log http://subdomain.bar.com
+  schooner draft https://bar.travel
+  http://bar.very123longtld
+  Scurvy Admiral of the Black spirits clipper http://www.ba-r.com Nipperkin
+  http://bar.com:8080 Jolly Roger matey hulk aye
+  http://bar.com/baz
+  booty provost killick bounty http://bar.com/index.html
+  http://www.parameters.org/page2014.html?utm_source=facebook&utm_medium=eventlinkonwall&utm_term=trapshoot&utm_content=calendar_event_on_wall&utm_campaign=trapshoot2014
+  bar
+  bar.com
+  Line containing something resembling an inline link: command! -buffer -range=% -bar TagLinks silent keeppatterns <line1>,<line2>substitute#\v%(\[[^\]]+\]\(\s*)@<!\zs<https?://([^.]+)\S+#[\1](\0)#giep
+~~~~~
+Execute (Convert a range in a mail buffer):
+  let b:md_link_heading = 'Links:'
+  4,6 call mdlink#Convert()
+~~~~~
+Expect mail:
+  www.bar.com
+  Fluke furl ftp://ftp.bar.net scuttle coffer
+  file://path/to/file.txt hang the jib spyglass driver crack Jennys tea cup.
+  Quarterdeck run a [0]
+  rig Jolly Roger [1] gangway [2] no prey,
+  no pay pirate quarter log [3]
+  schooner draft https://bar.travel
+  http://bar.very123longtld
+  Scurvy Admiral of the Black spirits clipper http://www.ba-r.com Nipperkin
+  http://bar.com:8080 Jolly Roger matey hulk aye
+  http://bar.com/baz
+  booty provost killick bounty http://bar.com/index.html
+  http://www.parameters.org/page2014.html?utm_source=facebook&utm_medium=eventlinkonwall&utm_term=trapshoot&utm_content=calendar_event_on_wall&utm_campaign=trapshoot2014
+  bar
+  bar.com
+  Line containing something resembling an inline link: command! -buffer -range=% -bar TagLinks silent keeppatterns <line1>,<line2>substitute#\v%(\[[^\]]+\]\(\s*)@<!\zs<https?://([^.]+)\S+#[\1](\0)#giep
+
+  Links:
+
+  [0]: http://www.bar.com
+  [1]: https://bar.org
+  [2]: http://192.0.2.1
+  [3]: http://subdomain.bar.com
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given mail:
+  Subject: Join Our Webinar Series!
+  
+  Hi John,
+  
+  Exciting news! We're hosting a series of webinars on Vim and Neovim. Here's
+  the schedule:
+  
+  Intro to Vim: Join here: https://vim.com/webinar1 or https://vimbackup.com/webinar1
+  Advanced Vim Techniques: Join here: www.vim.com/webinar2
+  Q&A with Experts: Join here: http://vim.com/webinar3
+
+  Intro to Neovim: Join here: https://neovim.com/webinar1 or https://neovimbackup.com/webinar1
+  > Advanced Neovim Techniques: Join here: www.neovim.com/webinar2
+  Q&A with Experts: Join here: http://neovim.com/webinar3
+
+  Don't miss out — register now! Let us know if you have any questions.
+  
+  Cheers,
+  Jane
+~~~~~
+Execute (Mail buffer):
+  let b:md_link_heading = 'Full Links:'
+  let b:md_link_heading_before = '^Cheers'
+  let b:md_link_skip_line = '^>'
+  10,13 call mdlink#Convert()
+~~~~~
+Expect mail:
+  Subject: Join Our Webinar Series!
+  
+  Hi John,
+  
+  Exciting news! We're hosting a series of webinars on Vim and Neovim. Here's
+  the schedule:
+  
+  Intro to Vim: Join here: https://vim.com/webinar1 or https://vimbackup.com/webinar1
+  Advanced Vim Techniques: Join here: www.vim.com/webinar2
+  Q&A with Experts: Join here: [0]
+
+  Intro to Neovim: Join here: [1] or [2]
+  > Advanced Neovim Techniques: Join here: www.neovim.com/webinar2
+  Q&A with Experts: Join here: http://neovim.com/webinar3
+
+  Don't miss out — register now! Let us know if you have any questions.
+
+  Full Links:
+  
+  [0]: http://vim.com/webinar3
+  [1]: https://neovim.com/webinar1
+  [2]: https://neovimbackup.com/webinar1
+
+  Cheers,
+  Jane
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

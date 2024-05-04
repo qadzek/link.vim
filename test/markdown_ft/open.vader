@@ -1,0 +1,70 @@
+Before:
+  messages clear
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown;
+# A consectetuer nunc justo ac nisl.
+
+## Nam vitae purus
+
+Cum sociis natoque penatibus et magnis dis parturient montes,
+nascetur ridiculus mus.
+
+## Links
+
+[0]: http://www.loremipsumdolorsitamet.com
+~~~~~~~~~~~~~~~~~~~~~~~~~
+Execute (From reference section):
+  call cursor('$', 1)
+  MdLinkOpen
+  let expected = g:mdlink#err_msg['not_from_ref']
+  let actual = split( execute('messages'), '\n')[-1]
+  AssertEqual expected, actual
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown;
+# A consectetuer nunc justo ac nisl.
+
+## Nam vitae purus
+
+Cum sociis [natoque][0] penatibus et magnis dis parturient montes,
+nascetur ridiculus mus.
+
+Praesent semper magna. In eu justo. Nunc vitae risus nec
+sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+
+## Links
+
+[0]: loremipsumdolorsitamet.com
+~~~~~~~~~~~~~~~~~~~~~~~~~
+Execute (No reference link on line):
+  MdLinkOpen
+  let expected = g:mdlink#err_msg['no_reference_link']
+  let actual = split( execute('messages'), '\n')[-1]
+  AssertEqual expected, actual
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Given markdown;
+# A consectetuer nunc justo ac nisl.
+
+## Nam vitae purus
+
+Cum sociis [natoque][0] penatibus et magnis dis parturient montes,
+nascetur ridiculus mus.
+
+Praesent semper magna. In eu justo. Nunc vitae risus nec
+sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+
+## Links
+
+[0]: loremipsum.com
+~~~~~~~~~~~~~~~~~~~~~~~~~
+Execute (No valid URL: does not start with a protocol like 'http' or with 'www'):
+  call cursor(5, 1)
+  MdLinkOpen
+  let expected = g:mdlink#err_msg['no_valid_url'] .. ': loremipsum.com'
+  let actual = split( execute('messages'), '\n')[-1]
+  AssertEqual expected, actual
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

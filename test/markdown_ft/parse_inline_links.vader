@@ -6,7 +6,8 @@ Execute (No link):
   let actual = mdlink#ParseLineInBodyFor('inline', 1)
   AssertEqual expected, actual
 
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Given markdown;
 Cum sociis natoque [penatibus](http://www.loremipsum.com) et magnis dis parturient montes,
 
@@ -23,7 +24,7 @@ Execute (Single link):
   let actual = mdlink#ParseLineInBodyFor('inline', 1)
   AssertEqual expected, actual
 
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown;
 Cum sociis natoque [penatibus](http://www.loremipsum.com) et [magnis](http://www.dolorsitamet.com) dis parturient montes,
@@ -48,7 +49,7 @@ Execute (Two links):
   let actual = mdlink#ParseLineInBodyFor('inline', 1)
   AssertEqual expected, actual
 
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown;
 [penatibus](http://www.loremipsum.com) et magnis dis parturient montes
@@ -66,7 +67,7 @@ Execute (Link at start of line):
   let actual = mdlink#ParseLineInBodyFor('inline', 1)
   AssertEqual expected, actual
 
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown;
 Cum sociis natoque [penatibus](http://www.loremipsum.com)
@@ -84,7 +85,7 @@ Execute (Link at end of line):
   let actual = mdlink#ParseLineInBodyFor('inline', 1)
   AssertEqual expected, actual
 
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown;
 [penatibus](http://www.loremipsum.com) et [magnis](http://www.dolorsitamet.com)
@@ -109,7 +110,7 @@ Execute (Two links, one at start of line, one at end of line):
   let actual = mdlink#ParseLineInBodyFor('inline', 1)
   AssertEqual expected, actual
 
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown;
 Cum sociis natoque [penatibus](http://www.loremipsum.com) et [magnis](http://www.dolorsitamet.com) dis [parturient](http://www.adipiscingelitipsum.com) montes,
@@ -141,7 +142,7 @@ Execute (Three links):
   let actual = mdlink#ParseLineInBodyFor('inline', 1)
   AssertEqual expected, actual
 
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown;
 Cum sociis natoque [penatibus](http://www.loremipsum.com/foo.html?bar=baz#alfa) et magnis
@@ -159,7 +160,7 @@ Execute (Link containing special characters):
   let actual = mdlink#ParseLineInBodyFor('inline', 1)
   AssertEqual expected, actual
 
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown;
 Cum sociis natoque [penatibus](http://www.lorem-ipsum.com/foo_bar.html?bar=baz+alpha$bravo!charlie*delta,echo'foxtrot) et magnis
@@ -177,7 +178,7 @@ Execute (Link containing more special characters):
   let actual = mdlink#ParseLineInBodyFor('inline', 1)
   AssertEqual expected, actual
 
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown;
 volutpat. [Donec](www.donec.org) odio. Quisque nunc. [Integer](http://integ.er) cursus [feugiat](www.feugi.at) magna
@@ -209,4 +210,4 @@ Execute (Long line):
   let actual = mdlink#ParseLineInBodyFor('inline', 1)
   AssertEqual expected, actual
 
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

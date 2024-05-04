@@ -16,8 +16,10 @@ Given markdown:
   [foo](bar)
   [foo](bar.com)
   Line containing something resembling an inline link: command! -buffer -range=% -bar TagLinks silent keeppatterns <line1>,<line2>substitute#\v%(\[[^\]]+\]\(\s*)@<!\zs<https?://([^.]+)\S+#[\1](\0)#giep
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (URLs in varying formats):
   MdLinkConvertAll
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect markdown:
   [foo][0]
   [foo][1]
@@ -53,3 +55,4 @@ Expect markdown:
   [11]: http://bar.com/baz
   [12]: http://bar.com/index.html
   [13]: http://www.parameters.org/page2014.html?utm_source=facebook&utm_medium=eventlinkonwall&utm_term=trapshoot&utm_content=calendar_event_on_wall&utm_campaign=trapshoot2014
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

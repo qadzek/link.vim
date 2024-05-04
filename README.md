@@ -47,7 +47,7 @@ Plug 'qadzek/vim-md-link'
 :MdLinkOpen                  " Open a link in the browser
 :MdLinkPeek                  " Get a preview of the URL
 :MdLinkJump                  " Jump to and from the references
-:MdLinkDeleteUnneededRefs    " Delete references that are no longer needed
+:MdLinkDelete                " Delete references that are no longer needed
 ```
 
 No mappings are built-in to avoid conflicts with your existing key bindings.
@@ -68,7 +68,7 @@ The following is an example that you can copy to you `.vimrc`. By default,
     nnoremap <buffer> <silent> <LocalLeader>o   :MdLinkOpen<CR>
     nnoremap <buffer> <silent> <LocalLeader>p   :MdLinkPeek<CR>
     nnoremap <buffer> <silent> <LocalLeader>j   :MdLinkJump<CR>
-    nnoremap <buffer> <silent> <LocalLeader>d   :MdLinkDeleteUnneededRefs<CR>
+    nnoremap <buffer> <silent> <LocalLeader>d   :MdLinkDelete<CR>
   endfunction
 ```
 
@@ -85,11 +85,11 @@ filetypes, e.g. to `mail` buffers. This means that the following email
 ```text
 Hi John,
 
-I hope this email finds you well. Did you know that Vim was created by Bram
-Moolenaar? https://en.wikipedia.org/wiki/Bram_Moolenaar
+I hope this email finds you well. Did you know that Vim was created
+by Bram Moolenaar? https://en.wikipedia.org/wiki/Bram_Moolenaar
 
-He released it as charityware, so you are encouraged to make a donation for
-children in Uganda. https://vimhelp.org/uganda.txt.html
+He released it as charityware, so you are encouraged to make a
+donation for children in Uganda. https://vimhelp.org/uganda.txt.html
 
 Best regards,
 Jane
@@ -100,19 +100,19 @@ can be converted to
 ```text
 Hi John,
 
-I hope this email finds you well. Did you know that Vim was created by Bram
-Moolenaar? [0]
+I hope this email finds you well. Did you know that Vim was created
+by Bram Moolenaar? [0]
 
-He released it as charityware, so you are encouraged to make a donation for
-children in Uganda. [1]
-
-Best regards,
-Jane
+He released it as charityware, so you are encouraged to make a
+donation for children in Uganda. [1]
 
 Links:
 
 [0]: https://en.wikipedia.org/wiki/Bram_Moolenaar
 [1]: https://vimhelp.org/uganda.txt.html
+
+Best regards,
+Jane
 ```
 
 The [Wiki][1] contains some snippets provided by users, for instance on how to

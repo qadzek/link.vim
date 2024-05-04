@@ -11,7 +11,7 @@ After:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given markdown:
+Given mail:
   www.bar.com
   Fluke furl ftp://ftp.bar.net scuttle coffer
   file://path/to/file.txt hang the jib spyglass driver crack Jennys tea cup.
@@ -28,11 +28,11 @@ Given markdown:
   bar
   bar.com
   Line containing something resembling an inline link: command! -buffer -range=% -bar TagLinks silent keeppatterns <line1>,<line2>substitute#\v%(\[[^\]]+\]\(\s*)@<!\zs<https?://([^.]+)\S+#[\1](\0)#giep
-Execute (Process and convert all URLs):
+Execute (Convert all URLs in a mail buffer):
   let b:md_link_heading = 'Links:'
-  MdLinkProcessConvertAll
+  % call mdlink#Convert()
 
-Expect markdown:
+Expect mail:
   [0]
   Fluke furl [1] scuttle coffer
   [2] hang the jib spyglass driver crack Jennys tea cup.
@@ -69,53 +69,6 @@ Expect markdown:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given markdown:
-  www.bar.com
-  Fluke furl ftp://ftp.bar.net scuttle coffer
-  file://path/to/file.txt hang the jib spyglass driver crack Jennys tea cup.
-  Quarterdeck run a http://www.bar.com
-  rig Jolly Roger https://bar.org gangway http://192.0.2.1 no prey,
-  no pay pirate quarter log http://subdomain.bar.com
-  schooner draft https://bar.travel
-  http://bar.very123longtld
-  Scurvy Admiral of the Black spirits clipper http://www.ba-r.com Nipperkin
-  http://bar.com:8080 Jolly Roger matey hulk aye
-  http://bar.com/baz
-  booty provost killick bounty http://bar.com/index.html
-  http://www.parameters.org/page2014.html?utm_source=facebook&utm_medium=eventlinkonwall&utm_term=trapshoot&utm_content=calendar_event_on_wall&utm_campaign=trapshoot2014
-  bar
-  bar.com
-  Line containing something resembling an inline link: command! -buffer -range=% -bar TagLinks silent keeppatterns <line1>,<line2>substitute#\v%(\[[^\]]+\]\(\s*)@<!\zs<https?://([^.]+)\S+#[\1](\0)#giep
-Execute (Process and convert some URLs):
-  let b:md_link_heading = 'Links:'
-  :4,6 MdLinkProcessConvert
-
-Expect markdown:
-  www.bar.com
-  Fluke furl ftp://ftp.bar.net scuttle coffer
-  file://path/to/file.txt hang the jib spyglass driver crack Jennys tea cup.
-  Quarterdeck run a [0]
-  rig Jolly Roger [1] gangway [2] no prey,
-  no pay pirate quarter log [3]
-  schooner draft https://bar.travel
-  http://bar.very123longtld
-  Scurvy Admiral of the Black spirits clipper http://www.ba-r.com Nipperkin
-  http://bar.com:8080 Jolly Roger matey hulk aye
-  http://bar.com/baz
-  booty provost killick bounty http://bar.com/index.html
-  http://www.parameters.org/page2014.html?utm_source=facebook&utm_medium=eventlinkonwall&utm_term=trapshoot&utm_content=calendar_event_on_wall&utm_campaign=trapshoot2014
-  bar
-  bar.com
-  Line containing something resembling an inline link: command! -buffer -range=% -bar TagLinks silent keeppatterns <line1>,<line2>substitute#\v%(\[[^\]]+\]\(\s*)@<!\zs<https?://([^.]+)\S+#[\1](\0)#giep
-
-  Links:
-
-  [0]: http://www.bar.com
-  [1]: https://bar.org
-  [2]: http://192.0.2.1
-  [3]: http://subdomain.bar.com
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 Given gitcommit:
   Update README.md with project documentation links
   
@@ -139,10 +92,10 @@ Given gitcommit:
   # Changes to be committed:
   #	modified:   README.md
   #
-Execute (Process and convert gitcommit buffer, reposition reference section):
+Execute (Convert all URLs in a gitcommit buffer, reposition reference section):
   let b:md_link_heading = 'Links:'
   let b:md_link_heading_before = '^# Please enter'
-  MdLinkProcessConvertAll
+  % call mdlink#Convert()
 
 Expect gitcommit:
   Update README.md with project documentation links
@@ -174,4 +127,167 @@ Expect gitcommit:
   # Changes to be committed:
   #	modified:   README.md
   #
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given mail:
+  www.bar.com
+  Fluke furl ftp://ftp.bar.net scuttle coffer
+  file://path/to/file.txt hang the jib spyglass driver crack Jennys tea cup.
+  > Quarterdeck run a http://www.bar.com
+  > rig Jolly Roger https://bar.org gangway http://192.0.2.1 no prey,
+  > no pay pirate quarter log http://subdomain.bar.com
+  schooner draft https://bar.travel
+~~~~~
+Execute (Skip some lines in a mail buffer):
+  let b:md_link_skip_line = '^>'
+  let b:md_link_heading = 'Links:'
+  % call mdlink#Convert()
+~~~~~
+Expect mail:
+  [0]
+  Fluke furl [1] scuttle coffer
+  [2] hang the jib spyglass driver crack Jennys tea cup.
+  > Quarterdeck run a http://www.bar.com
+  > rig Jolly Roger https://bar.org gangway http://192.0.2.1 no prey,
+  > no pay pirate quarter log http://subdomain.bar.com
+  schooner draft [3]
+
+  Links:
+
+  [0]: www.bar.com
+  [1]: ftp://ftp.bar.net
+  [2]: file://path/to/file.txt
+  [3]: https://bar.travel
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given gitcommit:
+  Git commit title
+
+  Git https://comm.it body
+  Body continued
+
+  # Please enter the commit message for your changes. Lines starting
+  # with '#' will be ignored, and an empty message aborts the commit.
+  #
+  # On branch main
+  # Changes to be committed:
+  #	modified:   foo.txt
+  #
+~~~~~
+Execute (Gitcommit buffer, custom heading, repositioned reference section):
+  let b:md_link_heading = 'Links:'
+  let b:md_link_heading_before = '^# Please enter'
+  % call mdlink#Convert()
+~~~~~
+Expect gitcommit:
+  Git commit title
+
+  Git [0] body
+  Body continued
+
+  Links:
+
+  [0]: https://comm.it
+
+  # Please enter the commit message for your changes. Lines starting
+  # with '#' will be ignored, and an empty message aborts the commit.
+  #
+  # On branch main
+  # Changes to be committed:
+  #	modified:   foo.txt
+  #
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Given mail:
+  Hi Recipient,
+  
+  I hope this email https://email.com finds you well.
+  
+  Best regards,
+  Your Name
+  
+  --
+  Your Job Title
+  Your Company Name
+  Your Contact Information
+~~~~~
+Execute (Mail buffer):
+  let b:md_link_heading = 'Links:'
+  let b:md_link_heading_before = '^--'
+  % call mdlink#Convert()
+~~~~~
+Expect mail:
+  Hi Recipient,
+  
+  I hope this email [0] finds you well.
+  
+  Best regards,
+  Your Name
+  
+  Links:
+
+  [0]: https://email.com
+
+  --
+  Your Job Title
+  Your Company Name
+  Your Contact Information
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given mail:
+  Subject: Join Our Webinar Series!
+  
+  Hi John,
+  
+  Exciting news! We're hosting a series of webinars on Vim and Neovim. Here's
+  the schedule:
+  
+  Intro to Vim: Join here: https://vim.com/webinar1 or https://vimbackup.com/webinar1
+  Advanced Vim Techniques: Join here: www.vim.com/webinar2
+  Q&A with Experts: Join here: http://vim.com/webinar3
+
+  Intro to Neovim: Join here: https://neovim.com/webinar1 or https://neovimbackup.com/webinar1
+  > Advanced Neovim Techniques: Join here: www.neovim.com/webinar2
+  Q&A with Experts: Join here: http://neovim.com/webinar3
+
+  Don't miss out — register now! Let us know if you have any questions.
+  
+  Cheers,
+  Jane
+~~~~~
+Execute (Mail buffer):
+  let b:md_link_heading = 'Full Links:'
+  let b:md_link_heading_before = '^Cheers'
+  let b:md_link_skip_line = '^>'
+  % call mdlink#Convert()
+~~~~~
+Expect mail:
+  Subject: Join Our Webinar Series!
+  
+  Hi John,
+  
+  Exciting news! We're hosting a series of webinars on Vim and Neovim. Here's
+  the schedule:
+  
+  Intro to Vim: Join here: [0] or [1]
+  Advanced Vim Techniques: Join here: [2]
+  Q&A with Experts: Join here: [3]
+
+  Intro to Neovim: Join here: [4] or [5]
+  > Advanced Neovim Techniques: Join here: www.neovim.com/webinar2
+  Q&A with Experts: Join here: [6]
+
+  Don't miss out — register now! Let us know if you have any questions.
+
+  Full Links:
+  
+  [0]: https://vim.com/webinar1
+  [1]: https://vimbackup.com/webinar1
+  [2]: www.vim.com/webinar2
+  [3]: http://vim.com/webinar3
+  [4]: https://neovim.com/webinar1
+  [5]: https://neovimbackup.com/webinar1
+  [6]: http://neovim.com/webinar3
+
+  Cheers,
+  Jane
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

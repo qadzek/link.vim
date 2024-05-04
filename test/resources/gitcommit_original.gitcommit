@@ -1,0 +1,21 @@
+Update README.md with project documentation links
+
+This commit updates the README.md file to include links to various project
+documentation resources. The documentation includes:
+
+1. Project Wiki: https://github.com/example/project/wiki
+2. API Documentation: https://api.example.com/docs
+3. User Guide: https://docs.example.com/user-guide and Developer Documentation: https://docs.example.com/developer-guide
+
+Each link provides access to specific documentation sections relevant to
+different stakeholders involved in the project. This update ensures that
+stakeholders can easily access the necessary documentation directly from the
+project's README file.
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Changes to be committed:
+#	modified:   README.md
+#

@@ -1,5 +1,4 @@
-" Minimal vimrc, to create a testing environment isolated from plugins and
-" settings
+" Minimal vimrc: create a testing environment isolated from plugins and settings
 
 " Settings
 filetype off
