@@ -47,7 +47,7 @@ Plug 'qadzek/vim-md-link'
 :MdLinkOpen                  " Open a link in the browser
 :MdLinkPeek                  " Get a preview of the URL
 :MdLinkJump                  " Jump to and from the references
-:MdLinkDelete                " Delete references that are no longer needed
+:MdLinkReformat              " Renumber and merge links, delete unneeded links
 ```
 
 No mappings are built-in to avoid conflicts with your existing key bindings.
@@ -68,7 +68,7 @@ The following is an example that you can copy to you `.vimrc`. By default,
     nnoremap <buffer> <silent> <LocalLeader>o   :MdLinkOpen<CR>
     nnoremap <buffer> <silent> <LocalLeader>p   :MdLinkPeek<CR>
     nnoremap <buffer> <silent> <LocalLeader>j   :MdLinkJump<CR>
-    nnoremap <buffer> <silent> <LocalLeader>d   :MdLinkDelete<CR>
+    nnoremap <buffer> <silent> <LocalLeader>f   :MdLinkReformat<CR>
   endfunction
 ```
 

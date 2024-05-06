@@ -1,0 +1,216 @@
+~~~ 1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown:
+  # Yar Pirate Ipsum
+  
+  ## Fluke furl
+  
+  Fluke furl [cutlass][0] scuttle coffer
+  [topmast][1] hang the jib spyglass driver crack Jennys tea cup.
+  Quarterdeck run a rig Jolly Roger gangway no prey, no pay pirate quarter log
+  schooner draft. Sink me wherry [tackle][3]
+  matey ballast mizzen pinnace bucko bowsprit Cat o'nine tails.
+  
+  Nipperkin chase guns topgallant Nelsons folly Jolly Roger matey hulk aye
+  overhaul rum. Black jack fathom booty provost killick bounty Yellow Jack bucko
+  [sloop topgallant][4]. Scurvy Admiral of the Black spirits clipper
+  belaying pin lanyard gally barque keel gaff.
+  
+  ## Transom no
+  
+  Transom no prey, no pay haul wind galleon log smartly quarterdeck interloper
+  Nelsons folly dead men tell no tales. [Topgallant](www.gallant.top) plunder
+  maroon hempen halter pink hang the jib [crimp][6] squiffy clap of
+  [thunder][7] fathom. Spanish [Main][8] killick case
+  shot Shiver me timbers wench red ensign smartly chase guns pillage boom.
+  
+  ## Links
+  
+  [0]: http://cutlass.com
+  [1]: www.topmast.org
+  [2]: www.sink.com
+  [3]: https://tackle.net
+  [4]: www.sloop.com
+  [5]: www.gallant.top
+  [6]: crimp.com
+  [7]: www.thunder.com
+  [8]: http://main.es
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Execute (Delete two links, [2] and [5]):
+  call mdlink#Reformat()
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Expect markdown:
+  # Yar Pirate Ipsum
+  
+  ## Fluke furl
+  
+  Fluke furl [cutlass][0] scuttle coffer
+  [topmast][1] hang the jib spyglass driver crack Jennys tea cup.
+  Quarterdeck run a rig Jolly Roger gangway no prey, no pay pirate quarter log
+  schooner draft. Sink me wherry [tackle][2]
+  matey ballast mizzen pinnace bucko bowsprit Cat o'nine tails.
+  
+  Nipperkin chase guns topgallant Nelsons folly Jolly Roger matey hulk aye
+  overhaul rum. Black jack fathom booty provost killick bounty Yellow Jack bucko
+  [sloop topgallant][3]. Scurvy Admiral of the Black spirits clipper
+  belaying pin lanyard gally barque keel gaff.
+  
+  ## Transom no
+  
+  Transom no prey, no pay haul wind galleon log smartly quarterdeck interloper
+  Nelsons folly dead men tell no tales. [Topgallant](www.gallant.top) plunder
+  maroon hempen halter pink hang the jib [crimp][4] squiffy clap of
+  [thunder][5] fathom. Spanish [Main][6] killick case
+  shot Shiver me timbers wench red ensign smartly chase guns pillage boom.
+  
+  ## Links
+  
+  [0]: http://cutlass.com
+  [1]: www.topmast.org
+  [2]: https://tackle.net
+  [3]: www.sloop.com
+  [4]: crimp.com
+  [5]: www.thunder.com
+  [6]: http://main.es
+~~~ 2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown:
+  # Yar Pirate Ipsum
+  
+  ## Fluke furl
+  
+  Fluke furl [cutlass][0] scuttle coffer
+  [topmast][1] hang the jib spyglass driver crack [Jennys][19] tea cup.
+  Quarterdeck run a rig Jolly Roger gangway no prey, no pay pirate quarter log
+  schooner draft. Sink me wherry [tackle][3]
+  matey ballast mizzen pinnace bucko bowsprit Cat o'nine tails.
+  
+  Nipperkin [chase][23] guns topgallant Nelsons folly Jolly Roger matey hulk aye
+  overhaul rum. Black jack fathom booty provost killick bounty Yellow Jack bucko
+  [sloop topgallant][4]. Scurvy Admiral of the Black [spirits][15] clipper
+  belaying pin lanyard gally barque keel gaff.
+  
+  ## Transom no
+  
+  Transom no prey, no pay haul wind galleon log smartly quarterdeck interloper
+  Nelsons folly dead men tell no tales. [Topgallant](www.gallant.top) plunder
+  maroon hempen halter pink hang the jib [crimp][6] squiffy clap of
+  [thunder][7] fathom. Spanish [Main][8] killick case
+  shot Shiver me timbers wench red ensign smartly chase guns pillage boom.
+  
+  ## Links
+  
+  [1]: www.topmast.org
+  [2]: www.sink.com
+  [6]: crimp.com
+  [3]: https://tackle.net
+  [19]: www.thunder.com
+  [4]: www.sloop.com
+  [5]: www.gallant.top
+  [23]: www.topmast.org
+  [7]: www.thunder.com
+  [0]: http://cutlass.com
+  [15]: www.thunder.com
+  [4]: www.sloop.com
+  [8]: http://main.es
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Execute (Merge links):
+  call mdlink#Reformat()
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Expect markdown:
+  # Yar Pirate Ipsum
+  
+  ## Fluke furl
+  
+  Fluke furl [cutlass][0] scuttle coffer
+  [topmast][1] hang the jib spyglass driver crack [Jennys][2] tea cup.
+  Quarterdeck run a rig Jolly Roger gangway no prey, no pay pirate quarter log
+  schooner draft. Sink me wherry [tackle][3]
+  matey ballast mizzen pinnace bucko bowsprit Cat o'nine tails.
+  
+  Nipperkin [chase][1] guns topgallant Nelsons folly Jolly Roger matey hulk aye
+  overhaul rum. Black jack fathom booty provost killick bounty Yellow Jack bucko
+  [sloop topgallant][4]. Scurvy Admiral of the Black [spirits][2] clipper
+  belaying pin lanyard gally barque keel gaff.
+  
+  ## Transom no
+  
+  Transom no prey, no pay haul wind galleon log smartly quarterdeck interloper
+  Nelsons folly dead men tell no tales. [Topgallant](www.gallant.top) plunder
+  maroon hempen halter pink hang the jib [crimp][5] squiffy clap of
+  [thunder][2] fathom. Spanish [Main][6] killick case
+  shot Shiver me timbers wench red ensign smartly chase guns pillage boom.
+  
+  ## Links
+
+  [0]: http://cutlass.com
+  [1]: www.topmast.org
+  [2]: www.thunder.com
+  [3]: https://tackle.net
+  [4]: www.sloop.com
+  [5]: crimp.com
+  [6]: http://main.es
+~~~ 3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown:
+  Sapien ac iaculis feugiat, [lacus][9] lacus accumsan
+  lorem, quis volutpat justo turpis ac mauris.
+
+  Duis velit [magna][1], scelerisque
+  [vitae][2], varius ut, aliquam vel, justo. Proin ac
+  augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
+  Ut [sem][5] [nunc][4], vestibulum [nec][3],
+  sodales vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
+
+  Nunc convallis, massa eu [vestibulum][10] commodo, quam mauris interdum arcu,
+  [pellentesque][6] diam metus ut nulla. Vestibulum eu
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  lobortis ac, [fringilla][17] ac, [turpis][8].
+  Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque
+  dapibus. Duis venenatis magna feugiat.
+
+  ## Links
+
+  [2]: https://vitae.net/index.html
+  [1]: www.magna.com
+  [4]: ftp://nunc.com
+  [3]: www.nec.com
+  [5]: www.sem.com
+  [9]: http://lacus.org/lacus
+  [12]: http://no-exist.com
+  [6]: https://pellentesque.com
+  [17]: www.fringilla.com
+  [8]: http://turpis.net
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Execute ([10] has no corresponding label in the references section, [12] has no corresponding label in the document body):
+  MdLinkReformat
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Expect markdown:
+  Sapien ac iaculis feugiat, [lacus][0] lacus accumsan
+  lorem, quis volutpat justo turpis ac mauris.
+
+  Duis velit [magna][1], scelerisque
+  [vitae][2], varius ut, aliquam vel, justo. Proin ac
+  augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
+  Ut [sem][3] [nunc][4], vestibulum [nec][5],
+  sodales vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
+
+  Nunc convallis, massa eu [vestibulum][???] commodo, quam mauris interdum arcu,
+  [pellentesque][6] diam metus ut nulla. Vestibulum eu
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  lobortis ac, [fringilla][7] ac, [turpis][8].
+  Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque
+  dapibus. Duis venenatis magna feugiat.
+
+  ## Links
+
+  [0]: http://lacus.org/lacus
+  [1]: www.magna.com
+  [2]: https://vitae.net/index.html
+  [3]: www.sem.com
+  [4]: ftp://nunc.com
+  [5]: www.nec.com
+  [6]: https://pellentesque.com
+  [7]: www.fringilla.com
+  [8]: http://turpis.net
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

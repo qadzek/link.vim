@@ -46,6 +46,8 @@ policies:
     enabled: true
   ProhibitUnusedVariable:
     enabled: true
+    ignored_patterns:
+      - '^_'
   ProhibitUsingUndeclaredVariable:
     enabled: true
   ProhibitAbbreviationOption:

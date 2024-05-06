@@ -118,7 +118,8 @@ function! mdlink#Convert(type = 'multiple-links', mode = 'normal') abort range
 endfunction
 
 " Jump between a reference link and the corresponding link reference definition
-function! mdlink#Jump(type = 'jump') abort
+" Types: 'jump', 'open', 'peek'
+function! mdlink#Jump(type) abort
   let [l:orig_line_nr, l:orig_col_nr, l:orig_fold_option] = mdlink#Initialize()
 
   let [l:is_heading_present, l:heading_line_nr] = mdlink#GetHeadingInfo()[1:2]
@@ -193,25 +194,8 @@ function! mdlink#Jump(type = 'jump') abort
   endif
 endfunction
 
-" Open the URL from the corresponding reference link definition in the browser
-function! mdlink#Open() abort
-  call mdlink#Jump('open')
-endfunction
-
-" Get a preview of the corresponding reference link definition
-function! mdlink#Peek() abort
-  call mdlink#Jump('peek')
-endfunction
-
-" Delete link reference definitions that are no longer needed
-function! mdlink#Delete() abort
-  if ! exists('g:md_link_testing_env')
-    let l:reply = confirm('Delete links in reference section that are no longer needed?', "&Yes\n&No", 3)
-    if l:reply != 1
-      return
-    endif
-  endif
-
+" Reformat reference links and reference section: renumber, merge, delete, mark
+function! mdlink#Reformat() abort
   let [l:orig_line_nr, l:orig_col_nr, l:orig_fold_option] = mdlink#Initialize()
 
   let [l:is_heading_present, l:heading_line_nr] = mdlink#GetHeadingInfo()[1:2]
@@ -221,54 +205,86 @@ function! mdlink#Delete() abort
     return
   endif
 
-  """ Store all reference links from the document body
-  let l:all_labels = []
+  let l:ref_section_start = l:heading_line_nr + 2
+  let l:ref_section_end = mdlink#GetLastLabel('line_nr')
+  let l:ref_section = mdlink#ParseReferenceSection(l:ref_section_start, 'all')
+
+  " Nth reference link, counting from start of document body
+  let l:index = mdlink#GetLabelStartIndex()
+
+  let l:all_ref_links = []
 
   " Loop over all lines from first line until heading
-  for l:cur_line_nr in range(1, l:heading_line_nr - 1)
-    let l:all_links_on_line = mdlink#ParseLineInBodyFor('reference', l:cur_line_nr)
+  for l:body_line_nr in range(1, l:heading_line_nr - 1)
+    if mdlink#SkipLine(l:body_line_nr)
+      continue
+    endif
+
+    let l:all_links_on_line = mdlink#ParseLineInBodyFor('reference',
+          \ l:body_line_nr)
 
     " Loop over all links on current line
     for l:link in l:all_links_on_line
-      call add(l:all_labels, l:link['destination'])
+      let l:body_line_content = getline(l:body_line_nr)
+      let l:link['line_nr'] = l:body_line_nr
+
+      " Find the link reference definition with a corresponding label
+      let l:ref_section_copy = deepcopy(l:ref_section)
+      let l:corresponding_refs = filter(l:ref_section_copy,
+            \ {_, val -> val['label'] ==# l:link['destination']})
+
+      " Corresponding label was not found in the reference section, so label
+      " will be changed to '???', to mark that it's broken
+      if len(l:corresponding_refs) == 0
+        call mdlink#ReplaceLink(l:body_line_content, l:link['full_link'],
+              \ l:link['link_text'], '???', l:body_line_nr)
+        continue
+      endif
+
+      let l:link['url'] = l:corresponding_refs[0]['destination']
+      let l:link['index'] = l:index
+
+      " Determine if exactly the same URL was already encountered before
+      let l:all_ref_links_copy = deepcopy(l:all_ref_links)
+      let l:url_matches = filter( l:all_ref_links_copy,
+            \ { _, val -> val['url'] ==# l:link['url'] } )
+      " 'Merge' labels
+      if len(l:url_matches) >= 1
+        let l:link['index'] = l:url_matches[0]['index']
+        call mdlink#ReplaceLink(l:body_line_content, l:link['full_link'],
+              \ l:link['link_text'], l:link['index'], l:body_line_nr)
+        continue
+      endif
+
+      " Label differs from index: e.g. label says 5 while it's the 3rd link
+      if l:link['destination'] !=# l:link['index']
+        call mdlink#ReplaceLink(l:body_line_content, l:link['full_link'],
+              \ l:link['link_text'], l:link['index'], l:body_line_nr)
+      endif
+
+      call add(l:all_ref_links, l:link)
+
+      let l:index += 1
     endfor
   endfor
 
-  """ Loop over all link reference definitions in the reference section
-  let l:cur_line_nr = l:heading_line_nr + 1
-  let l:last_line_nr = line('$')
+  " Delete current reference section to black hole register
+  silent execute 'normal! :' .. l:ref_section_start .. ',' .. l:ref_section_end
+        \ .. "$ delete _ \<CR>"
 
-  " Protect against an infinite loop
-  let l:loop_count = 0
-  let l:loop_max = l:last_line_nr - l:heading_line_nr - 1
+  " Add new reference section
+  for l:idx in range( len(l:all_ref_links) )
+    let l:ref_link = l:all_ref_links[l:idx]
+    let l:line_nr = l:ref_section_start - 1 + l:idx
+    call mdlink#AddReference(l:ref_link['index'], l:ref_link['url'], l:line_nr)
 
-  let l:delete_count = 0
+  let l:ref_section_start = l:heading_line_nr + 2
+  endfor
 
-  while l:cur_line_nr <= l:last_line_nr && l:loop_count <= l:loop_max
-    let l:loop_count += 1
-    let l:cur_line_nr += 1
-
-    let l:ref_link = mdlink#ParseReferenceSection(l:cur_line_nr, 'one')
-    if len(l:ref_link) == 0
-      continue
-    endif
-    let l:label = l:ref_link[0]['label']
-
-    " Corresponding label in the document body
-    if index(l:all_labels, l:label) >= 0
-      continue
-    endif
-
-    " No corresponding label in the document body
-    "  Delete line to black hole register
-    execute l:cur_line_nr .. ' delete _'
-    let l:delete_count += 1
-    " Line number shouldn't be increased, as a line was just removed
-    let l:cur_line_nr -= 1
-  endwhile
-
-  echom l:delete_count .. ' links have been deleted from the reference section'
-  call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
+  let l:orig_ref_len = l:ref_section_end - l:ref_section_start + 1
+  let l:new_ref_len = mdlink#GetLastLabel('line_nr') - l:ref_section_start + 1
+  echom 'Finished reformatting reference links and reference section'
+  echom 'Number of lines in reference section -- Before: ' .. l:orig_ref_len .. ' -- After: ' .. l:new_ref_len
 endfunction
 
 " HEADING ========================================================== {{{1
@@ -420,7 +436,7 @@ function! mdlink#ReplaceLink(line_content, full_link, link_text, label, line_nr)
     let l:ref_link = '[' .. a:link_text .. '][' .. a:label .. ']'
   else
     let l:ref_link = '[' .. a:label .. ']'
-endif
+  endif
 
   let l:new_line_content = substitute(a:line_content, l:esc_full_link,
         \ l:ref_link, '')
@@ -438,8 +454,8 @@ endfunction
 " Parse the reference section, in its entirety or just one line
 " Return a list of dictionaries
 function! mdlink#ParseReferenceSection(start_line_nr, type) abort
-  if a:type ==# 'all' " This type isn't used at the moment
-    let l:cur_line_nr = a:start_line_nr + 1
+  if a:type ==# 'all'
+    let l:cur_line_nr = a:start_line_nr
     let l:last_line_nr = line('$')
   elseif a:type ==# 'one'
     let l:cur_line_nr = a:start_line_nr
@@ -577,7 +593,7 @@ function! mdlink#JumpToBody(orig_line_nr, heading_line_nr) abort
   let l:body_line_nr = search('\v\[' .. l:label .. '\]', 'cWe', a:heading_line_nr)
 
   if l:body_line_nr == 0
-    echom 'Could not find the label ' .. l:label .. ' in the document body'
+    echom g:mdlink#err_msg['no_label_body'] .. l:label
   endif
 
   " 0 in case of no match
@@ -659,8 +675,6 @@ let s:defaults = {
 
 " Error messages
 let g:mdlink#err_msg = {
-      \ 'no_corresponding_ref':
-      \ 'No corresponding label found in the references section',
       \ 'no_heading':
       \ 'No heading found',
       \ 'no_inline_link':
@@ -669,6 +683,8 @@ let g:mdlink#err_msg = {
       \ 'No link reference definition in the format of "[3]: ..." found on this line',
       \ 'no_label_ref_section':
       \ 'The following label was not found in the reference section: ',
+      \ 'no_label_body':
+      \ 'The following label was not found in the document body: ',
       \ 'not_from_ref':
       \ 'This action is only possible from the document body, not from the reference section',
       \ 'no_reference_link':

@@ -2,10 +2,10 @@
 :MdLinkConvertRange	vim-md-link.txt	/*:MdLinkConvertRange*
 :MdLinkConvertSingle	vim-md-link.txt	/*:MdLinkConvertSingle*
 :MdLinkConvertSingleInsert	vim-md-link.txt	/*:MdLinkConvertSingleInsert*
-:MdLinkDelete	vim-md-link.txt	/*:MdLinkDelete*
 :MdLinkJump	vim-md-link.txt	/*:MdLinkJump*
 :MdLinkOpen	vim-md-link.txt	/*:MdLinkOpen*
 :MdLinkPeek	vim-md-link.txt	/*:MdLinkPeek*
+:MdLinkReformat	vim-md-link.txt	/*:MdLinkReformat*
 b:md_link_heading	vim-md-link.txt	/*b:md_link_heading*
 b:md_link_heading_before	vim-md-link.txt	/*b:md_link_heading_before*
 b:md_link_skip_line	vim-md-link.txt	/*b:md_link_skip_line*

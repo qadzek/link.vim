@@ -8,7 +8,7 @@
           \_/ |_|_| |_| |_|     |_| |_| |_|\__,_|     |_|_|_| |_|_|\_\~
 
 
-Version: 1.0.0
+Version: 1.0.1
 Author:  qadzek
 License: MIT
 
@@ -49,7 +49,7 @@ into >
 
   [0]: https://www.vim.org
   [1]: https://neovim.io
->
+<
 A heading is used to mark the divide between the document body and the
 reference section. It will be automatically added if needed.
 
@@ -107,10 +107,73 @@ The vim-md-link plugin exposes the following commands:
     corresponding link reference definition in the reference section, and the
     other way around.
 
-:MdLinkDelete                                                  *:MdLinkDelete*
-    Test for every link reference definition if its label is present in the
-    document body. If it isn't, delete the link reference definition.
+:MdLinkReformat                                              *:MdLinkReformat*
+    Reformat reference links and reference section. This includes:
 
+    - Renumber in document body and in reference section: >
+        [Vim][1] is a text editor.
+        [Neovim][0] is another one.
+
+        ## Links
+
+        [0]: https://neovim.io
+        [1]: https://www.vim.org
+<      is turned into >
+        [Vim][0] is a text editor.
+        [Neovim][1] is another one.
+
+        ## Links
+
+        [0]: https://www.vim.org
+        [1]: https://neovim.io
+<
+    - Merge links using the same URL: >
+        [Vim][0] is a text editor.
+        Bram Moolenaar created [Vim][1].
+
+        ## Links
+
+        [0]: https://www.vim.org
+        [1]: https://www.vim.org
+<      is turned into >
+        [Vim][0] is a text editor.
+        Bram Moolenaar created [Vim][0].
+
+        ## Links
+
+        [0]: https://www.vim.org
+<
+    - Delete link reference definitions that are no longer needed: >
+        [Vim][0] is a text editor.
+        Neovim is another one.
+
+        ## Links
+
+        [0]: https://www.vim.org
+        [1]: https://neovim.io
+<      is turned into >
+        [Vim][0] is a text editor.
+        Neovim is another one.
+
+        ## Links
+
+        [0]: https://www.vim.org
+<
+    - Mark missing links as '???': >
+        [Vim][0] is a text editor.
+        [Neovim][1] is another one.
+
+        ## Links
+
+        [0]: https://www.vim.org
+<      is turned into >
+        [Vim][0] is a text editor.
+        [Neovim][???] is another one.
+
+        ## Links
+
+        [0]: https://www.vim.org
+<
 ==============================================================================
 MAPPINGS                                                    *md-link-mappings*
 
@@ -130,7 +193,7 @@ existing key bindings. Some suggestions for your `.vimrc`:
     nnoremap <buffer> <silent> <LocalLeader>o   :MdLinkOpen<CR>
     nnoremap <buffer> <silent> <LocalLeader>j   :MdLinkJump<CR>
     nnoremap <buffer> <silent> <LocalLeader>p   :MdLinkPeek<CR>
-    nnoremap <buffer> <silent> <LocalLeader>d   :MdLinkDelete<CR>
+    nnoremap <buffer> <silent> <LocalLeader>f   :MdLinkReformat<CR>
   endfunction
 <
 To ensure these bindings are only applied for Markdown files, they are wrapped
@@ -228,6 +291,10 @@ To execute the tests: `./test/run_tests.sh`
 
 ==============================================================================
 CHANGELOG                                                  *md-link-changelog*
+
+1.0.1   2024-05-06
+        - Remove :MdLinkDelete                                 BREAKING CHANGE
+        - Add :MdLinkReformat to renumber, merge and delete links
 
 1.0.0   2024-05-04
         - Remove pre- and post-processing commands             BREAKING CHANGE
