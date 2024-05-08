@@ -10,28 +10,28 @@ Execute ():
 Execute (Valid jump, from single reference link on line, [2]):
   call cursor(6, 1)
   MdLinkJump
-  let [@_, line_nr, col_nr, @_, @_] = getcurpos()
+  let [line_nr, col_nr] = getcurpos()[1:2]
   AssertEqual line_nr, 23
   AssertEqual col_nr, 6
 
 Execute (Valid jump, from second reference link on line, [5]):
   call cursor(9, 15)
   MdLinkJump
-  let [@_, line_nr, col_nr, @_, @_] = getcurpos()
+  let [line_nr, col_nr] = getcurpos()[1:2]
   AssertEqual line_nr, 26
   AssertEqual col_nr, 6
 
 Execute (Invalid jump, no reference link on line):
   call cursor(4, 20)
   MdLinkJump
-  let [@_, line_nr, col_nr, @_, @_] = getcurpos()
+  let [line_nr, col_nr] = getcurpos()[1:2]
   AssertEqual line_nr, 4
   AssertEqual col_nr, 20
 
 Execute (Invalid jump, single reference link on line with no corresponding link reference definition, [9]):
   call cursor(16, 1)
   MdLinkJump
-  let [@_, line_nr, col_nr, @_, @_] = getcurpos()
+  let [line_nr, col_nr] = getcurpos()[1:2]
   AssertEqual line_nr, 16
   AssertEqual col_nr, 1
 
@@ -43,20 +43,20 @@ Execute ():
 Execute (Valid jump, to a line with a single link, [3]):
   call cursor(24, 1)
   MdLinkJump
-  let [@_, line_nr, col_nr, @_, @_] = getcurpos()
+  let [line_nr, col_nr] = getcurpos()[1:2]
   AssertEqual line_nr, 7
   AssertEqual col_nr, 10
 
 Execute (Valid jump, to a line with multiple links, [6]):
   call cursor(27, 1)
   MdLinkJump
-  let [@_, line_nr, col_nr, @_, @_] = getcurpos()
+  let [line_nr, col_nr] = getcurpos()[1:2]
   AssertEqual line_nr, 9
   AssertEqual col_nr, 42
 
 Execute (Invalid jump, no corresponding reference link, [10]):
   call cursor(30, 1)
   MdLinkJump
-  let [@_, line_nr, col_nr, @_, @_] = getcurpos()
+  let [line_nr, col_nr] = getcurpos()[1:2]
   AssertEqual line_nr, 30
   AssertEqual col_nr, 1

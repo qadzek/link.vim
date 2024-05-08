@@ -31,7 +31,7 @@ Given mail:
 ~~~~~
 Execute (Convert a range in a mail buffer):
   let b:md_link_heading = 'Links:'
-  4,6 call mdlink#Convert()
+  4,6 MdLinkConvertRange
 ~~~~~
 Expect mail:
   www.bar.com
@@ -84,7 +84,7 @@ Execute (Mail buffer):
   let b:md_link_heading = 'Full Links:'
   let b:md_link_heading_before = '^Cheers'
   let b:md_link_skip_line = '^>'
-  10,13 call mdlink#Convert()
+  10,13 MdLinkConvertRange
 ~~~~~
 Expect mail:
   Subject: Join Our Webinar Series!

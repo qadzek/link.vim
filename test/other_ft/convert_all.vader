@@ -30,7 +30,7 @@ Given mail:
   Line containing something resembling an inline link: command! -buffer -range=% -bar TagLinks silent keeppatterns <line1>,<line2>substitute#\v%(\[[^\]]+\]\(\s*)@<!\zs<https?://([^.]+)\S+#[\1](\0)#giep
 Execute (Convert all URLs in a mail buffer):
   let b:md_link_heading = 'Links:'
-  % call mdlink#Convert()
+  MdLinkConvertAll
 
 Expect mail:
   [0]
@@ -95,7 +95,7 @@ Given gitcommit:
 Execute (Convert all URLs in a gitcommit buffer, reposition reference section):
   let b:md_link_heading = 'Links:'
   let b:md_link_heading_before = '^# Please enter'
-  % call mdlink#Convert()
+  MdLinkConvertAll
 
 Expect gitcommit:
   Update README.md with project documentation links
@@ -141,7 +141,7 @@ Given mail:
 Execute (Skip some lines in a mail buffer):
   let b:md_link_skip_line = '^>'
   let b:md_link_heading = 'Links:'
-  % call mdlink#Convert()
+  MdLinkConvertAll
 ~~~~~
 Expect mail:
   [0]
@@ -177,7 +177,7 @@ Given gitcommit:
 Execute (Gitcommit buffer, custom heading, repositioned reference section):
   let b:md_link_heading = 'Links:'
   let b:md_link_heading_before = '^# Please enter'
-  % call mdlink#Convert()
+  MdLinkConvertAll
 ~~~~~
 Expect gitcommit:
   Git commit title
@@ -213,7 +213,7 @@ Given mail:
 Execute (Mail buffer):
   let b:md_link_heading = 'Links:'
   let b:md_link_heading_before = '^--'
-  % call mdlink#Convert()
+  MdLinkConvertAll
 ~~~~~
 Expect mail:
   Hi Recipient,
@@ -258,7 +258,7 @@ Execute (Mail buffer):
   let b:md_link_heading = 'Full Links:'
   let b:md_link_heading_before = '^Cheers'
   let b:md_link_skip_line = '^>'
-  % call mdlink#Convert()
+  MdLinkConvertAll
 ~~~~~
 Expect mail:
   Subject: Join Our Webinar Series!

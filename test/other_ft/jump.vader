@@ -1,3 +1,6 @@
+" Calling functions is required here; the commands are unknown because of the
+" gitcommit resource
+
 Before:
   edit resources/gitcommit_converted.gitcommit
   normal! gg

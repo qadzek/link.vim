@@ -32,7 +32,7 @@ Given mail:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (URLs in varying formats):
   let b:md_link_heading = 'Links:'
-  % call mdlink#Convert()
+  MdLinkConvertAll
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect mail:
   foo [0]

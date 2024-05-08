@@ -1,3 +1,6 @@
+" Calling functions is required here; can't use the commands because of
+" b:init_cur_pos
+
 Given mail:
   http://www.loremipsum.com et http://www.dolorsitamet.com dis http://www.adipiscingelitipsum.com montes,
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -8,7 +11,7 @@ Execute (First out of three links, cursor on first char):
 Expect mail:
   [0] et http://www.dolorsitamet.com dis http://www.adipiscingelitipsum.com montes,
 
-  ## Links
+  Links:
 
   [0]: http://www.loremipsum.com
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -23,7 +26,7 @@ Execute (Second out of three links, cursor on first char):
 Expect mail:
   http://www.loremipsum.com et magnis [0] dis parturient http://www.adipiscingelitipsum.com montes,
 
-  ## Links
+  Links:
 
   [0]: http://www.dolorsitamet.com
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -38,7 +41,7 @@ Execute (Third out of three links, cursor on first char):
 Expect mail:
   http://www.loremipsum.com et http://www.dolorsitamet.com dis [0] montes,
 
-  ## Links
+  Links:
 
   [0]: http://www.adipiscingelitipsum.com
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -52,7 +55,7 @@ Execute (First out of three links, cursor on last char):
 Expect mail:
   [0] et http://www.dolorsitamet.com dis http://www.adipiscingelitipsum.com montes,
 
-  ## Links
+  Links:
 
   [0]: http://www.loremipsum.com
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -67,7 +70,7 @@ Execute (Second out of three links, cursor on last char):
 Expect mail:
   http://www.loremipsum.com et [0] dis http://www.adipiscingelitipsum.com montes,
 
-  ## Links
+  Links:
 
   [0]: http://www.dolorsitamet.com
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -82,7 +85,7 @@ Execute (Third out of three links, cursor on last char):
 Expect mail:
   http://www.loremipsum.com et http://www.dolorsitamet.com dis [0] montes,
 
-  ## Links
+  Links:
 
   [0]: http://www.adipiscingelitipsum.com
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -97,7 +100,7 @@ Execute (Cursor between first and second link):
 Expect mail:
   http://www.loremipsum.com et [0] dis http://www.adipiscingelitipsum.com montes,
 
-  ## Links
+  Links:
 
   [0]: http://www.dolorsitamet.com
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -112,7 +115,7 @@ Execute (Cursor inside second link):
 Expect mail:
   http://www.loremipsum.com et [0] dis http://www.adipiscingelitipsum.com montes,
 
-  ## Links
+  Links:
 
   [0]: http://www.dolorsitamet.com
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -127,7 +130,7 @@ Execute (Cursor just before second link):
 Expect mail:
   http://www.loremipsum.com et [0] dis http://www.adipiscingelitipsum.com montes,
 
-  ## Links
+  Links:
 
   [0]: http://www.dolorsitamet.com
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -142,7 +145,7 @@ Execute (Cursor just after second link):
 Expect mail:
   http://www.loremipsum.com et http://www.dolorsitamet.com dis [0] montes,
 
-  ## Links
+  Links:
 
   [0]: http://www.adipiscingelitipsum.com
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -157,7 +160,7 @@ Execute (Cursor on last char of last link, no trailing chars):
 Expect mail:
   http://www.loremipsum.com et http://www.dolorsitamet.com dis [0]
 
-  ## Links
+  Links:
 
   [0]: http://www.adipiscingelitipsum.com
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

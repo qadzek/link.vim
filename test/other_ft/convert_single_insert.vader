@@ -21,13 +21,13 @@ Given mail:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Link at start of line):
   let b:init_cur_pos = [1, 1]
-  call mdlink#Convert('single-link', 'insert')
+  MdLinkConvertSingleInsert
   normal! iX
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect mail:
   [0]X et magnis http://www.dolorsitamet.com dis parturient http://www.adipiscingelitipsum.com montes,
 
-  ## Links
+  Links:
 
   [0]: http://www.loremipsum.com
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -38,14 +38,14 @@ Given mail:
 Execute (Link at end of line):
   let b:init_cur_pos = [1, 85]
   normal! $
-  call mdlink#Convert('single-link', 'insert')
+  MdLinkConvertSingleInsert
   " Use a instead of i because we are at the end of the line
   normal! aX
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect mail:
   Penatibus http://www.loremipsum.com dis parturient [0]X
 
-  ## Links
+  Links:
 
   [0]: http://www.adipiscingelitipsum.com
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -56,13 +56,13 @@ Given mail:
 Execute (Cursor in middle of second link):
   let b:init_cur_pos = [1, 41]
   normal! 2f:
-  call mdlink#Convert('single-link', 'insert')
+  MdLinkConvertSingleInsert
   normal! iX
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect mail:
   http://www.loremipsum.com et magnis [0]X dis http://www.adipiscingelitipsum.com
 
-  ## Links
+  Links:
 
   [0]: http://www.dolorsitamet.com
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

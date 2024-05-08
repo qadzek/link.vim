@@ -1,0 +1,37 @@
+" For an unknown reason, the order of the tests seems to matter here
+
+Before:
+  unlet! g:vader_exception
+  unlet! g:vader_throwpoint
+After:
+  unlet! g:vader_exception
+  unlet! g:vader_throwpoint
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+" Given python:
+"   filler
+" Execute (Filetype not included in defaults):
+"   AssertThrows MdLinkConvertAll
+" Expect python:
+"   filler
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown:
+  filler
+Execute (Filetype included in defaults (markdown)):
+  MdLinkConvertAll
+Expect markdown:
+  filler
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given mail:
+  filler
+Execute (Filetype included in defaults (mail)):
+  MdLinkConvertAll
+Expect mail:
+  filler
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

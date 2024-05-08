@@ -1,4 +1,4 @@
-*vim-md-link.txt* Convert inline Markdown links to reference links
+*vim-md-link.txt* Convert inline links to reference links
 
                                                                      *md-link*
                _                               _       _ _       _~
@@ -8,7 +8,7 @@
           \_/ |_|_| |_| |_|     |_| |_| |_|\__,_|     |_|_|_| |_|_|\_\~
 
 
-Version: 1.0.1
+Version: 1.0.2
 Author:  qadzek
 License: MIT
 
@@ -19,27 +19,24 @@ CONTENTS                                                    *md-link-contents*
     2. Usage ................ |md-link-usage|
     3. Mappings ............. |md-link-mappings|
     4. Configuration ........ |md-link-configuration|
-    5. Extensions ........... |md-link-extensions|
-    6. Issues ............... |md-link-issues|
-    7. Contributing ......... |md-link-contributing|
-    8. Changelog ............ |md-link-changelog|
-    9. Credits .............. |md-link-credits|
+    5. Limitations .......... |md-link-limitations|
+    6. Contributing ......... |md-link-contributing|
+    7. Changelog ............ |md-link-changelog|
+    8. Credits .............. |md-link-credits|
 
 ==============================================================================
 INTRODUCTION                                            *md-link-introduction*
 
-Reference links allow for cleaner Markdown documents. Storing URLs at
-the bottom of your document helps maintain the flow of the body of the text.
-However, managing them manually can be tedious. This plugin for Vim and Neovim
-helps in converting these links, navigating between the document body and the
-reference section, quickly previewing hidden URLs, and deleting unnecessary
-links from the reference section.
+Reference links allow for cleaner documents. Storing (long) URLs at the bottom
+of your document helps maintain the flow of the body of the text. However,
+managing reference links manually can be tedious. This plugin for Vim and
+Neovim helps converting and handling these links. Links in Markdown syntax and
+plaintext links (e.g. in emails, in text files etc.) are supported.
 
 The main command will convert >
   # Notes
 
   [Vim](https://www.vim.org) and [Neovim](https://neovim.io) are text editors.
-<
 into >
   # Notes
 
@@ -50,24 +47,24 @@ into >
   [0]: https://www.vim.org
   [1]: https://neovim.io
 <
-A heading is used to mark the divide between the document body and the
-reference section. It will be automatically added if needed.
+URLs are moved to a reference section. A heading is used to mark the divide
+between the document body and the reference section. It will be automatically
+added if needed.
 
 Terminology~
-
-  - inline link:               `[Vim](https://www.vim.org)`
-  - reference link:            `[Vim][0]`
-  - link text:                 `[Vim]`
-  - label:                     `[0]`
-  - link reference definition: `[0]: https://www.vim.org`
-  - plaintext link:            `Try Vim as your editor: https://www.vim.org`
-  - heading:                   `## Links`
+                               Markdown                    Plaintext
+  - inline link:               `[Vim](www.vim.org)`          `Vim www.vim.org`
+  - reference link:            `[Vim][0]`                    `Vim [0]`
+  - link text:                 `[Vim]`                       `none`
+  - label:                     `[0]`                         `same`
+  - link reference definition: `[0]: https://www.vim.org`    `same`
+  - heading:                   `## Links`                    `Links:`
   - document body:     part of buffer above heading, containing the main text
   - reference section: part of buffer below heading, containing link reference
                        definitions
 
-For more information, see the CommonMark Specification at
-https://spec.commonmark.org/0.31.2/#links
+For more information about the syntax Markdown uses for links, refer to the
+CommonMark Specification at https://spec.commonmark.org/0.31.2/#links
 
 ==============================================================================
 USAGE                                                          *md-link-usage*
@@ -108,9 +105,11 @@ The vim-md-link plugin exposes the following commands:
     other way around.
 
 :MdLinkReformat                                              *:MdLinkReformat*
-    Reformat reference links and reference section. This includes:
+    Reformat reference links and reference section. This command is powerful;
+    use it with care. It deletes the current reference section and
+    reconstructs it. It performs the following actions:
 
-    - Renumber in document body and in reference section: >
+    - Renumber links in document body and in reference section: >
         [Vim][1] is a text editor.
         [Neovim][0] is another one.
 
@@ -127,19 +126,19 @@ The vim-md-link plugin exposes the following commands:
         [0]: https://www.vim.org
         [1]: https://neovim.io
 <
-    - Merge links using the same URL: >
-        [Vim][0] is a text editor.
-        Bram Moolenaar created [Vim][1].
+    - Merge links sharing the same URL: >
+        Vim [0] is a text editor.
+        Bram Moolenaar created Vim [1].
 
-        ## Links
+        Links:
 
         [0]: https://www.vim.org
         [1]: https://www.vim.org
 <      is turned into >
-        [Vim][0] is a text editor.
-        Bram Moolenaar created [Vim][0].
+        Vim [0] is a text editor.
+        Bram Moolenaar created Vim [0].
 
-        ## Links
+        Links:
 
         [0]: https://www.vim.org
 <
@@ -160,119 +159,119 @@ The vim-md-link plugin exposes the following commands:
         [0]: https://www.vim.org
 <
     - Mark missing links as '???': >
-        [Vim][0] is a text editor.
-        [Neovim][1] is another one.
+        Vim [0] is a text editor.
+        Neovim [1] is another one.
 
-        ## Links
+        Links:
 
         [0]: https://www.vim.org
 <      is turned into >
-        [Vim][0] is a text editor.
-        [Neovim][???] is another one.
+        Vim [0] is a text editor.
+        Neovim [???] is another one.
 
-        ## Links
+        Links:
 
         [0]: https://www.vim.org
 <
 ==============================================================================
 MAPPINGS                                                    *md-link-mappings*
 
-By default, no mappings are specified, in order to avoid conflicts with
-existing key bindings. Some suggestions for your `.vimrc`:
->
-  augroup vim_md_link
+No mappings are built-in to avoid conflicts with existing key bindings.
+
+                                              *g:md_link_use_default_mappings*
+Enable the suggested key bindings (the same as mentioned below) by adding this
+line to your `vimrc`: >
+  let g:md_link_use_default_mappings = 1
+<
+If you prefer to specify your own key bindings, ensure the variable mentioned
+above is not set (or set to `0`) and add the following to your `vimrc`: >
+  augroup vim_md_link_key_bindings
     autocmd!
-    autocmd Filetype markdown :call MdLinkAddKeyBindings()
+    autocmd Filetype markdown,vimwiki,mail,text :call MdLinkAddKeyBindings()
   augroup END
 
   function! MdLinkAddKeyBindings()
-    nnoremap <buffer> <silent> <LocalLeader>s   :MdLinkConvertSingle<CR>
-    inoremap <buffer> <silent> <C-g>       <Esc>:MdLinkConvertSingleInsert<CR>
-    vnoremap <buffer> <silent> <LocalLeader>r   :MdLinkConvertRange<CR>
-    nnoremap <buffer> <silent> <LocalLeader>a   :MdLinkConvertAll<CR>
-    nnoremap <buffer> <silent> <LocalLeader>o   :MdLinkOpen<CR>
-    nnoremap <buffer> <silent> <LocalLeader>j   :MdLinkJump<CR>
-    nnoremap <buffer> <silent> <LocalLeader>p   :MdLinkPeek<CR>
-    nnoremap <buffer> <silent> <LocalLeader>f   :MdLinkReformat<CR>
+    nnoremap <buffer> <silent> <LocalLeader>c      :MdLinkConvertSingle<CR>
+    inoremap <buffer> <silent> <C-g>c      <Esc>:MdLinkConvertSingleInsert<CR>
+    vnoremap <buffer> <silent> <LocalLeader>c      :MdLinkConvertRange<CR>
+    nnoremap <buffer> <silent> <LocalLeader>a      :MdLinkConvertAll<CR>
+    nnoremap <buffer> <silent> <LocalLeader>j      :MdLinkJump<CR>
+    nnoremap <buffer> <silent> <LocalLeader>o      :MdLinkOpen<CR>
+    nnoremap <buffer> <silent> <LocalLeader>p      :MdLinkPeek<CR>
+    nnoremap <buffer> <silent> <LocalLeader>r      :MdLinkReformat<CR>
   endfunction
 <
-To ensure these bindings are only applied for Markdown files, they are wrapped
-in an |autocmd| group.
-
-Any combination should work, but `<LocalLeader>` is a natural choice, as this
-is a filetype plugin (it only works for Markdown documents). By default, if it
-is not set or empty, a backslash is used. To view the current <LocalLeader>:
-`echo maplocalleader` . To set <LocalLeader> explicitly to, for example, the
-backslash character: `let maplocalleader = "\\"` . See `:help maplocalleader`
-for more information.
+You might want to change the filetypes mentioned in the |autocmd|. Another way
+to ensure that these key bindings are only applied to certain filetypes is to
+add them to e.g. `~/.vim/ftplugin/markdown.vim`. That way, you don't need to
+use an |autocmd| or function.
 
 ==============================================================================
 CONFIGURATION                                          *md-link-configuration*
 
+By default, the plugin operates on these filetypes: `markdown`, `vimwiki`,
+`email` and `text`.
+
+                                                 *g:md_link_enabled_filetypes*
+These filetypes can be customized: >
+  let g:md_link_enabled_filetypes = [ 'markdown', 'gitcommit' ]
+<
+For examples of how users have configured this plugin for particular
+filetypes, e.g. `gitcommit` buffers, visit the Wiki:
+https://github.com/qadzek/vim-md-link/wiki
+
+------------------------------------------------------------------------------
+
+Some of the following configuration options exist as a local buffer variable
+(`b:`) or as a global variable (`g:`). The buffer-local variables enjoy a
+higher priority.
+
+Global variables are specified in `vimrc`.
+
+Local buffer variables can be set in their corresponding file, e.g. for mail
+buffers in `~/.vim/ftplugin/mail.vim`
+They can also be set in `vimrc`, if they are wrapped in an |autocmd|: >
+  augroup vim_md_link_mail
+    autocmd!
+    autocmd Filetype mail let b:md_link_heading = 'My Links:'
+  augroup END
+<
+------------------------------------------------------------------------------
+
+                                                           *b:md_link_heading*
                                                            *g:md_link_heading*
-By default, the heading `## Links` will be used to mark the divide between the
-document body and the reference section. To modify this heading, add something
-like this to your `.vimrc`:
+By default, the heading `## Links` (Markdown) or `Links:` (other filetypes)
+will be used to mark the divide between the document body and the reference
+section. To modify this heading:
   `let g:md_link_heading = '# My Resources'`
 
+                                                       *b:md_link_start_index*
                                                        *g:md_link_start_index*
 By default, the first converted link gets a label of 0. To change this:
-  `let g:md_link_start_index = 100`
-
-==============================================================================
-EXTENSIONS                                                *md-link-extensions*
-
-By default, this plugin only operates on Markdown buffers, containing inline
-links in the Markdown format, e.g. `[Vim](https://www.vim.org)`
-
-It's possible to extend the plugin to other filetypes, containing plaintext
-links, e.g. `Try Vim as your editor: https://www.vim.org`
-
-To make this plugin's commands available to for instance `mail` buffers,
-create `~/.vim/ftplugin/mail.vim` with the following contents:
->
-  if !empty(findfile('ftplugin/markdown/vim-md-link.vim', &runtimepath))
-    runtime ftplugin/markdown/vim-md-link.vim
-  endif
-
-  if exists(':MdLinkConvertAll') != 2 | finish | endif
-<
-To use the suggested key bindings for additional filetypes, add the filetype
-to the line mentioned in |md-link-mappings|:
->
-  autocmd Filetype markdown,mail,gitcommit :call MdLinkAddKeyBindings()
-<
-                                                           *b:md_link_heading*
-Inside the `ftplugin` file, you can specify the heading that will mark the
-divide between the document body and the reference section. This heading will
-only be used for that particular filetype.
-  `let b:md_link_heading = 'Links:'`
+  `let g:md_link_start_index = 1`
 
                                                     *b:md_link_heading_before*
-Inside the `ftplugin` file, you can specify a pattern to which the cursor will
-be moved before the heading is added. This regular expression is matched from
-the bottom of the document. By default, the heading is added to the last line.
-This variable allows to position the heading, and the entire reference
-section, elsewhere. E.g. for a `gitcommit` buffer:
+By default, the heading is added to the last line. You can specify a pattern
+to which the cursor will be moved before the heading is added. This regular
+expression is matched from the bottom of the document. This allows to position
+the heading, and the entire reference section, elsewhere. E.g. for a
+`gitcommit` buffer, the following could be useful:
   `let b:md_link_heading_before = '^# Please enter the commit message'`
 
                                                          *b:md_link_skip_line*
-By default, links in lines matching |commentstring| are not converted. Inside
-the `ftplugin` file, you can modify this pattern. E.g. to skip blockquotes:
+By default, links in lines matching |commentstring| are not converted. This
+pattern can be modified. E.g. to skip blockquotes:
   `let b:md_link_skip_line = '^>'`
 
-For examples of how users have extended this plugin, for instance to
-`gitcommit` buffers, see the Wiki:
-https://github.com/qadzek/vim-md-link/wiki
-
 ==============================================================================
-ISSUES                                                        *md-link-issues*
+LIMITATIONS                                              *md-link-limitations*
 
 - Using a blank line as heading is currently not supported.
 - When converting an inline link to a reference link, a link reference
-  definition will be created, even if the same URL were already present in the
-  reference section. It would be better if the same label were reused.
-- URLs containing the `*` character are not supported.
+  definition will be created, even if the same URL is already present in the
+  reference section. It would be better if the same label were reused. Using
+  `:MdLinkReformat` fixes this though.
+- URLs containing the asterisk character (`*`) are not supported.
 
 ==============================================================================
 CONTRIBUTING                                            *md-link-contributing*
@@ -291,6 +290,11 @@ To execute the tests: `./test/run_tests.sh`
 
 ==============================================================================
 CHANGELOG                                                  *md-link-changelog*
+
+1.0.2   2024-05-08
+        - Convert filetype plugin to global plugin
+        - `Links:` is default heading if filetype is not Markdown
+        - Support `b:md_link_start_index`
 
 1.0.1   2024-05-06
         - Remove :MdLinkDelete                                 BREAKING CHANGE

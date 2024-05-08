@@ -285,14 +285,27 @@ function! mdlink#Reformat() abort
   let l:new_ref_len = mdlink#GetLastLabel('line_nr') - l:ref_section_start + 1
   echom 'Finished reformatting reference links and reference section'
   echom 'Number of lines in reference section -- Before: ' .. l:orig_ref_len .. ' -- After: ' .. l:new_ref_len
+
+  call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
 endfunction
 
 " HEADING ========================================================== {{{1
 
 " Return buffer-local heading, or the global heading, or the default heading
 function! mdlink#GetHeadingText() abort
-  return get(b:, 'md_link_heading',
-        \ get(g:, 'md_link_heading', s:defaults['heading']))
+  if exists('b:md_link_heading')
+    return b:md_link_heading
+  endif
+
+  if exists('g:md_link_heading')
+    return g:md_link_heading
+  endif
+
+  if mdlink#IsFiletypeMarkdown()
+    return s:defaults['heading_markdown']
+  else
+    return s:defaults['heading_other']
+  endif
 endfunction
 
 " Return <line_nr> if buffer contains heading, else 0
@@ -501,9 +514,17 @@ function! mdlink#GetNewLabelNumber(is_heading_present) abort
   return mdlink#GetLabelStartIndex()
 endfunction
 
-" Return the start index for the first label, specified in vimrc, or the default
+" Return the start index for the first label, buffer-local or global, or default
 function! mdlink#GetLabelStartIndex() abort
-  return get(g:, 'md_link_start_index', s:defaults['start_index'])
+  if exists('b:md_link_start_index')
+    return b:md_link_start_index
+  endif
+
+  if exists('g:md_link_start_index')
+    return g:md_link_start_index
+  endif
+
+  return s:defaults['start_index']
 endfunction
 
 " Types : 'line_nr' or 'label_nr'
@@ -669,7 +690,8 @@ endfunction
 
 " Default values, can be overridden by vimrc
 let s:defaults = {
-      \ 'heading': '## Links',
+      \ 'heading_markdown': '## Links',
+      \ 'heading_other': 'Links:',
       \ 'start_index': 0,
       \ }
 

@@ -182,8 +182,12 @@ Given markdown:
   [17]: www.fringilla.com
   [8]: http://turpis.net
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Execute ([10] has no corresponding label in the references section, [12] has no corresponding label in the document body):
+Execute ([10] has no corresponding label in the references section, [12] has no corresponding label in the document body; do not move cursor):
+  call cursor(5, 6)
   MdLinkReformat
+  let [line_nr, col_nr] = getcurpos()[1:2]
+  AssertEqual line_nr, 5
+  AssertEqual col_nr, 6
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect markdown:
   Sapien ac iaculis feugiat, [lacus][0] lacus accumsan

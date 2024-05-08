@@ -5,10 +5,23 @@ After:
   unlet! g:md_link_heading
   unlet! b:md_link_heading
 
-Execute (Use default heading):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown:
+Execute (Use default heading (Markdown)):
   let expected = '## Links'
   let actual = mdlink#GetHeadingText()
   AssertEqual expected, actual
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given mail:
+Execute (Use default heading (mail)):
+  let expected = 'Links:'
+  let actual = mdlink#GetHeadingText()
+  AssertEqual expected, actual
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Execute (Modify global heading):
   let g:md_link_heading = '# My Resources'
@@ -16,15 +29,21 @@ Execute (Modify global heading):
   let actual = mdlink#GetHeadingText()
   AssertEqual expected, actual
 
-Execute (Modify local heading):
-  let b:md_link_heading = 'Links:'
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute (Modify buffer-local heading):
+  let b:md_link_heading = 'My Links:'
   let expected = b:md_link_heading
   let actual = mdlink#GetHeadingText()
   AssertEqual expected, actual
 
-Execute (Modify local and global heading):
-  let b:md_link_heading = 'Links:'
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute (Modify global and buffer-local heading):
+  let b:md_link_heading = 'My Links:'
   let g:md_link_heading = '# My Resources'
   let expected = b:md_link_heading
   let actual = mdlink#GetHeadingText()
   AssertEqual expected, actual
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
