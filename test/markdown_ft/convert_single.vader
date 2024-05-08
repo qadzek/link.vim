@@ -1,7 +1,7 @@
 Given markdown:
   Cum sociis natoque penatibus et magnis dis parturient montes,
 Execute (No link):
-  MdLinkConvertSingle
+  LinkConvertSingle
 
 Expect markdown:
   Cum sociis natoque penatibus et magnis dis parturient montes,
@@ -10,7 +10,7 @@ Expect markdown:
 Given markdown:
   Cum sociis natoque [penatibus](http://www.loremipsum.com) et magnis dis parturient montes,
 Execute (Single link):
-  MdLinkConvertSingle
+  LinkConvertSingle
 
 Expect markdown:
   Cum sociis natoque [penatibus][0] et magnis dis parturient montes,
@@ -23,8 +23,8 @@ Expect markdown:
 Given markdown:
   Cum sociis natoque [penatibus](http://www.loremipsum.com) et [magnis](http://www.dolorsitamet.com) dis parturient montes,
 Execute (Two links):
-  MdLinkConvertSingle
-  MdLinkConvertSingle
+  LinkConvertSingle
+  LinkConvertSingle
 
 Expect markdown:
   Cum sociis natoque [penatibus][0] et [magnis][1] dis parturient montes,
@@ -38,7 +38,7 @@ Expect markdown:
 Given markdown:
   [penatibus](http://www.loremipsum.com) et magnis dis parturient montes
 Execute (Link at start of line):
-  MdLinkConvertSingle
+  LinkConvertSingle
 
 Expect markdown:
   [penatibus][0] et magnis dis parturient montes
@@ -51,7 +51,7 @@ Expect markdown:
 Given markdown:
   Cum sociis natoque [penatibus](http://www.loremipsum.com)
 Execute (Link at end of line):
-  MdLinkConvertSingle
+  LinkConvertSingle
 
 Expect markdown:
   Cum sociis natoque [penatibus][0]
@@ -64,8 +64,8 @@ Expect markdown:
 Given markdown:
   [penatibus](http://www.loremipsum.com) et [magnis](http://www.dolorsitamet.com)
 Execute (Two links, one at start of line, one at end of line):
-  MdLinkConvertSingle
-  MdLinkConvertSingle
+  LinkConvertSingle
+  LinkConvertSingle
 
 Expect markdown:
   [penatibus][0] et [magnis][1]
@@ -79,9 +79,9 @@ Expect markdown:
 Given markdown:
   Cum sociis natoque [penatibus](http://www.loremipsum.com) et [magnis](http://www.dolorsitamet.com) dis [parturient](http://www.adipiscingelitipsum.com) montes,
 Execute (Three links):
-  MdLinkConvertSingle
-  MdLinkConvertSingle
-  MdLinkConvertSingle
+  LinkConvertSingle
+  LinkConvertSingle
+  LinkConvertSingle
 
 Expect markdown:
   Cum sociis natoque [penatibus][0] et [magnis][1] dis [parturient][2] montes,
@@ -97,7 +97,7 @@ Expect markdown:
 Given markdown:
   Cum sociis natoque [penatibus](http://www.lorem-ipsum.com/foo_bar.html?bar=baz+alpha$bravo!charlie'delta,echo%foxtrot) et magnis
 Execute (Link containing special characters):
-  MdLinkConvertSingle
+  LinkConvertSingle
 
 Expect markdown:
   Cum sociis natoque [penatibus][0] et magnis

@@ -13,7 +13,7 @@ Given markdown:
   fringilla ac, turpis. Duis ac erat. Etiam consequat. Integer sed est eu elit
   pellentesque dapibus. Duis venenatis magna feugiat.
 Execute (No links):
-  3,11 MdLinkConvertRange
+  3,11 LinkConvertRange
 
 Expect markdown:
   Sapien ac iaculis feugiat, lacus lacus accumsan lorem, quis volutpat justo
@@ -48,7 +48,7 @@ Given markdown:
   Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque dapibus.
   Duis venenatis magna feugiat.
 Execute (Multiple links, no heading):
-  3,11 MdLinkConvertRange
+  3,11 LinkConvertRange
 
 Expect markdown:
   Sapien ac iaculis feugiat, [lacus](http://lacus.org/lacus) lacus accumsan
@@ -98,7 +98,7 @@ Given markdown:
   
 
 Execute (Multiple links, heading present, no references yet):
-  3,11 MdLinkConvertRange
+  3,11 LinkConvertRange
 
 Expect markdown:
   Sapien ac iaculis feugiat, [lacus](http://lacus.org/lacus) lacus accumsan
@@ -150,7 +150,7 @@ Given markdown:
   [1]: https://pellentesque.com
 
 Execute (Multiple links, heading and references present):
-  3,11 MdLinkConvertRange
+  3,11 LinkConvertRange
 
 Expect markdown:
   Sapien ac iaculis feugiat, [lacus][0] lacus accumsan
@@ -203,7 +203,7 @@ Given markdown:
   [1]: https://pellentesque.com
 
 Execute (Range includes reference section):
-  7,19 MdLinkConvertRange
+  7,19 LinkConvertRange
 
 Expect markdown:
   Sapien ac iaculis feugiat, [lacus][0] lacus accumsan

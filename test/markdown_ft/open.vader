@@ -17,8 +17,8 @@ nascetur ridiculus mus.
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (From reference section):
   call cursor('$', 1)
-  MdLinkOpen
-  let expected = g:mdlink#err_msg['not_from_ref']
+  LinkOpen
+  let expected = g:link#err_msg['not_from_ref']
   let actual = split( execute('messages'), '\n')[-1]
   AssertEqual expected, actual
 
@@ -40,8 +40,8 @@ sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
 [0]: loremipsumdolorsitamet.com
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (No reference link on line):
-  MdLinkOpen
-  let expected = g:mdlink#err_msg['no_reference_link']
+  LinkOpen
+  let expected = g:link#err_msg['no_reference_link']
   let actual = split( execute('messages'), '\n')[-1]
   AssertEqual expected, actual
 
@@ -63,8 +63,8 @@ sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (No valid URL: does not start with a protocol like 'http' or with 'www'):
   call cursor(5, 1)
-  MdLinkOpen
-  let expected = g:mdlink#err_msg['no_valid_url'] .. ': loremipsum.com'
+  LinkOpen
+  let expected = g:link#err_msg['no_valid_url'] .. ': loremipsum.com'
   let actual = split( execute('messages'), '\n')[-1]
   AssertEqual expected, actual
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -13,7 +13,7 @@ nascetur ridiculus mus. Praesent semper magna. In eu justo. Nunc vitae risus nec
 sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
 Execute (No heading):
   let expected = 0
-  let actual = mdlink#IsHeadingPresent('## Links')
+  let actual = link#IsHeadingPresent('## Links')
   AssertEqual expected, actual
 -----------------------------------------------
 
@@ -29,7 +29,7 @@ sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
 ## Links
 Execute (Heading on very last line):
   let expected = 1
-  let actual = mdlink#IsHeadingPresent('## Links')
+  let actual = link#IsHeadingPresent('## Links')
   AssertEqual expected, actual
 -----------------------------------------------
 
@@ -46,7 +46,7 @@ sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
 
 Execute (Heading on last but one line, last one is blank):
   let expected = 1
-  let actual = mdlink#IsHeadingPresent('## Links')
+  let actual = link#IsHeadingPresent('## Links')
   AssertEqual expected, actual
 -----------------------------------------------
 
@@ -71,7 +71,7 @@ sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
 [3]: http://www.adipiscingelitipsumdolorsitamet.com
 Execute (Two headings):
   let expected = 1
-  let actual = mdlink#IsHeadingPresent('## Links')
+  let actual = link#IsHeadingPresent('## Links')
   AssertEqual expected, actual
 -----------------------------------------------
 
@@ -91,7 +91,7 @@ sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
 Execute (No heading):
   normal G
   let expected = 0
-  let actual = mdlink#IsHeadingPresent('## Links')
+  let actual = link#IsHeadingPresent('## Links')
   AssertEqual expected, actual
 -----------------------------------------------
 
@@ -108,7 +108,7 @@ sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
 Execute (Heading on very last line):
   normal G
   let expected = 1
-  let actual = mdlink#IsHeadingPresent('## Links')
+  let actual = link#IsHeadingPresent('## Links')
   AssertEqual expected, actual
 -----------------------------------------------
 
@@ -126,7 +126,7 @@ sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
 Execute (Heading on last but one line, last one is blank):
   normal G
   let expected = 1
-  let actual = mdlink#IsHeadingPresent('## Links')
+  let actual = link#IsHeadingPresent('## Links')
   AssertEqual expected, actual
 -----------------------------------------------
 
@@ -152,7 +152,7 @@ sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
 Execute (Two headings):
   normal G
   let expected = 1
-  let actual = mdlink#IsHeadingPresent('## Links')
+  let actual = link#IsHeadingPresent('## Links')
   AssertEqual expected, actual
 -----------------------------------------------
 
@@ -172,7 +172,7 @@ sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
 Execute (No heading):
   normal 5j
   let expected = 0
-  let actual = mdlink#IsHeadingPresent('## Links')
+  let actual = link#IsHeadingPresent('## Links')
   AssertEqual expected, actual
 -----------------------------------------------
 
@@ -189,7 +189,7 @@ sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
 Execute (Heading on very last line):
   normal 5j
   let expected = 1
-  let actual = mdlink#IsHeadingPresent('## Links')
+  let actual = link#IsHeadingPresent('## Links')
   AssertEqual expected, actual
 -----------------------------------------------
 
@@ -207,7 +207,7 @@ sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
 Execute (Heading on last but one line, last one is blank):
   normal 5j
   let expected = 1
-  let actual = mdlink#IsHeadingPresent('## Links')
+  let actual = link#IsHeadingPresent('## Links')
   AssertEqual expected, actual
 -----------------------------------------------
 
@@ -233,6 +233,6 @@ sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
 Execute (Two headings):
   normal 9j
   let expected = 1
-  let actual = mdlink#IsHeadingPresent('## Links')
+  let actual = link#IsHeadingPresent('## Links')
   AssertEqual expected, actual
 -----------------------------------------------

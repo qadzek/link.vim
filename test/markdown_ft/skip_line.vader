@@ -1,7 +1,7 @@
 Before:
-  unlet! b:md_link_skip_line
+  unlet! b:link_skip_line
 After:
-  unlet! b:md_link_skip_line
+  unlet! b:link_skip_line
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -19,7 +19,7 @@ Given markdown:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Use default (commentstring) to skip lines):
 
-  MdLinkConvertAll
+  LinkConvertAll
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect markdown:
   Filler
@@ -52,8 +52,8 @@ Given markdown:
   End
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Use custom pattern to skip lines):
-  let b:md_link_skip_line = '^>'
-  MdLinkConvertAll
+  let b:link_skip_line = '^>'
+  LinkConvertAll
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect markdown:
   Filler

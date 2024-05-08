@@ -12,7 +12,7 @@ After:
 " Given python:
 "   filler
 " Execute (Filetype not included in defaults):
-"   AssertThrows MdLinkConvertAll
+"   AssertThrows LinkConvertAll
 " Expect python:
 "   filler
 
@@ -21,7 +21,7 @@ After:
 Given markdown:
   filler
 Execute (Filetype included in defaults (markdown)):
-  MdLinkConvertAll
+  LinkConvertAll
 Expect markdown:
   filler
 
@@ -30,7 +30,7 @@ Expect markdown:
 Given mail:
   filler
 Execute (Filetype included in defaults (mail)):
-  MdLinkConvertAll
+  LinkConvertAll
 Expect mail:
   filler
 

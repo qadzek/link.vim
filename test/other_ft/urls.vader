@@ -1,13 +1,13 @@
 Before:
-  unlet! g:md_link_heading
-  unlet! b:md_link_heading
-  unlet! b:md_link_heading_before
-  unlet! b:md_link_skip_line
+  unlet! g:link_heading
+  unlet! b:link_heading
+  unlet! b:link_heading_before
+  unlet! b:link_skip_line
 After:
-  unlet! g:md_link_heading
-  unlet! b:md_link_heading
-  unlet! b:md_link_heading_before
-  unlet! b:md_link_skip_line
+  unlet! g:link_heading
+  unlet! b:link_heading
+  unlet! b:link_heading_before
+  unlet! b:link_skip_line
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -31,8 +31,8 @@ Given mail:
   Line containing something resembling an inline link: command! -buffer -range=% -bar TagLinks silent keeppatterns <line1>,<line2>substitute#\v%(\[[^\]]+\]\(\s*)@<!\zs<https?://([^.]+)\S+#[\1](\0)#giep
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (URLs in varying formats):
-  let b:md_link_heading = 'Links:'
-  MdLinkConvertAll
+  let b:link_heading = 'Links:'
+  LinkConvertAll
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect mail:
   foo [0]

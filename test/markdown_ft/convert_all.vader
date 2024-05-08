@@ -1,15 +1,15 @@
 Before:
-  unlet! g:md_link_heading
-  unlet! b:md_link_heading
-  unlet! b:md_link_heading_before
-  unlet! b:md_link_skip_line
-  unlet! g:md_link_start_index
+  unlet! g:link_heading
+  unlet! b:link_heading
+  unlet! b:link_heading_before
+  unlet! b:link_skip_line
+  unlet! g:link_start_index
 After:
-  unlet! g:md_link_heading
-  unlet! b:md_link_heading
-  unlet! b:md_link_heading_before
-  unlet! b:md_link_skip_line
-  unlet! g:md_link_start_index
+  unlet! g:link_heading
+  unlet! b:link_heading
+  unlet! b:link_heading_before
+  unlet! b:link_skip_line
+  unlet! g:link_start_index
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -28,7 +28,7 @@ Given markdown:
   fringilla ac, turpis. Duis ac erat. Etiam consequat. Integer sed est eu elit
   pellentesque dapibus. Duis venenatis magna feugiat.
 Execute (No links):
-  MdLinkConvertAll
+  LinkConvertAll
 
 Expect markdown:
   Sapien ac iaculis feugiat, lacus lacus accumsan lorem, quis volutpat justo
@@ -63,7 +63,7 @@ Given markdown:
   Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque dapibus.
   Duis venenatis magna feugiat.
 Execute (Multiple links, no heading):
-  MdLinkConvertAll
+  LinkConvertAll
 
 Expect markdown:
   Sapien ac iaculis feugiat, [lacus][0] lacus accumsan
@@ -116,7 +116,7 @@ Given markdown:
   
 
 Execute (Multiple links, heading present, no references yet):
-  MdLinkConvertAll
+  LinkConvertAll
 
 Expect markdown:
   Sapien ac iaculis feugiat, [lacus][0] lacus accumsan
@@ -171,7 +171,7 @@ Given markdown:
   [1]: https://pellentesque.com
 
 Execute (Multiple links, heading and references present):
-  MdLinkConvertAll
+  LinkConvertAll
 
 Expect markdown:
   Sapien ac iaculis feugiat, [lacus][0] lacus accumsan
@@ -227,7 +227,7 @@ Given markdown:
 
 Execute (Cursor should not move):
   call cursor(10, 5)
-  MdLinkConvertAll
+  LinkConvertAll
   let [line_nr, col_nr] = getcurpos()[1:2]
   AssertEqual line_nr, 10
   AssertEqual col_nr, 5
@@ -251,8 +251,8 @@ Given markdown:
   Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque dapibus.
   Duis venenatis magna feugiat.
 Execute (Skip some lines):
-  let b:md_link_skip_line = '^>'
-  MdLinkConvertAll
+  let b:link_skip_line = '^>'
+  LinkConvertAll
 
 Expect markdown:
   Sapien ac iaculis feugiat, [lacus][0] lacus accumsan
@@ -298,8 +298,8 @@ Given markdown:
   Duis venenatis magna feugiat.
 ~~~~~~~~~~~~~
 Execute (Change label start index):
-  let g:md_link_start_index = 100
-  MdLinkConvertAll
+  let g:link_start_index = 100
+  LinkConvertAll
 ~~~~~~~~~~~~~
 Expect markdown:
   Sapien ac iaculis feugiat, [lacus][100] lacus accumsan

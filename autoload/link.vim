@@ -3,8 +3,8 @@
 " Convert inline links to reference links within a range
 " Types : 'multiple-links', 'single-link'
 " Modes : 'normal', 'insert'
-function! mdlink#Convert(type = 'multiple-links', mode = 'normal') abort range
-  let [l:orig_line_nr, l:orig_col_nr, l:orig_fold_option] = mdlink#Initialize()
+function! link#Convert(type = 'multiple-links', mode = 'normal') abort range
+  let [l:orig_line_nr, l:orig_col_nr, l:orig_fold_option] = link#Initialize()
 
   " Use cursor position before range function moves cursor to first line of
   " range: https://vi.stackexchange.com/questions/6036/
@@ -17,12 +17,12 @@ function! mdlink#Convert(type = 'multiple-links', mode = 'normal') abort range
   endif
 
   let [ l:heading_text, l:is_heading_present, l:heading_line_nr ] =
-        \ mdlink#GetHeadingInfo()
+        \ link#GetHeadingInfo()
 
-  let l:new_label_nr = mdlink#GetNewLabelNumber(l:is_heading_present)
+  let l:new_label_nr = link#GetNewLabelNumber(l:is_heading_present)
   let l:start_label_nr = l:new_label_nr
 
-  let l:max_line_nr = mdlink#LimitRangeToHeading(l:is_heading_present,
+  let l:max_line_nr = link#LimitRangeToHeading(l:is_heading_present,
         \ l:heading_line_nr, a:lastline)
 
   " Loop over all lines within the range
@@ -33,22 +33,22 @@ function! mdlink#Convert(type = 'multiple-links', mode = 'normal') abort range
       break
     endif
 
-    if mdlink#SkipLine(l:cur_line_nr)
+    if link#SkipLine(l:cur_line_nr)
       continue
     endif
 
-    let l:all_links_on_line = mdlink#ParseLineInBodyFor('inline', l:cur_line_nr)
+    let l:all_links_on_line = link#ParseLineInBodyFor('inline', l:cur_line_nr)
 
     " Display error when trying to convert a single link but there is none
     if a:type ==# 'single-link' && len(l:all_links_on_line) == 0
-      echom g:mdlink#err_msg['no_inline_link']
-      call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
+      echom g:link#err_msg['no_inline_link']
+      call link#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
       return
     endif
 
     " Limit list of links to one link when converting a single inline link
     if a:type ==# 'single-link'
-      let l:all_links_on_line = [ mdlink#PickClosestLink(l:all_links_on_line, l:orig_col_nr) ]
+      let l:all_links_on_line = [ link#PickClosestLink(l:all_links_on_line, l:orig_col_nr) ]
     endif
 
     " Loop over all inline links on current line
@@ -60,29 +60,29 @@ function! mdlink#Convert(type = 'multiple-links', mode = 'normal') abort range
 
       " Last label line number is unknown, so look it up
       elseif l:is_heading_present
-        let l:last_label_line_nr = mdlink#GetLastLabel('line_nr')
+        let l:last_label_line_nr = link#GetLastLabel('line_nr')
 
       " No heading
       else
-        call mdlink#AddHeading(l:heading_text)
+        call link#AddHeading(l:heading_text)
         let l:is_heading_present = 1
-        let l:heading_line_nr = mdlink#GetHeadingLineNr(l:heading_text)
+        let l:heading_line_nr = link#GetHeadingLineNr(l:heading_text)
         let l:last_label_line_nr = l:heading_line_nr + 1
       endif
 
       let l:cur_line_content = getline(l:cur_line_nr)
 
-      call mdlink#ReplaceLink(l:cur_line_content, l:link['full_link'],
+      call link#ReplaceLink(l:cur_line_content, l:link['full_link'],
             \ l:link['link_text'], l:new_label_nr, l:cur_line_nr)
 
-      call mdlink#AddReference(l:new_label_nr, l:link['destination'],
+      call link#AddReference(l:new_label_nr, l:link['destination'],
             \ l:last_label_line_nr)
 
       let l:new_label_nr += 1
     endfor " End looping over all links on current line
   endfor " End looping over all lines
 
-  call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
+  call link#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
 
   " Display how many links were converted
   if a:type !=# 'single-link'
@@ -96,7 +96,7 @@ function! mdlink#Convert(type = 'multiple-links', mode = 'normal') abort range
 
     call cursor(l:orig_line_nr, l:link['col_start'])
 
-    if mdlink#IsFiletypeMarkdown()
+    if link#IsFiletypeMarkdown()
       normal! 2f]
     else
       normal! f]
@@ -119,39 +119,39 @@ endfunction
 
 " Jump between a reference link and the corresponding link reference definition
 " Types: 'jump', 'open', 'peek'
-function! mdlink#Jump(type) abort
-  let [l:orig_line_nr, l:orig_col_nr, l:orig_fold_option] = mdlink#Initialize()
+function! link#Jump(type) abort
+  let [l:orig_line_nr, l:orig_col_nr, l:orig_fold_option] = link#Initialize()
 
-  let [l:is_heading_present, l:heading_line_nr] = mdlink#GetHeadingInfo()[1:2]
+  let [l:is_heading_present, l:heading_line_nr] = link#GetHeadingInfo()[1:2]
   if !l:is_heading_present
-    echom g:mdlink#err_msg['no_heading']
-    call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
+    echom g:link#err_msg['no_heading']
+    call link#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
     return
   endif
 
   " No opening/peeking from reference section
   if (a:type ==# 'open' || a:type ==# 'peek') && l:orig_line_nr >= l:heading_line_nr
-    echom g:mdlink#err_msg['not_from_ref']
-    call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
+    echom g:link#err_msg['not_from_ref']
+    call link#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
     return
   endif
 
   " Determine if we should jump to the reference section or to the document body
   if l:orig_line_nr < l:heading_line_nr
-    let l:line_nr = mdlink#JumpToReferenceSection(l:orig_line_nr, l:orig_col_nr, l:heading_line_nr)
+    let l:line_nr = link#JumpToReferenceSection(l:orig_line_nr, l:orig_col_nr, l:heading_line_nr)
   else
-    let l:line_nr = mdlink#JumpToBody(l:orig_line_nr, l:heading_line_nr)
+    let l:line_nr = link#JumpToBody(l:orig_line_nr, l:heading_line_nr)
   endif
 
   " 0 will get returned if the jump failed
   if l:line_nr == 0
-    call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
+    call link#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
     return
   endif
 
   " Open URL from corresponding link reference definition in browser
   if a:type ==# 'open'
-    let l:ref_link = mdlink#ParseReferenceSection(l:line_nr, 'one')[0]
+    let l:ref_link = link#ParseReferenceSection(l:line_nr, 'one')[0]
     let l:url = l:ref_link['destination']
 
     " Add protocol if required
@@ -161,13 +161,13 @@ function! mdlink#Jump(type) abort
 
     " Not a valid URL
     if l:url !~# '^http'
-      echom g:mdlink#err_msg['no_valid_url'] .. ': ' .. l:url
-      call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
+      echom g:link#err_msg['no_valid_url'] .. ': ' .. l:url
+      call link#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
       return
     endif
 
     " Decide which command to use, based on the OS
-    let l:os = mdlink#GetOperatingSystem()
+    let l:os = link#GetOperatingSystem()
     if l:os ==? 'Darwin'
       let l:cmd = 'open'
     elseif l:os ==? 'Linux'
@@ -180,47 +180,47 @@ function! mdlink#Jump(type) abort
     " Capture the command's output and remove trailing newline
     let l:output = substitute( system(l:cmd .. ' ' .. l:url), '\n\+$', '', '' )
     if v:shell_error != 0
-      echom g:mdlink#err_msg['open_in_browser_failed'] .. l:output
+      echom g:link#err_msg['open_in_browser_failed'] .. l:output
     endif
 
-    call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
+    call link#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
   endif
 
   " Display corresponding link reference definition
   if a:type ==# 'peek'
     let l:line_content = getline('.')
-    call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
+    call link#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
     echom l:line_content
   endif
 endfunction
 
 " Reformat reference links and reference section: renumber, merge, delete, mark
-function! mdlink#Reformat() abort
-  let [l:orig_line_nr, l:orig_col_nr, l:orig_fold_option] = mdlink#Initialize()
+function! link#Reformat() abort
+  let [l:orig_line_nr, l:orig_col_nr, l:orig_fold_option] = link#Initialize()
 
-  let [l:is_heading_present, l:heading_line_nr] = mdlink#GetHeadingInfo()[1:2]
+  let [l:is_heading_present, l:heading_line_nr] = link#GetHeadingInfo()[1:2]
   if !l:is_heading_present
-    echom g:mdlink#err_msg['no_heading']
-    call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
+    echom g:link#err_msg['no_heading']
+    call link#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
     return
   endif
 
   let l:ref_section_start = l:heading_line_nr + 2
-  let l:ref_section_end = mdlink#GetLastLabel('line_nr')
-  let l:ref_section = mdlink#ParseReferenceSection(l:ref_section_start, 'all')
+  let l:ref_section_end = link#GetLastLabel('line_nr')
+  let l:ref_section = link#ParseReferenceSection(l:ref_section_start, 'all')
 
   " Nth reference link, counting from start of document body
-  let l:index = mdlink#GetLabelStartIndex()
+  let l:index = link#GetLabelStartIndex()
 
   let l:all_ref_links = []
 
   " Loop over all lines from first line until heading
   for l:body_line_nr in range(1, l:heading_line_nr - 1)
-    if mdlink#SkipLine(l:body_line_nr)
+    if link#SkipLine(l:body_line_nr)
       continue
     endif
 
-    let l:all_links_on_line = mdlink#ParseLineInBodyFor('reference',
+    let l:all_links_on_line = link#ParseLineInBodyFor('reference',
           \ l:body_line_nr)
 
     " Loop over all links on current line
@@ -236,7 +236,7 @@ function! mdlink#Reformat() abort
       " Corresponding label was not found in the reference section, so label
       " will be changed to '???', to mark that it's broken
       if len(l:corresponding_refs) == 0
-        call mdlink#ReplaceLink(l:body_line_content, l:link['full_link'],
+        call link#ReplaceLink(l:body_line_content, l:link['full_link'],
               \ l:link['link_text'], '???', l:body_line_nr)
         continue
       endif
@@ -251,14 +251,14 @@ function! mdlink#Reformat() abort
       " 'Merge' labels
       if len(l:url_matches) >= 1
         let l:link['index'] = l:url_matches[0]['index']
-        call mdlink#ReplaceLink(l:body_line_content, l:link['full_link'],
+        call link#ReplaceLink(l:body_line_content, l:link['full_link'],
               \ l:link['link_text'], l:link['index'], l:body_line_nr)
         continue
       endif
 
       " Label differs from index: e.g. label says 5 while it's the 3rd link
       if l:link['destination'] !=# l:link['index']
-        call mdlink#ReplaceLink(l:body_line_content, l:link['full_link'],
+        call link#ReplaceLink(l:body_line_content, l:link['full_link'],
               \ l:link['link_text'], l:link['index'], l:body_line_nr)
       endif
 
@@ -276,32 +276,32 @@ function! mdlink#Reformat() abort
   for l:idx in range( len(l:all_ref_links) )
     let l:ref_link = l:all_ref_links[l:idx]
     let l:line_nr = l:ref_section_start - 1 + l:idx
-    call mdlink#AddReference(l:ref_link['index'], l:ref_link['url'], l:line_nr)
+    call link#AddReference(l:ref_link['index'], l:ref_link['url'], l:line_nr)
 
   let l:ref_section_start = l:heading_line_nr + 2
   endfor
 
   let l:orig_ref_len = l:ref_section_end - l:ref_section_start + 1
-  let l:new_ref_len = mdlink#GetLastLabel('line_nr') - l:ref_section_start + 1
+  let l:new_ref_len = link#GetLastLabel('line_nr') - l:ref_section_start + 1
   echom 'Finished reformatting reference links and reference section'
   echom 'Number of lines in reference section -- Before: ' .. l:orig_ref_len .. ' -- After: ' .. l:new_ref_len
 
-  call mdlink#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
+  call link#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
 endfunction
 
 " HEADING ========================================================== {{{1
 
 " Return buffer-local heading, or the global heading, or the default heading
-function! mdlink#GetHeadingText() abort
-  if exists('b:md_link_heading')
-    return b:md_link_heading
+function! link#GetHeadingText() abort
+  if exists('b:link_heading')
+    return b:link_heading
   endif
 
-  if exists('g:md_link_heading')
-    return g:md_link_heading
+  if exists('g:link_heading')
+    return g:link_heading
   endif
 
-  if mdlink#IsFiletypeMarkdown()
+  if link#IsFiletypeMarkdown()
     return s:defaults['heading_markdown']
   else
     return s:defaults['heading_other']
@@ -309,7 +309,7 @@ function! mdlink#GetHeadingText() abort
 endfunction
 
 " Return <line_nr> if buffer contains heading, else 0
-function! mdlink#GetHeadingLineNr(heading) abort
+function! link#GetHeadingLineNr(heading) abort
   " Needed to get line number if there are two headings
   normal! G$
 
@@ -319,29 +319,29 @@ function! mdlink#GetHeadingLineNr(heading) abort
 endfunction
 
 " Return 1 if heading is present in buffer, else 0
-function! mdlink#IsHeadingPresent(heading) abort
-  let l:line_nr = mdlink#GetHeadingLineNr(a:heading)
+function! link#IsHeadingPresent(heading) abort
+  let l:line_nr = link#GetHeadingLineNr(a:heading)
   return l:line_nr > 0
 endfunction
 
 " Return list of heading text, if heading is present, heading line number
-function! mdlink#GetHeadingInfo() abort
-  let l:heading_text = mdlink#GetHeadingText()
-  let l:is_heading_present = mdlink#IsHeadingPresent(l:heading_text)
-  let l:heading_line_nr = mdlink#GetHeadingLineNr(l:heading_text)
+function! link#GetHeadingInfo() abort
+  let l:heading_text = link#GetHeadingText()
+  let l:is_heading_present = link#IsHeadingPresent(l:heading_text)
+  let l:heading_line_nr = link#GetHeadingLineNr(l:heading_text)
   return [ l:heading_text, l:is_heading_present, l:heading_line_nr ]
 endfunction
 
 " Add the specified heading to the buffer
-function! mdlink#AddHeading(heading_text) abort
+function! link#AddHeading(heading_text) abort
   normal! G$
 
   " Move to a line matching a pattern, before adding the heading
-  if exists('b:md_link_heading_before')
+  if exists('b:link_heading_before')
 
     " Cannot find pattern: show message
-    if search(b:md_link_heading_before, 'bcWz') == 0
-      echom g:mdlink#err_msg['no_heading_pattern'] .. b:md_link_heading_before
+    if search(b:link_heading_before, 'bcWz') == 0
+      echom g:link#err_msg['no_heading_pattern'] .. b:link_heading_before
 
     " Can find pattern: move 2 lines up
     else
@@ -357,7 +357,7 @@ endfunction
 
 " Determine which link to use, if there are multiple links on one line
 " The link that is positioned behind or on the cursor will be picked
-function! mdlink#PickClosestLink(links, col_nr) abort
+function! link#PickClosestLink(links, col_nr) abort
   if len(a:links) == 1
     return a:links[0]
   endif
@@ -376,13 +376,13 @@ endfunction
 " Return list of dictionaries, containing full link [foo](www.bar.com), link
 " text, destination (URL or reference), length of total match and start position
 " of total match
-function! mdlink#ParseLineInBodyFor(type, line_nr) abort
+function! link#ParseLineInBodyFor(type, line_nr) abort
   if a:type ==# 'inline'
     " Match http://, ftp://, www. etc.
     let l:protocol = '[a-zA-Z0-9.-]{2,12}:\/\/|www\.'
 
     " Match [foo](https://bar.com)
-    if mdlink#IsFiletypeMarkdown()
+    if link#IsFiletypeMarkdown()
       let l:regex = '\v' .. '\[(' .. '[^]]+' .. ')\]' .
           \ '\((' .. '%(' .. l:protocol .. ')' .. '[^)]+' .. ')\)'
 
@@ -394,7 +394,7 @@ function! mdlink#ParseLineInBodyFor(type, line_nr) abort
 
   elseif a:type ==# 'reference'
     " Match [foo][3]
-    if mdlink#IsFiletypeMarkdown()
+    if link#IsFiletypeMarkdown()
       let l:regex = '\v' .. '\[(' .. '[^]]+' .. ')\]' .. '\[(' .. '[^]]+' .. ')\]'
 
     " Match [3]
@@ -441,11 +441,11 @@ function! mdlink#ParseLineInBodyFor(type, line_nr) abort
 endfunction
 
 " Convert inline link to reference link by replacing line content
-function! mdlink#ReplaceLink(line_content, full_link, link_text, label, line_nr) abort
+function! link#ReplaceLink(line_content, full_link, link_text, label, line_nr) abort
   " NOTE URLs containing the * character are not supported
   let l:esc_full_link = escape(a:full_link, '[]')
 
-  if mdlink#IsFiletypeMarkdown()
+  if link#IsFiletypeMarkdown()
     let l:ref_link = '[' .. a:link_text .. '][' .. a:label .. ']'
   else
     let l:ref_link = '[' .. a:label .. ']'
@@ -459,14 +459,14 @@ endfunction
 " REFERENCE SECTION ================================================ {{{1
 
 " Add a link reference definition to the reference section
-function! mdlink#AddReference(label, url, last_label_line_nr = '$') abort
+function! link#AddReference(label, url, last_label_line_nr = '$') abort
   let l:new_line_content = '[' .. a:label .. ']: ' .. a:url
   call append(a:last_label_line_nr, l:new_line_content)
 endfunction
 
 " Parse the reference section, in its entirety or just one line
 " Return a list of dictionaries
-function! mdlink#ParseReferenceSection(start_line_nr, type) abort
+function! link#ParseReferenceSection(start_line_nr, type) abort
   if a:type ==# 'all'
     let l:cur_line_nr = a:start_line_nr
     let l:last_line_nr = line('$')
@@ -506,22 +506,22 @@ endfunction
 " LABEL ============================================================ {{{1
 
 " Determine new label number
-function! mdlink#GetNewLabelNumber(is_heading_present) abort
+function! link#GetNewLabelNumber(is_heading_present) abort
   if a:is_heading_present
-    return mdlink#GetLastLabel('label_nr') + 1
+    return link#GetLastLabel('label_nr') + 1
   endif
 
-  return mdlink#GetLabelStartIndex()
+  return link#GetLabelStartIndex()
 endfunction
 
 " Return the start index for the first label, buffer-local or global, or default
-function! mdlink#GetLabelStartIndex() abort
-  if exists('b:md_link_start_index')
-    return b:md_link_start_index
+function! link#GetLabelStartIndex() abort
+  if exists('b:link_start_index')
+    return b:link_start_index
   endif
 
-  if exists('g:md_link_start_index')
-    return g:md_link_start_index
+  if exists('g:link_start_index')
+    return g:link_start_index
   endif
 
   return s:defaults['start_index']
@@ -534,7 +534,7 @@ endfunction
 " 'line_nr':
 " Return line number of last label in reference section
 " Return last line number of buffer if not found
-function! mdlink#GetLastLabel(type) abort
+function! link#GetLastLabel(type) abort
   let l:regex = '\v^\s*\[\zs\d+\ze\]:\s+'
 
   " Go to start of last non-blank line
@@ -565,14 +565,14 @@ endfunction
 " Jump from a reference link in the document body [foo][3] to the corresponding
 " link reference definition in the reference section [3]: http://bar.com
 " Return line number of match, or 0
-function! mdlink#JumpToReferenceSection(orig_line_nr, orig_col_nr, heading_line_nr) abort
-  let l:all_links = mdlink#ParseLineInBodyFor('reference', a:orig_line_nr)
+function! link#JumpToReferenceSection(orig_line_nr, orig_col_nr, heading_line_nr) abort
+  let l:all_links = link#ParseLineInBodyFor('reference', a:orig_line_nr)
   if len(l:all_links) == 0
-    echom g:mdlink#err_msg['no_reference_link']
+    echom g:link#err_msg['no_reference_link']
     return 0
   endif
 
-  let l:link = mdlink#PickClosestLink(l:all_links, a:orig_col_nr)
+  let l:link = link#PickClosestLink(l:all_links, a:orig_col_nr)
   let l:label = l:link['destination']
 
   let l:regex = '\v^\s*\[' .. l:label .. '\]:\s+\S+'
@@ -588,7 +588,7 @@ function! mdlink#JumpToReferenceSection(orig_line_nr, orig_col_nr, heading_line_
   normal! W
 
   if l:ref_line_nr == 0
-    echom g:mdlink#err_msg['no_label_ref_section'] .. l:label
+    echom g:link#err_msg['no_label_ref_section'] .. l:label
   endif
 
   " 0 in case of no match
@@ -599,10 +599,10 @@ endfunction
 " [3]: http://bar.com to the corresponding reference link in the document body
 " [foo][3]
 " Return line number of match, or 0
-function! mdlink#JumpToBody(orig_line_nr, heading_line_nr) abort
-  let l:reference_section = mdlink#ParseReferenceSection(a:orig_line_nr, 'one')
+function! link#JumpToBody(orig_line_nr, heading_line_nr) abort
+  let l:reference_section = link#ParseReferenceSection(a:orig_line_nr, 'one')
   if len(l:reference_section) == 0
-    echom g:mdlink#err_msg['no_link_ref_definition']
+    echom g:link#err_msg['no_link_ref_definition']
     return 0
   endif
   let l:link_reference_definition = l:reference_section[0]
@@ -614,7 +614,7 @@ function! mdlink#JumpToBody(orig_line_nr, heading_line_nr) abort
   let l:body_line_nr = search('\v\[' .. l:label .. '\]', 'cWe', a:heading_line_nr)
 
   if l:body_line_nr == 0
-    echom g:mdlink#err_msg['no_label_body'] .. l:label
+    echom g:link#err_msg['no_label_body'] .. l:label
   endif
 
   " 0 in case of no match
@@ -625,7 +625,7 @@ endfunction
 
 " Return list of original line number, column number and folding option
 " Temporarily disable folding
-function! mdlink#Initialize() abort
+function! link#Initialize() abort
   let [@_, l:line_nr, l:col_nr, @_, @_] = getcurpos()
   let l:orig_fold_option = &foldenable
   setlocal nofoldenable
@@ -633,14 +633,14 @@ function! mdlink#Initialize() abort
 endfunction
 
 " Restore cursor position and folding option
-function! mdlink#Finalize(orig_line_nr, orig_col_nr, orig_fold_option) abort
+function! link#Finalize(orig_line_nr, orig_col_nr, orig_fold_option) abort
   call cursor(a:orig_line_nr, a:orig_col_nr)
   let &l:foldenable = a:orig_fold_option
-  call mdlink#VimwikiRefLinksRefresh()
+  call link#VimwikiRefLinksRefresh()
 endfunction
 
 " Limit range to line containing heading, so reference section stays untouched
-function! mdlink#LimitRangeToHeading(is_heading_present, heading_line_nr, range_end_line_nr) abort range
+function! link#LimitRangeToHeading(is_heading_present, heading_line_nr, range_end_line_nr) abort range
   if a:is_heading_present && a:range_end_line_nr > a:heading_line_nr
     return a:heading_line_nr
   endif
@@ -649,10 +649,10 @@ function! mdlink#LimitRangeToHeading(is_heading_present, heading_line_nr, range_
 endfunction
 
 " Return 1 if line should be skipped, else 0
-function! mdlink#SkipLine(cur_line_nr) abort
+function! link#SkipLine(cur_line_nr) abort
   "Custom pattern
-  if exists('b:md_link_skip_line')
-    let l:regex = b:md_link_skip_line
+  if exists('b:link_skip_line')
+    let l:regex = b:link_skip_line
   else
     " Default
     let l:regex = '\V\^' .. substitute( escape(&commentstring, '\'), '%s', '\\.\\*', 'g' ) .. '\$'
@@ -662,7 +662,7 @@ function! mdlink#SkipLine(cur_line_nr) abort
 endfunction
 
 " Fix Vimwiki bug where newly created reference links don't work instantly
-function! mdlink#VimwikiRefLinksRefresh() abort
+function! link#VimwikiRefLinksRefresh() abort
   " See https://github.com/vimwiki/vimwiki/issues/1005 and
   " https://github.com/vimwiki/vimwiki/issues/1351
 
@@ -674,7 +674,7 @@ function! mdlink#VimwikiRefLinksRefresh() abort
 endfunction
 
 " Return the operating system: 'Darwin', 'Linux' or 'Windows'
-function! mdlink#GetOperatingSystem() abort
+function! link#GetOperatingSystem() abort
   " https://vi.stackexchange.com/a/2577/50213
   if has('win64') || has('win32') || has('win16')
     return 'Windows'
@@ -683,7 +683,7 @@ function! mdlink#GetOperatingSystem() abort
   endif
 endfunction
 
-function! mdlink#IsFiletypeMarkdown() abort
+function! link#IsFiletypeMarkdown() abort
   " NOTE This assumes that Vimwiki uses Markdown syntax
   return &filetype =~# 'markdown' || &filetype =~# 'vimwiki'
 endfunction
@@ -696,7 +696,7 @@ let s:defaults = {
       \ }
 
 " Error messages
-let g:mdlink#err_msg = {
+let g:link#err_msg = {
       \ 'no_heading':
       \ 'No heading found',
       \ 'no_inline_link':

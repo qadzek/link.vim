@@ -1,9 +1,9 @@
 Before:
-  unlet! b:md_link_heading
-  unlet! b:md_link_skip_line
+  unlet! b:link_heading
+  unlet! b:link_skip_line
 After:
-  unlet! b:md_link_heading
-  unlet! b:md_link_skip_line
+  unlet! b:link_heading
+  unlet! b:link_skip_line
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -14,8 +14,8 @@ Given javascript:
   // this is a comment: https://vitae.net/index.html
 ~~~~~
 Execute (Use default (commentstring) to skip lines; JavaScript):
-  let b:md_link_heading = 'Links:'
-  % call mdlink#Convert()
+  let b:link_heading = 'Links:'
+  % call link#Convert()
 ~~~~~
 Expect javascript:
   // filler
@@ -41,7 +41,7 @@ Given html:
   End
 ~~~~~
 Execute (Use default (commentstring) to skip lines; HTML):
-  % call mdlink#Convert()
+  % call link#Convert()
 ~~~~~
 Expect html:
   Filler
@@ -73,8 +73,8 @@ Given html:
   End
 ~~~~~
 Execute (Use custom pattern to skip lines; HTML):
-  let b:md_link_skip_line = '^>'
-  % call mdlink#Convert()
+  let b:link_skip_line = '^>'
+  % call link#Convert()
 ~~~~~
 Expect html:
   Not a comment: [0]

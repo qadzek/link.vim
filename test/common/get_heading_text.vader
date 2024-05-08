@@ -1,16 +1,16 @@
 Before:
-  unlet! g:md_link_heading
-  unlet! b:md_link_heading
+  unlet! g:link_heading
+  unlet! b:link_heading
 After:
-  unlet! g:md_link_heading
-  unlet! b:md_link_heading
+  unlet! g:link_heading
+  unlet! b:link_heading
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown:
 Execute (Use default heading (Markdown)):
   let expected = '## Links'
-  let actual = mdlink#GetHeadingText()
+  let actual = link#GetHeadingText()
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -18,32 +18,32 @@ Execute (Use default heading (Markdown)):
 Given mail:
 Execute (Use default heading (mail)):
   let expected = 'Links:'
-  let actual = mdlink#GetHeadingText()
+  let actual = link#GetHeadingText()
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Execute (Modify global heading):
-  let g:md_link_heading = '# My Resources'
-  let expected = g:md_link_heading
-  let actual = mdlink#GetHeadingText()
+  let g:link_heading = '# My Resources'
+  let expected = g:link_heading
+  let actual = link#GetHeadingText()
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Execute (Modify buffer-local heading):
-  let b:md_link_heading = 'My Links:'
-  let expected = b:md_link_heading
-  let actual = mdlink#GetHeadingText()
+  let b:link_heading = 'My Links:'
+  let expected = b:link_heading
+  let actual = link#GetHeadingText()
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Execute (Modify global and buffer-local heading):
-  let b:md_link_heading = 'My Links:'
-  let g:md_link_heading = '# My Resources'
-  let expected = b:md_link_heading
-  let actual = mdlink#GetHeadingText()
+  let b:link_heading = 'My Links:'
+  let g:link_heading = '# My Resources'
+  let expected = b:link_heading
+  let actual = link#GetHeadingText()
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

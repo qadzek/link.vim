@@ -29,7 +29,7 @@ endfunction
 call LoadPlugin('vader.vim')
 
 " Load this plugin
-call LoadPlugin('vim-md-link')
+call LoadPlugin('link.vim')
 
 " Exit tests
 nnoremap Q :qa!<CR>

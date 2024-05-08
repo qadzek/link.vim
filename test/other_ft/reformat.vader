@@ -2,17 +2,17 @@
 " gitcommit resource
 
 Before:
-  unlet! g:md_link_start_index
-  unlet! g:md_link_heading
-  unlet! b:md_link_heading
-  unlet! b:md_link_heading_before
-  unlet! b:md_link_skip_line
+  unlet! g:link_start_index
+  unlet! g:link_heading
+  unlet! b:link_heading
+  unlet! b:link_heading_before
+  unlet! b:link_skip_line
 After:
-  unlet! g:md_link_start_index
-  unlet! g:md_link_heading
-  unlet! b:md_link_heading
-  unlet! b:md_link_heading_before
-  unlet! b:md_link_skip_line
+  unlet! g:link_start_index
+  unlet! g:link_heading
+  unlet! b:link_heading
+  unlet! b:link_heading_before
+  unlet! b:link_skip_line
 
 ~~~ 1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -46,11 +46,11 @@ Given gitcommit:
   #
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Delete two links, [0] and [3]):
-  let g:md_link_start_index = 10
-  let b:md_link_heading = 'Links:'
-  let b:md_link_heading_before = '^# Please enter the commit message'
-  let b:md_link_skip_line = '^>'
-  call mdlink#Reformat()
+  let g:link_start_index = 10
+  let b:link_heading = 'Links:'
+  let b:link_heading_before = '^# Please enter the commit message'
+  let b:link_skip_line = '^>'
+  call link#Reformat()
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect gitcommit:
   Update README.md with project documentation links
@@ -117,10 +117,10 @@ Given gitcommit:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Merge links; do not move cursor):
   call cursor(5, 6)
-  let b:md_link_heading = 'Links:'
-  let b:md_link_heading_before = '^# Please enter the commit message'
-  let b:md_link_skip_line = '^>'
-  call mdlink#Reformat()
+  let b:link_heading = 'Links:'
+  let b:link_heading_before = '^# Please enter the commit message'
+  let b:link_skip_line = '^>'
+  call link#Reformat()
   let [line_nr, col_nr] = getcurpos()[1:2]
   AssertEqual line_nr, 5
   AssertEqual col_nr, 6

@@ -2,16 +2,16 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Before:
-  unlet! g:md_link_heading
-  unlet! b:md_link_heading
-  unlet! b:md_link_heading_before
-  unlet! b:md_link_skip_line
+  unlet! g:link_heading
+  unlet! b:link_heading
+  unlet! b:link_heading_before
+  unlet! b:link_skip_line
   unlet! b:init_cur_pos
 After:
-  unlet! g:md_link_heading
-  unlet! b:md_link_heading
-  unlet! b:md_link_heading_before
-  unlet! b:md_link_skip_line
+  unlet! g:link_heading
+  unlet! b:link_heading
+  unlet! b:link_heading_before
+  unlet! b:link_skip_line
   unlet! b:init_cur_pos
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -21,7 +21,7 @@ Given mail:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Link at start of line):
   let b:init_cur_pos = [1, 1]
-  MdLinkConvertSingleInsert
+  LinkConvertSingleInsert
   normal! iX
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect mail:
@@ -38,7 +38,7 @@ Given mail:
 Execute (Link at end of line):
   let b:init_cur_pos = [1, 85]
   normal! $
-  MdLinkConvertSingleInsert
+  LinkConvertSingleInsert
   " Use a instead of i because we are at the end of the line
   normal! aX
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -56,7 +56,7 @@ Given mail:
 Execute (Cursor in middle of second link):
   let b:init_cur_pos = [1, 41]
   normal! 2f:
-  MdLinkConvertSingleInsert
+  LinkConvertSingleInsert
   normal! iX
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect mail:

@@ -4,51 +4,51 @@
 Before:
   edit resources/gitcommit_converted.gitcommit
   normal! gg
-  unlet! g:md_link_heading
-  unlet! b:md_link_heading
-  unlet! b:md_link_heading_before
-  unlet! b:md_link_skip_line
+  unlet! g:link_heading
+  unlet! b:link_heading
+  unlet! b:link_heading_before
+  unlet! b:link_skip_line
 After:
-  unlet! g:md_link_heading
-  unlet! b:md_link_heading
-  unlet! b:md_link_heading_before
-  unlet! b:md_link_skip_line
+  unlet! g:link_heading
+  unlet! b:link_heading
+  unlet! b:link_heading_before
+  unlet! b:link_skip_line
 
 Execute (Valid peek, from single reference link on line, [0]):
-  let b:md_link_heading = 'Links:'
-  let b:md_link_heading_before = '^# Please enter'
+  let b:link_heading = 'Links:'
+  let b:link_heading_before = '^# Please enter'
   call cursor(6, 1)
-  call mdlink#Jump('peek')
+  call link#Jump('peek')
   let expected = '[0]: https://github.com/example/project/wiki'
   let messages = execute('messages')
   let actual = split(messages, "\n")[-1] " Last message
   AssertEqual expected, actual
 
 Execute (Valid peek, from multiple reference links on line, [3]):
-  let b:md_link_heading = 'Links:'
-  let b:md_link_heading_before = '^# Please enter'
+  let b:link_heading = 'Links:'
+  let b:link_heading_before = '^# Please enter'
   call cursor(8, 24)
-  call mdlink#Jump('peek')
+  call link#Jump('peek')
   let expected = '[3]: https://docs.example.com/developer-guide'
   let messages = execute('messages')
   let actual = split( execute('messages'), '\n')[-1]
   AssertEqual expected, actual
 
 Execute (Invalid peek, from below heading):
-  let b:md_link_heading = 'Links:'
-  let b:md_link_heading_before = '^# Please enter'
+  let b:link_heading = 'Links:'
+  let b:link_heading_before = '^# Please enter'
   call cursor(16, 1)
-  call mdlink#Jump('peek')
-  let expected = mdlink#err_msg['not_from_ref']
+  call link#Jump('peek')
+  let expected = link#err_msg['not_from_ref']
   let actual = split( execute('messages'), '\n')[-1]
   AssertEqual expected, actual
 
 Execute (Invalid peek, label [1] not found in reference section):
-  let b:md_link_heading = 'Links:'
-  let b:md_link_heading_before = '^# Please enter'
+  let b:link_heading = 'Links:'
+  let b:link_heading_before = '^# Please enter'
   18 delete
   call cursor(7, 1)
-  call mdlink#Jump('peek')
-  let expected = mdlink#err_msg['no_label_ref_section'] .. '1'
+  call link#Jump('peek')
+  let expected = link#err_msg['no_label_ref_section'] .. '1'
   let actual = split( execute('messages'), '\n')[-1]
   AssertEqual expected, actual

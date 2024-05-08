@@ -37,7 +37,7 @@ Given markdown:
   [8]: http://main.es
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Delete two links, [2] and [5]):
-  call mdlink#Reformat()
+  call link#Reformat()
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect markdown:
   # Yar Pirate Ipsum
@@ -115,7 +115,7 @@ Given markdown:
   [8]: http://main.es
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Merge links):
-  call mdlink#Reformat()
+  call link#Reformat()
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect markdown:
   # Yar Pirate Ipsum
@@ -184,7 +184,7 @@ Given markdown:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute ([10] has no corresponding label in the references section, [12] has no corresponding label in the document body; do not move cursor):
   call cursor(5, 6)
-  MdLinkReformat
+  LinkReformat
   let [line_nr, col_nr] = getcurpos()[1:2]
   AssertEqual line_nr, 5
   AssertEqual col_nr, 6

@@ -1,7 +1,7 @@
 Before:
-  unlet! b:md_link_heading_before
+  unlet! b:link_heading_before
 After:
-  unlet! b:md_link_heading_before
+  unlet! b:link_heading_before
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown:
@@ -13,7 +13,7 @@ Given markdown:
   nascetur ridiculus mus. Praesent semper magna. In eu justo. Nunc vitae risus nec
   sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
 Execute (No heading present):
-  call mdlink#AddHeading('## My Resources')
+  call link#AddHeading('## My Resources')
 
 Expect markdown:
   # A consectetuer nunc justo ac nisl.
@@ -41,8 +41,8 @@ Given mail:
   Your Company Name
   Your Contact Information
 Execute (Put heading before a signature (mail buffer)):
-  let b:md_link_heading_before = '^--'
-  call mdlink#AddHeading('Links:')
+  let b:link_heading_before = '^--'
+  call link#AddHeading('Links:')
 
 Expect mail:
   Hi Recipient,
@@ -75,8 +75,8 @@ Given gitcommit:
   #	modified:   foo.txt
   #
 Execute (Put heading before comments (gitcommit buffer)):
-  let b:md_link_heading_before = '# Please enter'
-  call mdlink#AddHeading('Links:')
+  let b:link_heading_before = '# Please enter'
+  call link#AddHeading('Links:')
 
 Expect gitcommit:
   Git commit title

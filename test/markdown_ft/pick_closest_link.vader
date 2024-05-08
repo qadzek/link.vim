@@ -3,7 +3,7 @@ Given markdown:
   [Penatibus](http://www.loremipsum.com) et [magnis](http://www.dolorsitamet.com) dis [parturient](http://www.adipiscingelitipsum.com) montes,
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (First out of three links, cursor on first char):
-  MdLinkConvertSingle
+  LinkConvertSingle
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect markdown:
   [Penatibus][0] et [magnis](http://www.dolorsitamet.com) dis [parturient](http://www.adipiscingelitipsum.com) montes,
@@ -18,7 +18,7 @@ Given markdown:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Second out of three links, cursor on first char):
   normal! f[
-  MdLinkConvertSingle
+  LinkConvertSingle
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect markdown:
   [Penatibus](http://www.loremipsum.com) et [magnis][0] dis [parturient](http://www.adipiscingelitipsum.com) montes,
@@ -33,7 +33,7 @@ Given markdown:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Third out of three links, cursor on first char):
   normal! f[f[
-  MdLinkConvertSingle
+  LinkConvertSingle
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect markdown:
   [Penatibus](http://www.loremipsum.com) et [magnis](http://www.dolorsitamet.com) dis [parturient][0] montes,
@@ -48,7 +48,7 @@ Given markdown:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (First out of three links, cursor on last char):
   normal! f)
-  MdLinkConvertSingle
+  LinkConvertSingle
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect markdown:
   [Penatibus][0] et [magnis](http://www.dolorsitamet.com) dis [parturient](http://www.adipiscingelitipsum.com) montes,
@@ -63,7 +63,7 @@ Given markdown:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Second out of three links, cursor on last char):
   normal! 2f)
-  MdLinkConvertSingle
+  LinkConvertSingle
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect markdown:
   [Penatibus](http://www.loremipsum.com) et [magnis][0] dis [parturient](http://www.adipiscingelitipsum.com) montes,
@@ -78,7 +78,7 @@ Given markdown:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Third out of three links, cursor on last char):
   normal! 3f)
-  MdLinkConvertSingle
+  LinkConvertSingle
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect markdown:
   [Penatibus](http://www.loremipsum.com) et [magnis](http://www.dolorsitamet.com) dis [parturient][0] montes,
@@ -93,7 +93,7 @@ Given markdown:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Cursor between first and second link):
   normal! f)W
-  MdLinkConvertSingle
+  LinkConvertSingle
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect markdown:
   [Penatibus](http://www.loremipsum.com) et [magnis][0] dis [parturient](http://www.adipiscingelitipsum.com) montes,
@@ -108,7 +108,7 @@ Given markdown:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Cursor inside second link):
   normal! f)f)3b
-  MdLinkConvertSingle
+  LinkConvertSingle
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect markdown:
   [Penatibus](http://www.loremipsum.com) et [magnis][0] dis [parturient](http://www.adipiscingelitipsum.com) montes,
@@ -123,7 +123,7 @@ Given markdown:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Cursor just before second link):
   normal! f[h
-  MdLinkConvertSingle
+  LinkConvertSingle
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect markdown:
   [Penatibus](http://www.loremipsum.com) et [magnis][0] dis [parturient](http://www.adipiscingelitipsum.com) montes,
@@ -138,7 +138,7 @@ Given markdown:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Cursor just after second link):
   normal! 2f)l
-  MdLinkConvertSingle
+  LinkConvertSingle
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect markdown:
   [Penatibus](http://www.loremipsum.com) et [magnis](http://www.dolorsitamet.com) dis [parturient][0] montes,
@@ -153,7 +153,7 @@ Given markdown:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Cursor on last char of last link, no trailing chars):
   normal! 3f)
-  MdLinkConvertSingle
+  LinkConvertSingle
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect markdown:
   [Penatibus](http://www.loremipsum.com) et [magnis](http://www.dolorsitamet.com) dis [parturient][0]

@@ -1,40 +1,40 @@
 Before:
-  unlet! g:md_link_start_index
-  unlet! b:md_link_start_index
+  unlet! g:link_start_index
+  unlet! b:link_start_index
 After:
-  unlet! g:md_link_start_index
-  unlet! b:md_link_start_index
+  unlet! g:link_start_index
+  unlet! b:link_start_index
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Execute (Use default label start index):
   let expected = 0
-  let actual = mdlink#GetLabelStartIndex()
+  let actual = link#GetLabelStartIndex()
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Execute (Modify global label start index):
-  let g:md_link_start_index = 100
-  let expected = g:md_link_start_index
-  let actual = mdlink#GetLabelStartIndex()
+  let g:link_start_index = 100
+  let expected = g:link_start_index
+  let actual = link#GetLabelStartIndex()
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Execute (Modify buffer-local label start index):
-  let b:md_link_start_index = 50
-  let expected = b:md_link_start_index
-  let actual = mdlink#GetLabelStartIndex()
+  let b:link_start_index = 50
+  let expected = b:link_start_index
+  let actual = link#GetLabelStartIndex()
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Execute (Modify global and buffer-local label start index):
-  let g:md_link_start_index = 100
-  let b:md_link_start_index = 10
-  let expected = b:md_link_start_index
-  let actual = mdlink#GetLabelStartIndex()
+  let g:link_start_index = 100
+  let b:link_start_index = 10
+  let expected = b:link_start_index
+  let actual = link#GetLabelStartIndex()
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

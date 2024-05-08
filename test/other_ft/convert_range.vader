@@ -1,13 +1,13 @@
 Before:
-  unlet! g:md_link_heading
-  unlet! b:md_link_heading
-  unlet! b:md_link_heading_before
-  unlet! b:md_link_skip_line
+  unlet! g:link_heading
+  unlet! b:link_heading
+  unlet! b:link_heading_before
+  unlet! b:link_skip_line
 After:
-  unlet! g:md_link_heading
-  unlet! b:md_link_heading
-  unlet! b:md_link_heading_before
-  unlet! b:md_link_skip_line
+  unlet! g:link_heading
+  unlet! b:link_heading
+  unlet! b:link_heading_before
+  unlet! b:link_skip_line
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -30,8 +30,8 @@ Given mail:
   Line containing something resembling an inline link: command! -buffer -range=% -bar TagLinks silent keeppatterns <line1>,<line2>substitute#\v%(\[[^\]]+\]\(\s*)@<!\zs<https?://([^.]+)\S+#[\1](\0)#giep
 ~~~~~
 Execute (Convert a range in a mail buffer):
-  let b:md_link_heading = 'Links:'
-  4,6 MdLinkConvertRange
+  let b:link_heading = 'Links:'
+  4,6 LinkConvertRange
 ~~~~~
 Expect mail:
   www.bar.com
@@ -81,10 +81,10 @@ Given mail:
   Jane
 ~~~~~
 Execute (Mail buffer):
-  let b:md_link_heading = 'Full Links:'
-  let b:md_link_heading_before = '^Cheers'
-  let b:md_link_skip_line = '^>'
-  10,13 MdLinkConvertRange
+  let b:link_heading = 'Full Links:'
+  let b:link_heading_before = '^Cheers'
+  let b:link_skip_line = '^>'
+  10,13 LinkConvertRange
 ~~~~~
 Expect mail:
   Subject: Join Our Webinar Series!
