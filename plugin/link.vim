@@ -1,5 +1,14 @@
 " Convert ---------------------------------------------------------- {{{1
 
+" Boilerplate; see :help use-cpo-save
+if exists('g:loaded_link')
+  finish
+endif
+let g:loaded_link = 1
+
+let s:save_cpo = &cpoptions
+set cpoptions&vim
+
 " By default, the plugin will be enabled for the following filetypes, if the
 " user hasn't set a special variable in their vimrc
 let s:default_enabled_filetypes = [ 'markdown', 'vimwiki', 'mail', 'text' ]
@@ -52,3 +61,6 @@ function! LinkEnable() abort
     nnoremap <buffer> <silent> <LocalLeader>r       :LinkReformat<CR>
   endif
 endfunction
+
+let &cpoptions = s:save_cpo
+unlet s:save_cpo
