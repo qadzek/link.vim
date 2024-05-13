@@ -1,6 +1,74 @@
 Before:
   messages clear
 
+Given markdown:
+  Nascetur [ridiculus][0] mus.
+
+  ## Links
+
+  [0]: https://www.vim.org/
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute (Regular URL):
+  LinkOpen
+  AssertEqual 0, v:shell_error
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown:
+  Nascetur [ridiculus][0] mus.
+
+  ## Links
+
+  [0]: https://en.wikipedia.org/wiki/Giro_d%27Italia
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute (URL containing percent-encoding):
+  LinkOpen
+  AssertEqual 0, v:shell_error
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown:
+  Nascetur [ridiculus][0] mus.
+
+  ## Links
+
+  [0]: https://en.wikipedia.org/wiki/Giro_d%27Italia#Defunct_classifications
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute (URL containing percent-encoding and hash sign):
+  LinkOpen
+  AssertEqual 0, v:shell_error
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown:
+  Nascetur [ridiculus][0] mus.
+
+  ## Links
+
+  [0]: https://www.mobileread.com/forums/showthread.php?p=1769412
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute (URL containing question mark):
+  LinkOpen
+  AssertEqual 0, v:shell_error
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown:
+  Nascetur [ridiculus][0] mus.
+
+  ## Links
+
+  [0]: https://www.mobileread.com/forums/showpost.php?p=1769412&postcount=1
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute (URL containing question mark and ampersand):
+  LinkOpen
+  AssertEqual 0, v:shell_error
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown;
@@ -46,6 +114,7 @@ Execute (No reference link on line):
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Given markdown;
 # A consectetuer nunc justo ac nisl.
 
@@ -67,4 +136,5 @@ Execute (No valid URL: does not start with a protocol like 'http' or with 'www')
   let expected = g:link#err_msg['no_valid_url'] .. ': loremipsum.com'
   let actual = split( execute('messages'), '\n')[-1]
   AssertEqual expected, actual
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -178,7 +178,8 @@ function! link#Jump(type) abort
 
     """ Open URL in browser
     " Capture the command's output and remove trailing newline
-    let l:output = substitute( system(l:cmd .. ' ' .. l:url), '\n\+$', '', '' )
+    let l:output = substitute( system(l:cmd .. " '" .. l:url .. "'"), '\n\+$',
+          \ '', '' )
     if v:shell_error != 0
       echom g:link#err_msg['open_in_browser_failed'] .. l:output
     endif

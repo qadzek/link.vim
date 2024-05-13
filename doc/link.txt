@@ -8,7 +8,7 @@
              |_| |_| |_| |_| |_|\_\ (_)   \_/   |_| |_| |_| |_|~
 
 
-Version: 1.0.2
+Version: 1.0.3
 Author:  qadzek
 License: MIT
 
@@ -291,15 +291,21 @@ To execute the tests: `./test/run_tests.sh`
 ==============================================================================
 CHANGELOG                                                     *link-changelog*
 
+1.0.3   2024-05-13
+        - Support special characters in URLs when opening
+          them in browser
+
 1.0.2   2024-05-08
         - Convert filetype plugin to global plugin             BREAKING CHANGE
-        - `Links:` is default heading if filetype is not Markdown
+        - `Links:` is default heading if filetype is not
+          Markdown
         - Support `b:link_start_index`
         - Rename plugin                                        BREAKING CHANGE
 
 1.0.1   2024-05-06
         - Remove :MdLinkDelete                                 BREAKING CHANGE
-        - Add :MdLinkReformat to renumber, merge and delete links
+        - Add :MdLinkReformat to renumber, merge and delete
+          links
 
 1.0.0   2024-05-04
         - Remove pre- and post-processing commands             BREAKING CHANGE
