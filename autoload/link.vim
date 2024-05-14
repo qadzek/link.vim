@@ -177,9 +177,11 @@ function! link#Jump(type) abort
     endif
 
     """ Open URL in browser
+    " Escape URL, to support URLs containing e.g. a question mark
+    let l:esc_url = shellescape(l:url)
     " Capture the command's output and remove trailing newline
-    let l:output = substitute( system(l:cmd .. " '" .. l:url .. "'"), '\n\+$',
-          \ '', '' )
+    let l:output = substitute( system(l:cmd .. ' ' .. l:esc_url),
+          \ '\n\+$', '', '' )
     if v:shell_error != 0
       echom g:link#err_msg['open_in_browser_failed'] .. l:output
     endif
