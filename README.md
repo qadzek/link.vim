@@ -1,10 +1,5 @@
 # link.vim
 
-> [!WARNING]
-> This plugin now supports not only Markdown links, but also plaintext links,
-> hence the renaming of the plugin. This update includes several breaking
-> changes, so please read this document and `:help link`.
-
 `link.vim` is a plugin for Vim and Neovim that keeps long URLs out of your way.
 It supports links in Markdown syntax and plaintext links (e.g. in emails, in
 text files etc.)
@@ -31,7 +26,7 @@ will be turned into
 [1]: https://neovim.io
 ```
 
-Watch the screencast for a quick overview of the plugin: 
+Watch the screencast for a quick overview of the plugin:
 
 https://github.com/qadzek/link.vim/assets/84473512/7be44a63-677c-4477-8e30-fa6090e3c6d9
 
