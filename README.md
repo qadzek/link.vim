@@ -83,8 +83,11 @@ for e.g. `gitcommit` buffers.
 Questions, suggestions, comments, feature requests... everything is welcome in
 the _Issues_ tab.
 
-If you would like to contribute, see `:help link-contributing`.
+If you would like to contribute, see `:help link-contributing`. This plugin uses
+the [Vint][3] linter and the [Vader][4] test framework.
 
 [0]: https://github.com/junegunn/vim-plug
 [1]: https://github.com/vimwiki/vimwiki
 [2]: https://github.com/qadzek/link.vim/wiki
+[3]: https://github.com/Vimjas/vint
+[4]: https://github.com/junegunn/vader.vim

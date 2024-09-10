@@ -1,6 +1,6 @@
 *link.txt* Convert inline links (Markdown or plaintext) to reference links
 
-                                                                        *link*
+                                                                          *link*
 >
        __       __  .__   __.  __  ___     ____    ____  __  .___  ___.
       |  |     |  | |  \ |  | |  |/  /     \   \  /   / |  | |   \/   |
@@ -15,7 +15,7 @@ Author:  qadzek
 License: MIT
 
 ==============================================================================
-CONTENTS                                                       *link-contents*
+CONTENTS                                                         *link-contents*
 
     1. Introduction ......... |link-introduction|
     2. Usage ................ |link-usage|
@@ -27,7 +27,7 @@ CONTENTS                                                       *link-contents*
     8. Credits .............. |link-credits|
 
 ==============================================================================
-INTRODUCTION                                               *link-introduction*
+INTRODUCTION                                                 *link-introduction*
 
 Reference links allow for cleaner documents. Storing (long) URLs at the bottom
 of your document helps maintain the flow of the body of the text. However,
@@ -53,14 +53,15 @@ URLs are moved to a reference section. A heading is used to mark the divide
 between the document body and the reference section. It will be automatically
 added if needed.
 
-Terminology~
-                               Markdown                    Plaintext
-  - inline link:               `[Vim](www.vim.org)`          `Vim www.vim.org`
-  - reference link:            `[Vim][0]`                    `Vim [0]`
-  - link text:                 `[Vim]`                       `none`
-  - label:                     `[0]`                         `same`
-  - link reference definition: `[0]: https://www.vim.org`    `same`
-  - heading:                   `## Links`                    `Links:`
+Terminology ~
+                       Markdown format            Plaintext format
+  - inline link:       `[Vim](https://www.vim.org)` `Vim https://www.vim.org`
+  - reference link:    `[Vim][0]`                   `Vim [0]`
+  - link text:         `[Vim]`                      `none`
+  - label:             `[0]`                        `[0]`
+  - link reference
+    definition:        `[0]: https://www.vim.org`   `[0]: https://www.vim.org`
+  - heading:           `## Links`                   `Links:`
   - document body:     part of buffer above heading, containing the main text
   - reference section: part of buffer below heading, containing link reference
                        definitions
@@ -69,44 +70,47 @@ For more information about the syntax Markdown uses for links, refer to the
 CommonMark Specification at https://spec.commonmark.org/0.31.2/#links
 
 ==============================================================================
-USAGE                                                             *link-usage*
+USAGE                                                               *link-usage*
 
-The link.vim plugin exposes the following commands:
+The link.vim plugin exposes the following commands.
+All `:LinkConvert*` commands will add a heading below the document body if
+needed.
 
-:LinkConvertSingle                                        *:LinkConvertSingle*
+*:LinkConvertSingle*
     Convert one inline link on the current line of the document body to a
     reference link. Add a heading below the document body if needed. If there
     are multiple links on the current line, pick the (first) link that is
     positioned on the cursor or behind the cursor.
 
-:LinkConvertSingleInsert                            *:LinkConvertSingleInsert*
+*:LinkConvertSingleInsert*
     Same as above; intended to be used with an Insert mode mapping. Return to
-    Insert mode and position the cursor just outside the reference link.
+    Insert mode after conversion and position the cursor just outside the
+    reference link.
 
-:LinkConvertRange                                          *:LinkConvertRange*
-    Convert all inline links within a range to reference links. Add a
-    heading below the document body if needed. Intended to be used after
-    selecting lines in Visual mode `:'<,'>LinkConvertRange` or with an
-    explicit range `:5,12 LinkConvertRange`
+*:LinkConvertRange*
+    Convert all inline links within a range of lines to reference links.
+    Intended to be used:
+    - with a Visual mode mapping,
+    - after selecting lines in Visual mode `:'<,'>LinkConvertRange`, or
+    - with an explicit range `:5,12 LinkConvertRange`
 
-:LinkConvertAll                                              *:LinkConvertAll*
-    Convert all inline links in the document body to reference links. Add a
-    heading below the document body if needed.
+*:LinkConvertAll*
+    Convert all inline links in the document body to reference links.
 
-:LinkOpen                                                          *:LinkOpen*
+*:LinkOpen*
     For a reference link within the document body, open the URL of the
     corresponding link reference definition in the default browser.
 
-:LinkPeek                                                          *:LinkPeek*
+*:LinkPeek*
     For a reference link within the document body, show a preview of the
     corresponding link reference definition.
 
-:LinkJump                                                          *:LinkJump*
+*:LinkJump*
     Move the cursor from a reference link within the document body to a
     corresponding link reference definition in the reference section, and the
     other way around.
 
-:LinkReformat                                                  *:LinkReformat*
+*:LinkReformat*
     Reformat reference links and reference section. This command is powerful;
     use it with care. It deletes the current reference section and
     reconstructs it. It performs the following actions:
@@ -176,11 +180,11 @@ The link.vim plugin exposes the following commands:
         [0]: https://www.vim.org
 <
 ==============================================================================
-MAPPINGS                                                       *link-mappings*
+MAPPINGS                                                         *link-mappings*
 
 No mappings are built-in to avoid conflicts with existing key bindings.
 
-                                                 *g:link_use_default_mappings*
+                                                   *g:link_use_default_mappings*
 Enable the suggested key bindings (the same as mentioned below) by adding this
 line to your `vimrc`: >
   let g:link_use_default_mappings = 1
@@ -209,12 +213,12 @@ add them to e.g. `~/.vim/ftplugin/markdown.vim`. That way, you don't need to
 use an |autocmd| or function.
 
 ==============================================================================
-CONFIGURATION                                             *link-configuration*
+CONFIGURATION                                               *link-configuration*
 
-By default, the plugin operates on these filetypes: `markdown`, `vimwiki`,
-`email` and `text`.
+By default, the plugin operates on the following filetypes: `markdown`,
+`vimwiki`, `email` and `text`.
 
-                                                    *g:link_enabled_filetypes*
+                                                      *g:link_enabled_filetypes*
 These filetypes can be customized: >
   let g:link_enabled_filetypes = [ 'markdown', 'gitcommit' ]
 <
@@ -240,33 +244,34 @@ They can also be set in `vimrc`, if they are wrapped in an |autocmd|: >
 <
 ------------------------------------------------------------------------------
 
-                                                              *b:link_heading*
-                                                              *g:link_heading*
-By default, the heading `## Links` (Markdown) or `Links:` (other filetypes)
-will be used to mark the divide between the document body and the reference
-section. To modify this heading:
-  `let g:link_heading = '# My Resources'`
+*b:link_heading*
+*g:link_heading*
+    By default, the heading `## Links` (Markdown) or `Links:` (other
+    filetypes) will be used to mark the divide between the document body and
+    the reference section. To modify this heading:
+      `let g:link_heading = '# My Resources'`
 
-                                                          *b:link_start_index*
-                                                          *g:link_start_index*
-By default, the first converted link gets a label of 0. To change this:
-  `let g:link_start_index = 1`
+*b:link_start_index*
+*g:link_start_index*
+    By default, the first converted link gets a label of 0. To change this:
+      `let g:link_start_index = 1`
 
-                                                       *b:link_heading_before*
-By default, the heading is added to the last line. You can specify a pattern
-to which the cursor will be moved before the heading is added. This regular
-expression is matched from the bottom of the document. This allows to position
-the heading, and the entire reference section, elsewhere. E.g. for a
-`gitcommit` buffer, the following could be useful:
-  `let b:link_heading_before = '^# Please enter the commit message'`
+*b:link_heading_before*
+    By default, the heading is added to the last line. You can specify a
+    pattern to which the cursor will be moved before the heading is added.
+    This regular expression is matched starting from the bottom of the
+    document. This allows to position the heading, and the entire reference
+    section, elsewhere. E.g. for a `gitcommit` buffer, the following could be
+    useful:
+      `let b:link_heading_before = '^# Please enter the commit message'`
 
-                                                            *b:link_skip_line*
-By default, links in lines matching |commentstring| are not converted. This
-pattern can be modified. E.g. to skip blockquotes:
-  `let b:link_skip_line = '^>'`
+*b:link_skip_line*
+    By default, links in lines matching |commentstring| are not converted.
+    This pattern can be modified. E.g. to skip blockquotes:
+      `let b:link_skip_line = '^>'`
 
 ==============================================================================
-LIMITATIONS                                                 *link-limitations*
+LIMITATIONS                                                   *link-limitations*
 
 - Using a blank line as heading is currently not supported.
 - When converting an inline link to a reference link, a link reference
@@ -274,9 +279,10 @@ LIMITATIONS                                                 *link-limitations*
   reference section. It would be better if the same label were reused. Using
   `:LinkReformat` fixes this though.
 - URLs containing the asterisk character (`*`) are not supported.
+- Only numeric labels are supported.
 
 ==============================================================================
-CONTRIBUTING                                               *link-contributing*
+CONTRIBUTING                                                 *link-contributing*
 
 Pull requests are welcome.
 The Vint linter, the Vader test framework and the Google Style Guide are being
@@ -341,7 +347,7 @@ CHANGELOG                                                       *link-changelog*
         - Initial version
 
 ==============================================================================
-CREDITS                                                         *link-credits*
+CREDITS                                                           *link-credits*
 
 Learn Vimscript the Hard Way by Steve Losh:
 https://learnvimscriptthehardway.stevelosh.com/
