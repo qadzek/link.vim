@@ -10,7 +10,7 @@
       |_______||__| |__| \__| |__|\__\ (__)    \__/     |__| |__|  |__|
 <
 
-Version: 1.0.3
+Version: 1.0.4
 Author:  qadzek
 License: MIT
 
@@ -291,7 +291,10 @@ To analyze the code for issues: `vint **/*.vim`
 To execute the tests: `./test/run_tests.sh`
 
 ==============================================================================
-CHANGELOG                                                     *link-changelog*
+CHANGELOG                                                       *link-changelog*
+
+1.0.4   2024-09-10
+        - Fix unintended scrolling
 
 1.0.3   2024-05-13
         - Support special characters in URLs when opening

@@ -4,16 +4,14 @@
 " Types : 'multiple-links', 'single-link'
 " Modes : 'normal', 'insert'
 function! link#Convert(type = 'multiple-links', mode = 'normal') abort range
-  let [l:orig_line_nr, l:orig_col_nr, l:orig_fold_option] = link#Initialize()
+  let [l:orig_view, l:orig_line_nr, l:orig_col_nr, l:orig_fold_option] =
+        \ link#Initialize()
 
   " Use cursor position before range function moves cursor to first line of
   " range: https://vi.stackexchange.com/questions/6036/
-  if exists('b:init_cur_pos')
-    let [l:orig_line_nr, l:orig_col_nr] = b:init_cur_pos
-    unlet b:init_cur_pos
-  else
-    " Default for tests
-    let [l:orig_line_nr, l:orig_col_nr] = [1, 1]
+  if exists('b:init_view')
+    let l:orig_view = b:init_view
+    unlet b:init_view
   endif
 
   let [ l:heading_text, l:is_heading_present, l:heading_line_nr ] =
@@ -42,7 +40,7 @@ function! link#Convert(type = 'multiple-links', mode = 'normal') abort range
     " Display error when trying to convert a single link but there is none
     if a:type ==# 'single-link' && len(l:all_links_on_line) == 0
       echom g:link#err_msg['no_inline_link']
-      call link#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
+      call link#Finalize(l:orig_view, l:orig_fold_option)
       return
     endif
 
@@ -82,7 +80,7 @@ function! link#Convert(type = 'multiple-links', mode = 'normal') abort range
     endfor " End looping over all links on current line
   endfor " End looping over all lines
 
-  call link#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
+  call link#Finalize(l:orig_view, l:orig_fold_option)
 
   " Display how many links were converted
   if a:type !=# 'single-link'
@@ -120,19 +118,20 @@ endfunction
 " Jump between a reference link and the corresponding link reference definition
 " Types: 'jump', 'open', 'peek'
 function! link#Jump(type) abort
-  let [l:orig_line_nr, l:orig_col_nr, l:orig_fold_option] = link#Initialize()
+  let [l:orig_view, l:orig_line_nr, l:orig_col_nr, l:orig_fold_option] =
+        \ link#Initialize()
 
   let [l:is_heading_present, l:heading_line_nr] = link#GetHeadingInfo()[1:2]
   if !l:is_heading_present
     echom g:link#err_msg['no_heading']
-    call link#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
+    call link#Finalize(l:orig_view, l:orig_fold_option)
     return
   endif
 
   " No opening/peeking from reference section
   if (a:type ==# 'open' || a:type ==# 'peek') && l:orig_line_nr >= l:heading_line_nr
     echom g:link#err_msg['not_from_ref']
-    call link#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
+    call link#Finalize(l:orig_view, l:orig_fold_option)
     return
   endif
 
@@ -145,7 +144,7 @@ function! link#Jump(type) abort
 
   " 0 will get returned if the jump failed
   if l:line_nr == 0
-    call link#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
+    call link#Finalize(l:orig_view, l:orig_fold_option)
     return
   endif
 
@@ -162,7 +161,7 @@ function! link#Jump(type) abort
     " Not a valid URL
     if l:url !~# '^http'
       echom g:link#err_msg['no_valid_url'] .. ': ' .. l:url
-      call link#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
+      call link#Finalize(l:orig_view, l:orig_fold_option)
       return
     endif
 
@@ -186,25 +185,25 @@ function! link#Jump(type) abort
       echom g:link#err_msg['open_in_browser_failed'] .. l:output
     endif
 
-    call link#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
+    call link#Finalize(l:orig_view, l:orig_fold_option)
   endif
 
   " Display corresponding link reference definition
   if a:type ==# 'peek'
     let l:line_content = getline('.')
-    call link#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
+    call link#Finalize(l:orig_view, l:orig_fold_option)
     echom l:line_content
   endif
 endfunction
 
 " Reformat reference links and reference section: renumber, merge, delete, mark
 function! link#Reformat() abort
-  let [l:orig_line_nr, l:orig_col_nr, l:orig_fold_option] = link#Initialize()
+  let [l:orig_view, @_, @_, l:orig_fold_option] = link#Initialize()
 
   let [l:is_heading_present, l:heading_line_nr] = link#GetHeadingInfo()[1:2]
   if !l:is_heading_present
     echom g:link#err_msg['no_heading']
-    call link#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
+    call link#Finalize(l:orig_view, l:orig_fold_option)
     return
   endif
 
@@ -289,7 +288,7 @@ function! link#Reformat() abort
   echom 'Finished reformatting reference links and reference section'
   echom 'Number of lines in reference section -- Before: ' .. l:orig_ref_len .. ' -- After: ' .. l:new_ref_len
 
-  call link#Finalize(l:orig_line_nr, l:orig_col_nr, l:orig_fold_option)
+  call link#Finalize(l:orig_view, l:orig_fold_option)
 endfunction
 
 " HEADING ========================================================== {{{1
@@ -626,18 +625,22 @@ endfunction
 
 " HELPERS ========================================================== {{{1
 
-" Return list of original line number, column number and folding option
 " Temporarily disable folding
+" Return list of original view, line number, column number and folding option
 function! link#Initialize() abort
-  let [@_, l:line_nr, l:col_nr, @_, @_] = getcurpos()
+  let l:orig_view = winsaveview()
+  let l:line_nr = l:orig_view['lnum']
+  let l:col_nr = l:orig_view['col'] + 1
+
   let l:orig_fold_option = &foldenable
   setlocal nofoldenable
-  return [l:line_nr, l:col_nr, l:orig_fold_option]
+
+  return [ l:orig_view, l:line_nr, l:col_nr, l:orig_fold_option ]
 endfunction
 
-" Restore cursor position and folding option
-function! link#Finalize(orig_line_nr, orig_col_nr, orig_fold_option) abort
-  call cursor(a:orig_line_nr, a:orig_col_nr)
+" Restore original view and folding option
+function! link#Finalize(orig_view, orig_fold_option) abort
+  call winrestview(a:orig_view)
   let &l:foldenable = a:orig_fold_option
   call link#VimwikiRefLinksRefresh()
 endfunction

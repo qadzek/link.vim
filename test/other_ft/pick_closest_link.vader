@@ -1,11 +1,11 @@
 " Calling functions is required here; can't use the commands because of
-" b:init_cur_pos
+" b:init_view
 
 Given mail:
   http://www.loremipsum.com et http://www.dolorsitamet.com dis http://www.adipiscingelitipsum.com montes,
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (First out of three links, cursor on first char):
-  let b:init_cur_pos = [1, 1]
+  normal! 0
   call link#Convert('single-link')
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect mail:
@@ -20,7 +20,7 @@ Given mail:
   http://www.loremipsum.com et magnis http://www.dolorsitamet.com dis parturient http://www.adipiscingelitipsum.com montes,
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Second out of three links, cursor on first char):
-  let b:init_cur_pos = [1, 41]
+  normal! 2f:B
   call link#Convert('single-link')
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect mail:
@@ -35,7 +35,7 @@ Given mail:
   http://www.loremipsum.com et http://www.dolorsitamet.com dis http://www.adipiscingelitipsum.com montes,
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Third out of three links, cursor on first char):
-  let b:init_cur_pos = [1, 62]
+  normal! 3f:B
   call link#Convert('single-link')
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect mail:
@@ -49,7 +49,7 @@ Expect mail:
 Given mail:
   http://www.loremipsum.com et http://www.dolorsitamet.com dis http://www.adipiscingelitipsum.com montes,
 Execute (First out of three links, cursor on last char):
-  let b:init_cur_pos = [1, 25]
+  normal! 1f:E
   call link#Convert('single-link')
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect mail:
@@ -64,7 +64,7 @@ Given mail:
   http://www.loremipsum.com et http://www.dolorsitamet.com dis http://www.adipiscingelitipsum.com montes,
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Second out of three links, cursor on last char):
-  let b:init_cur_pos = [1, 56]
+  normal! 2f:E
   call link#Convert('single-link')
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect mail:
@@ -79,7 +79,7 @@ Given mail:
   http://www.loremipsum.com et http://www.dolorsitamet.com dis http://www.adipiscingelitipsum.com montes,
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Third out of three links, cursor on last char):
-  let b:init_cur_pos = [1, 95]
+  normal! 3f:E
   call link#Convert('single-link')
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect mail:
@@ -94,7 +94,7 @@ Given mail:
   http://www.loremipsum.com et http://www.dolorsitamet.com dis http://www.adipiscingelitipsum.com montes,
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Cursor between first and second link):
-  let b:init_cur_pos = [1, 28]
+  normal! 1f:Ew
   call link#Convert('single-link')
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect mail:
@@ -109,7 +109,7 @@ Given mail:
   http://www.loremipsum.com et http://www.dolorsitamet.com dis http://www.adipiscingelitipsum.com montes,
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Cursor inside second link):
-  let b:init_cur_pos = [1, 38]
+  normal! 2f:8l
   call link#Convert('single-link')
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect mail:
@@ -124,7 +124,7 @@ Given mail:
   http://www.loremipsum.com et http://www.dolorsitamet.com dis http://www.adipiscingelitipsum.com montes,
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Cursor just before second link):
-  let b:init_cur_pos = [1, 29]
+  normal! 2f:bh
   call link#Convert('single-link')
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect mail:
@@ -139,7 +139,7 @@ Given mail:
   http://www.loremipsum.com et http://www.dolorsitamet.com dis http://www.adipiscingelitipsum.com montes,
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Cursor just after second link):
-  let b:init_cur_pos = [1, 57]
+  normal! 2f:El
   call link#Convert('single-link')
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect mail:
@@ -154,7 +154,7 @@ Given mail:
   http://www.loremipsum.com et http://www.dolorsitamet.com dis http://www.adipiscingelitipsum.com
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Cursor on last char of last link, no trailing chars):
-  let b:init_cur_pos = [1, 95]
+  normal! 3f:E
   call link#Convert('single-link')
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect mail:

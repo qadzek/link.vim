@@ -27,19 +27,20 @@ augroup end
 
 function! LinkEnable() abort
 
-  " Store cursor position before range function moves it
+  " Store view of the current window (e.g. cursor position) before range
+  " function moves it
   command! -buffer -bar -range LinkConvertRange
-        \ let b:init_cur_pos = getcurpos()[1:2] |
+        \ let b:init_view = winsaveview() |
         \ :<line1>,<line2>call link#Convert()
 
   command! -buffer -bar        LinkConvertAll            :% LinkConvertRange
 
   command! -buffer -bar        LinkConvertSingle
-        \ let b:init_cur_pos = getcurpos()[1:2] |
+        \ let b:init_view = winsaveview() |
         \ :call link#Convert('single-link')
 
   command! -buffer -bar        LinkConvertSingleInsert
-        \ let b:init_cur_pos = getcurpos()[1:2] |
+        \ let b:init_view = winsaveview() |
         \ :call link#Convert('single-link', 'insert')
 
   command! -buffer -bar        LinkJump                  :call link#Jump('jump')

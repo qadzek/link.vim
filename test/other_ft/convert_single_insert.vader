@@ -6,13 +6,11 @@ Before:
   unlet! b:link_heading
   unlet! b:link_heading_before
   unlet! b:link_skip_line
-  unlet! b:init_cur_pos
 After:
   unlet! g:link_heading
   unlet! b:link_heading
   unlet! b:link_heading_before
   unlet! b:link_skip_line
-  unlet! b:init_cur_pos
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -20,7 +18,6 @@ Given mail:
   http://www.loremipsum.com et magnis http://www.dolorsitamet.com dis parturient http://www.adipiscingelitipsum.com montes,
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Link at start of line):
-  let b:init_cur_pos = [1, 1]
   LinkConvertSingleInsert
   normal! iX
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -36,7 +33,6 @@ Given mail:
   Penatibus http://www.loremipsum.com dis parturient http://www.adipiscingelitipsum.com
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Link at end of line):
-  let b:init_cur_pos = [1, 85]
   normal! $
   LinkConvertSingleInsert
   " Use a instead of i because we are at the end of the line
@@ -54,7 +50,6 @@ Given mail:
   http://www.loremipsum.com et magnis http://www.dolorsitamet.com dis http://www.adipiscingelitipsum.com
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Cursor in middle of second link):
-  let b:init_cur_pos = [1, 41]
   normal! 2f:
   LinkConvertSingleInsert
   normal! iX
