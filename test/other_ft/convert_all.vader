@@ -291,3 +291,18 @@ Expect mail:
   Cheers,
   Jane
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given mail:
+  foo https://www.vim.org bar https://www.vim.org baz
+Execute (Two identical links on the same line):
+  let b:link_heading = 'Links:'
+  LinkConvertAll
+
+Expect mail:
+  foo [0] bar [1] baz
+
+  Links:
+
+  [0]: https://www.vim.org
+  [1]: https://www.vim.org
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -44,7 +44,7 @@ Expect markdown:
   sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget, lobortis ac,
   fringilla ac, turpis. Duis ac erat. Etiam consequat. Integer sed est eu elit
   pellentesque dapibus. Duis venenatis magna feugiat.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown:
   Sapien ac iaculis feugiat, [lacus](http://lacus.org/lacus) lacus accumsan
@@ -93,7 +93,7 @@ Expect markdown:
   [6]: https://pellentesque.com
   [7]: www.fringilla.com
   [8]: http://turpis.net
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown:
   Sapien ac iaculis feugiat, [lacus](http://lacus.org/lacus) lacus accumsan
@@ -146,7 +146,7 @@ Expect markdown:
   [6]: https://pellentesque.com
   [7]: www.fringilla.com
   [8]: http://turpis.net
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown:
   Sapien ac iaculis feugiat, [lacus][0] lacus accumsan
@@ -201,7 +201,7 @@ Expect markdown:
   [6]: www.nec.com
   [7]: www.fringilla.com
   [8]: http://turpis.net
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown:
   Sapien ac iaculis feugiat, [lacus][0] lacus accumsan
@@ -232,7 +232,7 @@ Execute (Cursor should not move):
   AssertEqual line_nr, 10
   AssertEqual col_nr, 5
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown:
   Sapien ac iaculis feugiat, [lacus](http://lacus.org/lacus) lacus accumsan
@@ -278,7 +278,7 @@ Expect markdown:
   [2]: https://pellentesque.com
   [3]: www.fringilla.com
   [4]: http://turpis.net
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown:
   Sapien ac iaculis feugiat, [lacus](http://lacus.org/lacus) lacus accumsan
@@ -329,3 +329,18 @@ Expect markdown:
   [106]: https://pellentesque.com
   [107]: www.fringilla.com
   [108]: http://turpis.net
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown:
+  foo [Vim](https://www.vim.org) bar [Vim](https://www.vim.org)
+Execute (Two identical links on the same line):
+  LinkConvertAll
+
+Expect markdown:
+  foo [Vim][0] bar [Vim][1]
+
+  ## Links
+
+  [0]: https://www.vim.org
+  [1]: https://www.vim.org
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

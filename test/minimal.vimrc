@@ -33,3 +33,4 @@ call LoadPlugin('link.vim')
 
 " Exit tests
 nnoremap Q :qa!<CR>
+inoremap Q :qa!<CR>

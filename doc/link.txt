@@ -300,6 +300,7 @@ To execute the tests: `./test/run_tests.sh`
 CHANGELOG                                                       *link-changelog*
 
 1.0.4   2024-09-10
+        - Fix issue with identical links on the same line
         - Fix unintended scrolling
 
 1.0.3   2024-05-13

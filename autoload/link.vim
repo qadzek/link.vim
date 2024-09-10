@@ -385,7 +385,7 @@ function! link#ParseLineInBodyFor(type, line_nr) abort
 
     " Match [foo](https://bar.com)
     if link#IsFiletypeMarkdown()
-      let l:regex = '\v' .. '\[(' .. '[^]]+' .. ')\]' .
+      let l:regex = '\v' .. '\[(' .. '[^]]+' .. ')\]' ..
           \ '\((' .. '%(' .. l:protocol .. ')' .. '[^)]+' .. ')\)'
 
     " Match https://bar.com
@@ -423,7 +423,8 @@ function! link#ParseLineInBodyFor(type, line_nr) abort
     endif
 
     " First character is considered as 0
-    let l:match_start = match(l:line_content, '\V' .. l:match_list[0]) + 1
+    let l:match_start = match(l:line_content, '\V' .. l:match_list[0], l:col)
+          \ + 1
 
     let l:total_len = strlen(l:match_list[0])
 
