@@ -35,7 +35,7 @@ https://github.com/qadzek/link.vim/assets/84473512/7be44a63-677c-4477-8e30-fa609
 Use your favorite plugin manager to install this plugin. For instance, if you use [vim-plug][0]:
 
 ```vim
-Plug 'qadzek/vim.link'
+Plug 'qadzek/link.vim'
 ```
 
 ## Usage
