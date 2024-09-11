@@ -10,7 +10,7 @@
       |_______||__| |__| \__| |__|\__\ (__)    \__/     |__| |__|  |__|
 <
 
-Version: 1.0.4
+Version: 1.0.5
 Author:  qadzek
 License: MIT
 
@@ -298,6 +298,10 @@ To execute the tests: `./test/run_tests.sh`
 
 ==============================================================================
 CHANGELOG                                                       *link-changelog*
+
+1.0.5   2024-09-11
+        - Fix trailing punctuation characters being seen as
+          part of the URL (#12)
 
 1.0.4   2024-09-10
         - Fix issue with identical links on the same line

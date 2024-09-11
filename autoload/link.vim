@@ -390,8 +390,11 @@ function! link#ParseLineInBodyFor(type, line_nr) abort
 
     " Match https://bar.com
     else
+      " Avoid trailing punctuation character from being considered part of URL
+      let l:last_url_char = '[a-zA-Z0-9/#-]'
       " '()' ensures the right match ends up in the right subgroup
-      let l:regex = '\v' .. '()' .. '(%(' .. l:protocol .. ')' .. '\S+)'
+      let l:regex = '\v' .. '()' .. '(%(' .. l:protocol .. ')' .. '\S+' ..
+            \ l:last_url_char .. ')'
   endif
 
   elseif a:type ==# 'reference'

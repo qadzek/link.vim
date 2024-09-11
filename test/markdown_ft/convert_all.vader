@@ -344,3 +344,19 @@ Expect markdown:
   [0]: https://www.vim.org
   [1]: https://www.vim.org
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown:
+  foo [Vim](https://www.vim.org), bar
+  baz [Neovim](https://neovim.io). qux
+Execute (URLs with trailing punctuation characters):
+  LinkConvertAll
+
+Expect markdown:
+  foo [Vim][0], bar
+  baz [Neovim][1]. qux
+
+  ## Links
+
+  [0]: https://www.vim.org
+  [1]: https://neovim.io
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
