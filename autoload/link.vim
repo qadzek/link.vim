@@ -165,6 +165,12 @@ function! link#Jump(type) abort
       return
     endif
 
+    " Don't open links in browser when running tests if `-b` flag is set
+    if $VADER_OPEN_IN_BROWSER ==# 'false'
+      call link#Finalize(l:orig_view, l:orig_fold_option)
+      return
+    endif
+
     " Decide which command to use, based on the OS
     let l:os = link#GetOperatingSystem()
     if l:os ==? 'Darwin'
