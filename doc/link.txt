@@ -10,7 +10,7 @@
       |_______||__| |__| \__| |__|\__\ (__)    \__/     |__| |__|  |__|
 <
 
-Version: 1.0.5
+Version: 1.1.0
 Author:  qadzek
 License: MIT
 
@@ -191,20 +191,20 @@ line to your `vimrc`: >
 <
 If you prefer to specify your own key bindings, ensure the variable mentioned
 above is not set (or set to `0`) and add the following to your `vimrc`: >
-  augroup link_key_bindings
+  augroup linkvim_key_bindings
     autocmd!
-    autocmd Filetype markdown,vimwiki,mail,text :call LinkAddKeyBindings()
+    autocmd Filetype markdown,vimwiki,mail,text :call LinkVimAddKeyBindings()
   augroup END
 
-  function! LinkAddKeyBindings()
-    nnoremap <buffer> <silent> <LocalLeader>c      :LinkConvertSingle<CR>
-    inoremap <buffer> <silent> <C-g>c      <Esc>:LinkConvertSingleInsert<CR>
-    vnoremap <buffer> <silent> <LocalLeader>c      :LinkConvertRange<CR>
-    nnoremap <buffer> <silent> <LocalLeader>a      :LinkConvertAll<CR>
-    nnoremap <buffer> <silent> <LocalLeader>j      :LinkJump<CR>
-    nnoremap <buffer> <silent> <LocalLeader>o      :LinkOpen<CR>
-    nnoremap <buffer> <silent> <LocalLeader>p      :LinkPeek<CR>
-    nnoremap <buffer> <silent> <LocalLeader>r      :LinkReformat<CR>
+  function! LinkVimAddKeyBindings()
+    nmap <LocalLeader>c       <Plug>(LinkVim-ConvertSingle)
+    imap <C-g>c               <Plug>(LinkVim-ConvertSingleInsert)
+    vmap <LocalLeader>c       <Plug>(LinkVim-ConvertRange)
+    nmap <LocalLeader>a       <Plug>(LinkVim-ConvertAll)
+    nmap <LocalLeader>j       <Plug>(LinkVim-Jump)
+    nmap <LocalLeader>o       <Plug>(LinkVim-Open)
+    nmap <LocalLeader>p       <Plug>(LinkVim-Peek)
+    nmap <LocalLeader>r       <Plug>(LinkVim-Reformat)
   endfunction
 <
 You might want to change the filetypes mentioned in the |autocmd|. Another way
@@ -298,6 +298,9 @@ To execute the tests: `./test/run_tests.sh`
 
 ==============================================================================
 CHANGELOG                                                       *link-changelog*
+
+1.1.0   2024-11-04
+	- Support `<Plug>` mappings
 
 1.0.5   2024-09-11
         - Fix trailing punctuation characters being seen as

@@ -32,34 +32,38 @@ function! LinkEnable() abort
   command! -buffer -bar -range LinkConvertRange
         \ let b:init_view = winsaveview() |
         \ :<line1>,<line2>call link#Convert()
-
   command! -buffer -bar        LinkConvertAll            :% LinkConvertRange
-
   command! -buffer -bar        LinkConvertSingle
         \ let b:init_view = winsaveview() |
         \ :call link#Convert('single-link')
-
   command! -buffer -bar        LinkConvertSingleInsert
         \ let b:init_view = winsaveview() |
         \ :call link#Convert('single-link', 'insert')
-
   command! -buffer -bar        LinkJump                  :call link#Jump('jump')
   command! -buffer -bar        LinkOpen                  :call link#Jump('open')
   command! -buffer -bar        LinkPeek                  :call link#Jump('peek')
-
   command! -buffer -bar        LinkReformat              :call link#Reformat()
+  
+  nnoremap <buffer> <silent> <Plug>(LinkVim-ConvertSingle)            :LinkConvertSingle<CR>
+  inoremap <buffer> <silent> <Plug>(LinkVim-ConvertSingleInsert) <Esc>:LinkConvertSingleInsert<CR>
+  vnoremap <buffer> <silent> <Plug>(LinkVim-ConvertRange)             :LinkConvertRange<CR>
+  nnoremap <buffer> <silent> <Plug>(LinkVim-ConvertAll)               :LinkConvertAll<CR>
+  nnoremap <buffer> <silent> <Plug>(LinkVim-Jump)                     :LinkJump<CR>
+  nnoremap <buffer> <silent> <Plug>(LinkVim-Open)                     :LinkOpen<CR>
+  nnoremap <buffer> <silent> <Plug>(LinkVim-Peek)                     :LinkPeek<CR>
+  nnoremap <buffer> <silent> <Plug>(LinkVim-Reformat)                 :LinkReformat<CR>
 
   " By default, no mappings exist. The user can try the suggested key bindings
   " by setting a special variable in their vimrc
   if exists('g:link_use_default_mappings') && g:link_use_default_mappings
-    nnoremap <buffer> <silent> <LocalLeader>c       :LinkConvertSingle<CR>
-    inoremap <buffer> <silent> <C-g>c          <Esc>:LinkConvertSingleInsert<CR>
-    vnoremap <buffer> <silent> <LocalLeader>c       :LinkConvertRange<CR>
-    nnoremap <buffer> <silent> <LocalLeader>a       :LinkConvertAll<CR>
-    nnoremap <buffer> <silent> <LocalLeader>j       :LinkJump<CR>
-    nnoremap <buffer> <silent> <LocalLeader>o       :LinkOpen<CR>
-    nnoremap <buffer> <silent> <LocalLeader>p       :LinkPeek<CR>
-    nnoremap <buffer> <silent> <LocalLeader>r       :LinkReformat<CR>
+    nmap <LocalLeader>c       <Plug>(LinkVim-ConvertSingle)
+    imap <C-g>c               <Plug>(LinkVim-ConvertSingleInsert)
+    vmap <LocalLeader>c       <Plug>(LinkVim-ConvertRange)
+    nmap <LocalLeader>a       <Plug>(LinkVim-ConvertAll)
+    nmap <LocalLeader>j       <Plug>(LinkVim-Jump)
+    nmap <LocalLeader>o       <Plug>(LinkVim-Open)
+    nmap <LocalLeader>p       <Plug>(LinkVim-Peek)
+    nmap <LocalLeader>r       <Plug>(LinkVim-Reformat)
   endif
 endfunction
 
