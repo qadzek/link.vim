@@ -1,3 +1,22 @@
+function! link#utils#DisplayMsg(msg) abort
+  echohl WarningMsg
+
+  echomsg a:msg
+
+  echohl None
+endfunction
+
+function! link#utils#DisplayError(error_key, suffix = '') abort
+  echohl ErrorMsg
+
+  let l:msg = g:link#globals#errors[a:error_key]
+  if len(a:suffix) | let l:msg ..= ' ' .. a:suffix | endif
+
+  echomsg l:msg
+
+  echohl None
+endfunction
+
 " Return boolean
 function! link#utils#IsFiletypeMarkdown() abort
   " NOTE This assumes that Vimwiki uses Markdown syntax
@@ -25,4 +44,3 @@ function! link#utils#VimwikiRefLinksRefresh() abort
 
   call vimwiki#markdown_base#scan_reflinks()
 endfunction
-

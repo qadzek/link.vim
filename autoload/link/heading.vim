@@ -48,7 +48,7 @@ function! link#heading#Add(heading_text) abort
 
     " Cannot find pattern: show message
     if search(b:link_heading_before, 'bcWz') == 0
-      echom g:link#globals#err_msg['no_heading_pattern'] .. b:link_heading_before
+      call link#utils#DisplayError('no_heading_pattern', b:link_heading_before)
 
     " Can find pattern: move 2 lines up
     else

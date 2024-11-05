@@ -39,7 +39,7 @@ Execute (Invalid peek, from below heading):
   let b:link_heading_before = '^# Please enter'
   call cursor(16, 1)
   call link#Jump('peek')
-  let expected = link#globals#err_msg['not_from_ref']
+  let expected = link#globals#errors['not_from_ref']
   let actual = split( execute('messages'), '\n')[-1]
   AssertEqual expected, actual
 
@@ -49,6 +49,6 @@ Execute (Invalid peek, label [1] not found in reference section):
   18 delete
   call cursor(7, 1)
   call link#Jump('peek')
-  let expected = link#globals#err_msg['no_label_ref_section'] .. '1'
+  let expected = link#globals#errors['no_label_ref_section'] .. ' 1'
   let actual = split( execute('messages'), '\n')[-1]
   AssertEqual expected, actual

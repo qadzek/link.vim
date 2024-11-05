@@ -37,7 +37,7 @@ function! link#Convert(type = 'multiple-links', mode = 'normal') abort range
 
     " Display error when trying to convert a single link but there is none
     if a:type ==# 'single-link' && len(l:all_links_on_line) == 0
-      echom g:link#globals#err_msg['no_inline_link']
+      call link#utils#DisplayError('no_inline_link')
       call link#lifecycle#Finalize(l:orig_view, l:orig_fold_option)
       return
     endif
@@ -82,7 +82,8 @@ function! link#Convert(type = 'multiple-links', mode = 'normal') abort range
 
   " Display how many links were converted
   if a:type !=# 'single-link'
-    echom l:new_label_nr - l:start_label_nr .. ' links were converted'
+    call link#utils#DisplayMsg(l:new_label_nr - l:start_label_nr ..
+      \ ' links were converted')
   endif
 
   " Move cursor when function is called from Insert mode, to allow user to
@@ -121,14 +122,14 @@ function! link#Jump(type) abort
 
   let [l:is_heading_present, l:heading_line_nr] = link#heading#GetInfo()[1:2]
   if !l:is_heading_present
-    echom g:link#globals#err_msg['no_heading']
+    call link#utils#DisplayError('no_heading')
     call link#lifecycle#Finalize(l:orig_view, l:orig_fold_option)
     return
   endif
 
   " No opening/peeking from reference section
   if (a:type ==# 'open' || a:type ==# 'peek') && l:orig_line_nr >= l:heading_line_nr
-    echom g:link#globals#err_msg['not_from_ref']
+    call link#utils#DisplayError('not_from_ref')
     call link#lifecycle#Finalize(l:orig_view, l:orig_fold_option)
     return
   endif
@@ -150,7 +151,7 @@ function! link#Jump(type) abort
   if a:type ==# 'open'
     let l:ref_link = link#reference#Parse(l:line_nr, 'one')[0]
     let l:url = l:ref_link['destination']
-
+    
     " Add protocol if required
     if l:url =~# '^www'
       let l:url = 'https://' .. l:url
@@ -158,7 +159,7 @@ function! link#Jump(type) abort
 
     " Not a valid URL
     if l:url !~# '^http'
-      echom g:link#globals#err_msg['no_valid_url'] .. ': ' .. l:url
+      call link#utils#DisplayError('no_valid_url', l:url)
       call link#lifecycle#Finalize(l:orig_view, l:orig_fold_option)
       return
     endif
@@ -186,7 +187,7 @@ function! link#Jump(type) abort
     let l:output = substitute( system(l:cmd .. ' ' .. l:esc_url),
           \ '\n\+$', '', '' )
     if v:shell_error != 0
-      echom g:link#globals#err_msg['open_in_browser_failed'] .. l:output
+      call link#utils#DisplayError('open_in_browser_failed', l:output)
     endif
 
     call link#lifecycle#Finalize(l:orig_view, l:orig_fold_option)
@@ -196,7 +197,7 @@ function! link#Jump(type) abort
   if a:type ==# 'peek'
     let l:line_content = getline('.')
     call link#lifecycle#Finalize(l:orig_view, l:orig_fold_option)
-    echom l:line_content
+    call link#utils#DisplayMsg(l:line_content)
   endif
 endfunction
 
@@ -206,7 +207,7 @@ function! link#Reformat() abort
 
   let [l:is_heading_present, l:heading_line_nr] = link#heading#GetInfo()[1:2]
   if !l:is_heading_present
-    echom g:link#globals#err_msg['no_heading']
+    call link#utils#DisplayError('no_heading')
     call link#lifecycle#Finalize(l:orig_view, l:orig_fold_option)
     return
   endif
@@ -289,8 +290,10 @@ function! link#Reformat() abort
 
   let l:orig_ref_len = l:ref_section_end - l:ref_section_start + 1
   let l:new_ref_len = link#label#GetLast('line_nr') - l:ref_section_start + 1
-  echom 'Finished reformatting reference links and reference section'
-  echom 'Number of lines in reference section -- Before: ' .. l:orig_ref_len .. ' -- After: ' .. l:new_ref_len
+
+  call link#utils#DisplayMsg('Finished reformatting reference links and reference section')
+  call link#utils#DisplayMsg('Number of lines in reference section -- Before: '
+    \ .. l:orig_ref_len .. ' -- After: ' .. l:new_ref_len)
 
   call link#lifecycle#Finalize(l:orig_view, l:orig_fold_option)
 endfunction

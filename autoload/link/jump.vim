@@ -4,7 +4,7 @@
 function! link#jump#ToReferenceSection(orig_line_nr, orig_col_nr, heading_line_nr) abort
   let l:all_links = link#body#ParseLineFor('reference', a:orig_line_nr)
   if len(l:all_links) == 0
-    echom g:link#globals#err_msg['no_reference_link']
+    call link#utils#DisplayError('no_reference_link')
     return 0
   endif
 
@@ -24,7 +24,7 @@ function! link#jump#ToReferenceSection(orig_line_nr, orig_col_nr, heading_line_n
   normal! W
 
   if l:ref_line_nr == 0
-    echom g:link#globals#err_msg['no_label_ref_section'] .. l:label
+    call link#utils#DisplayError('no_label_ref_section', l:label)
   endif
 
   " 0 in case of no match
@@ -38,7 +38,7 @@ endfunction
 function! link#jump#ToBody(orig_line_nr, heading_line_nr) abort
   let l:reference_section = link#reference#Parse(a:orig_line_nr, 'one')
   if len(l:reference_section) == 0
-    echom g:link#globals#err_msg['no_link_ref_definition']
+    call link#utils#DisplayError('no_link_ref_definition')
     return 0
   endif
   let l:link_reference_definition = l:reference_section[0]
@@ -50,7 +50,7 @@ function! link#jump#ToBody(orig_line_nr, heading_line_nr) abort
   let l:body_line_nr = search('\v\[' .. l:label .. '\]', 'cWe', a:heading_line_nr)
 
   if l:body_line_nr == 0
-    echom g:link#globals#err_msg['no_label_body'] .. l:label
+    call link#utils#DisplayError('no_label_body', l:label)
   endif
 
   " 0 in case of no match
