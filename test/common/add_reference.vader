@@ -11,7 +11,7 @@ Given markdown:
 
   [0]: http://ipsum.com
 Execute (Add link reference definition):
-  call link#AddReference('1', 'https://lorem.com/')
+  call link#reference#Add('1', 'https://lorem.com/')
 
 Expect markdown:
   # A consectetuer nunc justo ac nisl.

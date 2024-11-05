@@ -13,7 +13,7 @@ Given markdown:
   nascetur ridiculus mus. Praesent semper magna. In eu justo. Nunc vitae risus nec
   sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
 Execute (No heading present):
-  call link#AddHeading('## My Resources')
+  call link#heading#Add('## My Resources')
 
 Expect markdown:
   # A consectetuer nunc justo ac nisl.
@@ -42,7 +42,7 @@ Given mail:
   Your Contact Information
 Execute (Put heading before a signature (mail buffer)):
   let b:link_heading_before = '^--'
-  call link#AddHeading('Links:')
+  call link#heading#Add('Links:')
 
 Expect mail:
   Hi Recipient,
@@ -76,7 +76,7 @@ Given gitcommit:
   #
 Execute (Put heading before comments (gitcommit buffer)):
   let b:link_heading_before = '# Please enter'
-  call link#AddHeading('Links:')
+  call link#heading#Add('Links:')
 
 Expect gitcommit:
   Git commit title

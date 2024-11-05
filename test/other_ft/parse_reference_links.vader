@@ -3,7 +3,7 @@ Given mail:
 
 Execute (No link):
   let expected = []
-  let actual = link#ParseLineInBodyFor('reference', 1)
+  let actual = link#body#ParseLineFor('reference', 1)
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -21,7 +21,7 @@ Execute (Single link):
     \ 'col_start': 30,
     \ }
   \ ]
-  let actual = link#ParseLineInBodyFor('reference', 1)
+  let actual = link#body#ParseLineFor('reference', 1)
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -46,7 +46,7 @@ Execute (Two links):
     \ 'col_start': 44,
     \ }
   \ ]
-  let actual = link#ParseLineInBodyFor('reference', 1)
+  let actual = link#body#ParseLineFor('reference', 1)
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -64,7 +64,7 @@ Execute (Link at start of line):
     \ 'col_start': 1,
     \ }
   \ ]
-  let actual = link#ParseLineInBodyFor('reference', 1)
+  let actual = link#body#ParseLineFor('reference', 1)
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -82,7 +82,7 @@ Execute (Link at end of line):
     \ 'col_start': 30,
     \ }
   \ ]
-  let actual = link#ParseLineInBodyFor('reference', 1)
+  let actual = link#body#ParseLineFor('reference', 1)
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -107,7 +107,7 @@ Execute (Two links, one at start of line, one at end of line):
     \ 'col_start': 8,
     \ }
   \ ]
-  let actual = link#ParseLineInBodyFor('reference', 1)
+  let actual = link#body#ParseLineFor('reference', 1)
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -139,7 +139,7 @@ Execute (Three links):
     \ 'col_start': 63,
     \ }
   \ ]
-  let actual = link#ParseLineInBodyFor('reference', 1)
+  let actual = link#body#ParseLineFor('reference', 1)
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -171,7 +171,7 @@ Execute (Long line):
     \ 'col_start': 169,
     \ }
   \ ]
-  let actual = link#ParseLineInBodyFor('reference', 1)
+  let actual = link#body#ParseLineFor('reference', 1)
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -189,7 +189,7 @@ Execute (Mix of inline and reference links):
     \ 'col_start': 53,
     \ },
   \ ]
-  let actual = link#ParseLineInBodyFor('reference', 1)
+  let actual = link#body#ParseLineFor('reference', 1)
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

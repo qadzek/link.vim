@@ -14,7 +14,7 @@ Links:
 Execute (From reference section):
   call cursor('$', 1)
   LinkOpen
-  let expected = g:link#err_msg['not_from_ref']
+  let expected = g:link#globals#err_msg['not_from_ref']
   let actual = split( execute('messages'), '\n')[-1]
   AssertEqual expected, actual
 
@@ -35,7 +35,7 @@ Links:
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (No reference link on line):
   LinkOpen
-  let expected = g:link#err_msg['no_reference_link']
+  let expected = g:link#globals#err_msg['no_reference_link']
   let actual = split( execute('messages'), '\n')[-1]
   AssertEqual expected, actual
 
@@ -51,7 +51,7 @@ Links:
 Execute (No valid URL: does not start with a protocol like 'http' or with 'www'):
   call cursor(1, 1)
   LinkOpen
-  let expected = g:link#err_msg['no_valid_url'] .. ': loremipsum.com'
+  let expected = g:link#globals#err_msg['no_valid_url'] .. ': loremipsum.com'
   let actual = split( execute('messages'), '\n')[-1]
   AssertEqual expected, actual
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

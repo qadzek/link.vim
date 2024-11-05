@@ -9,7 +9,7 @@ After:
 
 Execute (Use default label start index):
   let expected = 0
-  let actual = link#GetLabelStartIndex()
+  let actual = link#label#GetStartIndex()
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -17,7 +17,7 @@ Execute (Use default label start index):
 Execute (Modify global label start index):
   let g:link_start_index = 100
   let expected = g:link_start_index
-  let actual = link#GetLabelStartIndex()
+  let actual = link#label#GetStartIndex()
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -25,7 +25,7 @@ Execute (Modify global label start index):
 Execute (Modify buffer-local label start index):
   let b:link_start_index = 50
   let expected = b:link_start_index
-  let actual = link#GetLabelStartIndex()
+  let actual = link#label#GetStartIndex()
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -34,7 +34,7 @@ Execute (Modify global and buffer-local label start index):
   let g:link_start_index = 100
   let b:link_start_index = 10
   let expected = b:link_start_index
-  let actual = link#GetLabelStartIndex()
+  let actual = link#label#GetStartIndex()
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

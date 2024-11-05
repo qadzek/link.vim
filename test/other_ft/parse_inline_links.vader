@@ -3,7 +3,7 @@ Given mail:
 
 Execute (No link):
   let expected = []
-  let actual = link#ParseLineInBodyFor('inline', 1)
+  let actual = link#body#ParseLineFor('inline', 1)
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -21,7 +21,7 @@ Execute (Single link):
     \ 'col_start': 20,
     \ }
   \ ]
-  let actual = link#ParseLineInBodyFor('inline', 1)
+  let actual = link#body#ParseLineFor('inline', 1)
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -46,7 +46,7 @@ Execute (Two links):
     \ 'col_start': 49,
     \ }
   \ ]
-  let actual = link#ParseLineInBodyFor('inline', 1)
+  let actual = link#body#ParseLineFor('inline', 1)
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -64,7 +64,7 @@ Execute (Link at start of line):
     \ 'col_start': 1,
     \ }
   \ ]
-  let actual = link#ParseLineInBodyFor('inline', 1)
+  let actual = link#body#ParseLineFor('inline', 1)
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -82,7 +82,7 @@ Execute (Link at end of line):
     \ 'col_start': 20,
     \ }
   \ ]
-  let actual = link#ParseLineInBodyFor('inline', 1)
+  let actual = link#body#ParseLineFor('inline', 1)
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -107,7 +107,7 @@ Execute (Two links, one at start of line, one at end of line):
     \ 'col_start': 30,
     \ }
   \ ]
-  let actual = link#ParseLineInBodyFor('inline', 1)
+  let actual = link#body#ParseLineFor('inline', 1)
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -139,7 +139,7 @@ Execute (Three links):
     \ 'col_start': 81,
     \ }
   \ ]
-  let actual = link#ParseLineInBodyFor('inline', 1)
+  let actual = link#body#ParseLineFor('inline', 1)
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -157,7 +157,7 @@ Execute (Link containing special characters):
     \ 'col_start': 20,
     \ }
   \ ]
-  let actual = link#ParseLineInBodyFor('inline', 1)
+  let actual = link#body#ParseLineFor('inline', 1)
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -175,7 +175,7 @@ Execute (Link containing more special characters):
     \ 'col_start': 20,
     \ }
   \ ]
-  let actual = link#ParseLineInBodyFor('inline', 1)
+  let actual = link#body#ParseLineFor('inline', 1)
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -207,7 +207,7 @@ Execute (Long line):
     \ 'col_start': 79,
     \ }
   \ ]
-  let actual = link#ParseLineInBodyFor('inline', 1)
+  let actual = link#body#ParseLineFor('inline', 1)
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -10,7 +10,7 @@ After:
 Given markdown:
 Execute (Use default heading (Markdown)):
   let expected = '## Links'
-  let actual = link#GetHeadingText()
+  let actual = link#heading#GetText()
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -18,7 +18,7 @@ Execute (Use default heading (Markdown)):
 Given mail:
 Execute (Use default heading (mail)):
   let expected = 'Links:'
-  let actual = link#GetHeadingText()
+  let actual = link#heading#GetText()
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -26,7 +26,7 @@ Execute (Use default heading (mail)):
 Execute (Modify global heading):
   let g:link_heading = '# My Resources'
   let expected = g:link_heading
-  let actual = link#GetHeadingText()
+  let actual = link#heading#GetText()
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -34,7 +34,7 @@ Execute (Modify global heading):
 Execute (Modify buffer-local heading):
   let b:link_heading = 'My Links:'
   let expected = b:link_heading
-  let actual = link#GetHeadingText()
+  let actual = link#heading#GetText()
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -43,7 +43,7 @@ Execute (Modify global and buffer-local heading):
   let b:link_heading = 'My Links:'
   let g:link_heading = '# My Resources'
   let expected = b:link_heading
-  let actual = link#GetHeadingText()
+  let actual = link#heading#GetText()
   AssertEqual expected, actual
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
