@@ -28,10 +28,10 @@ function! LinkEnable() abort
   command! -buffer -bar        LinkConvertSingleInsert
     \ let b:init_view = winsaveview() |
     \ :call link#Convert('single-link', 'insert')
-  command! -buffer -bar        LinkJump                  :call link#Jump('jump')
-  command! -buffer -bar        LinkOpen                  :call link#Jump('open')
-  command! -buffer -bar        LinkPeek                  :call link#Jump('peek')
-  command! -buffer -bar        LinkReformat              :call link#Reformat()
+  command! -buffer -bar        LinkJump               :call link#Connect('jump')
+  command! -buffer -bar        LinkOpen               :call link#Connect('open')
+  command! -buffer -bar        LinkPeek               :call link#Connect('peek')
+  command! -buffer -bar        LinkReformat           :call link#Reformat()
 
   " Initialize mappings
   nnoremap <buffer> <silent> <Plug>(LinkVim-ConvertSingle) :LinkConvertSingle<CR>

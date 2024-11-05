@@ -112,9 +112,10 @@ function! link#Convert(type = 'multiple-links', mode = 'normal') abort range
   endif
 endfunction
 
-" Move between a reference link and the corresponding link reference definition
+" Connect a reference link and the corresponding link reference definition and
+" perform some action
 " Types : `jump`, `open`, `peek`
-function! link#Move(type) abort
+function! link#Connect(type) abort
   let [l:orig_view, l:orig_line_nr, l:orig_col_nr, l:orig_fold_option] =
         \ link#lifecycle#Initialize()
 
