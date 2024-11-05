@@ -1,9 +1,9 @@
 " Convert inline links to reference links within a range
-" Types : 'multiple-links', 'single-link'
-" Modes : 'normal', 'insert'
+" Types : `multiple-links`, `single-link`
+" Modes : `normal`, `insert`
 function! link#Convert(type = 'multiple-links', mode = 'normal') abort range
   let [l:orig_view, l:orig_line_nr, l:orig_col_nr, l:orig_fold_option] =
-        \ link#lifecycle#Initialize()
+    \ link#lifecycle#Initialize()
 
   " Use cursor position before range function moves cursor to first line of
   " range: https://vi.stackexchange.com/questions/6036/
@@ -13,13 +13,13 @@ function! link#Convert(type = 'multiple-links', mode = 'normal') abort range
   endif
 
   let [ l:heading_text, l:is_heading_present, l:heading_line_nr ] =
-        \ link#heading#GetInfo()
+    \ link#heading#GetInfo()
 
   let l:new_label_nr = link#label#GetNewNumber(l:is_heading_present)
   let l:start_label_nr = l:new_label_nr
 
   let l:max_line_nr = link#heading#LimitRange(l:is_heading_present,
-        \ l:heading_line_nr, a:lastline)
+    \ l:heading_line_nr, a:lastline)
 
   " Loop over all lines within the range
   for l:cur_line_nr in range(a:firstline, l:max_line_nr)
@@ -86,13 +86,11 @@ function! link#Convert(type = 'multiple-links', mode = 'normal') abort range
       \ ' links were converted')
   endif
 
-  " Move cursor when function is called from Insert mode, to allow user to
-  " continue typing after the converted link
+  " Move cursor when function is called from Insert mode, so user can continue
+  " typing after the converted link
   if a:type ==# 'single-link' && a:mode ==# 'insert'
-    " Move to end of reference link: first to start, then to 2nd ]
-
+    " Move to end of reference link: first to start, then to 1st/2nd `]`
     call cursor(l:orig_line_nr, l:link['col_start'])
-
     if link#utils#IsFiletypeMarkdown()
       normal! 2f]
     else
@@ -114,9 +112,9 @@ function! link#Convert(type = 'multiple-links', mode = 'normal') abort range
   endif
 endfunction
 
-" Jump between a reference link and the corresponding link reference definition
-" Types: 'jump', 'open', 'peek'
-function! link#Jump(type) abort
+" Move between a reference link and the corresponding link reference definition
+" Types : `jump`, `open`, `peek`
+function! link#Move(type) abort
   let [l:orig_view, l:orig_line_nr, l:orig_col_nr, l:orig_fold_option] =
         \ link#lifecycle#Initialize()
 
@@ -164,27 +162,21 @@ function! link#Jump(type) abort
       return
     endif
 
-    " Don't open links in browser when running tests if `-b` flag is set
+    " When running tests, don't open links in browser, if `-b` flag is set
     if $VADER_OPEN_IN_BROWSER ==# 'false'
       call link#lifecycle#Finalize(l:orig_view, l:orig_fold_option)
       return
     endif
 
     " Decide which command to use, based on the OS
-    let l:os = link#utils#GetOperatingSystem()
-    if l:os ==? 'Darwin'
-      let l:cmd = 'open'
-    elseif l:os ==? 'Linux'
-      let l:cmd = 'xdg-open'
-    elseif l:os ==? 'Windows'
-      let l:cmd = 'start'
-    endif
+    let l:operating_system = link#utils#GetOperatingSystem()
+    let l:open_cmd = link#utils#GetOpenCommand(l:operating_system)
 
-    """ Open URL in browser
     " Escape URL, to support URLs containing e.g. a question mark
     let l:esc_url = shellescape(l:url)
-    " Capture the command's output and remove trailing newline
-    let l:output = substitute( system(l:cmd .. ' ' .. l:esc_url),
+
+    " Open URL in browser; capture command's output and remove trailing newline
+    let l:output = substitute( system(l:open_cmd .. ' ' .. l:esc_url),
           \ '\n\+$', '', '' )
     if v:shell_error != 0
       call link#utils#DisplayError('open_in_browser_failed', l:output)
@@ -196,8 +188,8 @@ function! link#Jump(type) abort
   " Display corresponding link reference definition
   if a:type ==# 'peek'
     let l:line_content = getline('.')
-    call link#lifecycle#Finalize(l:orig_view, l:orig_fold_option)
     call link#utils#DisplayMsg(l:line_content)
+    call link#lifecycle#Finalize(l:orig_view, l:orig_fold_option)
   endif
 endfunction
 
@@ -240,8 +232,8 @@ function! link#Reformat() abort
       let l:corresponding_refs = filter(l:ref_section_copy,
             \ {_, val -> val['label'] ==# l:link['destination']})
 
-      " Corresponding label was not found in the reference section, so label
-      " will be changed to '???', to mark that it's broken
+      " Corresponding label was not found in reference section, so label will be
+      " changed to '???', to mark that it's broken
       if len(l:corresponding_refs) == 0
         call link#body#ReplaceLink(l:body_line_content, l:link['full_link'],
               \ l:link['link_text'], '???', l:body_line_nr)
@@ -285,7 +277,7 @@ function! link#Reformat() abort
     let l:line_nr = l:ref_section_start - 1 + l:idx
     call link#reference#Add(l:ref_link['index'], l:ref_link['url'], l:line_nr)
 
-  let l:ref_section_start = l:heading_line_nr + 2
+    let l:ref_section_start = l:heading_line_nr + 2
   endfor
 
   let l:orig_ref_len = l:ref_section_end - l:ref_section_start + 1

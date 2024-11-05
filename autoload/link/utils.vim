@@ -33,6 +33,19 @@ function! link#utils#GetOperatingSystem() abort
   endif
 endfunction
 
+" Return command to open URL in default application, based on operating system
+function! link#utils#GetOpenCommand(os) abort
+  if a:os ==? 'Darwin'
+    return 'open'
+  elseif a:os ==? 'Linux'
+    return 'xdg-open'
+  elseif a:os ==? 'Windows'
+    return 'start'
+  else
+    throw 'Unknown operating system'
+  endif
+endfunction
+
 " Fix Vimwiki bug where newly created reference links don't work instantly
 function! link#utils#VimwikiRefLinksRefresh() abort
   " See https://github.com/vimwiki/vimwiki/issues/1005 and
