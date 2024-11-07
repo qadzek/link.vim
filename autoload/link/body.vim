@@ -1,11 +1,11 @@
-" Scan one line in the document body for an inline link [foo](bar.com) or a
-" reference link [foo][5]
+" Scan single line in document body for inline link [foo](bar.com) or reference
+" link [foo][5]
 " Return list of dictionaries, containing full link [foo](www.bar.com), link
 " text, destination (URL or reference), length of total match and start position
 " of total match
 function! link#body#ParseLineFor(type, line_nr) abort
   if a:type ==# 'inline'
-    " Match http://, ftp://, www. etc.
+    " Match `http://`, `ftp://`, `www.` etc.
     let l:protocol = '[a-zA-Z0-9.-]{2,12}:\/\/|www\.'
 
     " Match [foo](https://bar.com)
@@ -37,7 +37,7 @@ function! link#body#ParseLineFor(type, line_nr) abort
   endif
 
   let l:line_content = getline(a:line_nr)
-  let l:line_len = strlen(l:line_content)
+  let l:line_len = len(l:line_content)
 
   let l:all_links = []
   let l:col = 0
@@ -51,18 +51,17 @@ function! link#body#ParseLineFor(type, line_nr) abort
     endif
 
     " First character is considered as 0
-    let l:match_start = match(l:line_content, '\V' .. l:match_list[0], l:col)
-          \ + 1
+    let l:match_start = match(l:line_content, '\V' .. l:match_list[0], l:col) + 1
 
     let l:total_len = strlen(l:match_list[0])
 
     let l:link = {
-          \ 'full_link': l:match_list[0],
-          \ 'link_text': l:match_list[1],
-          \ 'destination': l:match_list[2],
-          \ 'length': l:total_len,
-          \ 'col_start': l:match_start,
-          \ }
+      \ 'full_link': l:match_list[0],
+      \ 'link_text': l:match_list[1],
+      \ 'destination': l:match_list[2],
+      \ 'length': l:total_len,
+      \ 'col_start': l:match_start,
+    \ }
 
     call add(l:all_links, l:link)
     let l:col = l:match_start + l:total_len
@@ -89,7 +88,7 @@ endfunction
 
 " Convert inline link to reference link by replacing line content
 function! link#body#ReplaceLink(line_content, full_link, link_text, label, line_nr) abort
-  " NOTE URLs containing the * character are not supported
+  " URLs containing the * character are not supported
   let l:esc_full_link = escape(a:full_link, '[]')
 
   if link#utils#IsFiletypeMarkdown()
@@ -98,21 +97,30 @@ function! link#body#ReplaceLink(line_content, full_link, link_text, label, line_
     let l:ref_link = '[' .. a:label .. ']'
   endif
 
-  let l:new_line_content = substitute(a:line_content, l:esc_full_link,
-        \ l:ref_link, '')
+  let l:new_line_content = substitute(a:line_content, l:esc_full_link, l:ref_link, '')
   call setline(a:line_nr, l:new_line_content)
 endfunction
 
-" Return 1 if line should be skipped, else 0
+" Return boolean indicating if line should be skipped
 function! link#body#SkipLine(cur_line_nr) abort
-  "Custom pattern
   if exists('b:link_skip_line')
+    " Use custom pattern
     let l:regex = b:link_skip_line
+
   else
-    " Default
+    " Use a default
     let l:regex = '\V\^' .. substitute( escape(&commentstring, '\'), '%s', '\\.\\*', 'g' ) .. '\$'
   endif
 
   return match( getline(a:cur_line_nr), l:regex ) >= 0
 endfunction
 
+" Limit range to line containing heading/divider, so reference section stays
+" untouched
+function! link#body#LimitRange(divider_line_nr, range_end_line_nr) abort range
+  if a:range_end_line_nr >= a:divider_line_nr
+    return a:divider_line_nr - 1
+  endif
+
+  return a:range_end_line_nr
+endfunction

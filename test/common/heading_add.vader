@@ -6,54 +6,53 @@ After:
 
 Given markdown:
   # A consectetuer nunc justo ac nisl.
-  
+
   ## Nam vitae purus
-  
+
   Cum sociis natoque penatibus et magnis dis parturient montes,
   nascetur ridiculus mus. Praesent semper magna. In eu justo. Nunc vitae risus nec
   sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
-Execute (No heading present):
-  call link#heading#Add('## My Resources')
+Execute (Add heading to bottom of buffer):
+  call link#heading#Add('## My Resources', '$')
 
 Expect markdown:
   # A consectetuer nunc justo ac nisl.
-  
+
   ## Nam vitae purus
-  
+
   Cum sociis natoque penatibus et magnis dis parturient montes,
   nascetur ridiculus mus. Praesent semper magna. In eu justo. Nunc vitae risus nec
   sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
-  
+
   ## My Resources
   
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given mail:
   Hi Recipient,
-  
+
   I hope this email finds you well.
-  
+
   Best regards,
   Your Name
-  
+
   --
   Your Job Title
   Your Company Name
   Your Contact Information
-Execute (Put heading before a signature (mail buffer)):
-  let b:link_heading_before = '^--'
-  call link#heading#Add('Links:')
+Execute (Add heading to top of buffer):
+  call link#heading#Add('Links:', 0)
 
 Expect mail:
-  Hi Recipient,
-  
-  I hope this email finds you well.
-  
-  Best regards,
-  Your Name
-  
+
   Links:
 
+  Hi Recipient,
+
+  I hope this email finds you well.
+
+  Best regards,
+  Your Name
 
   --
   Your Job Title
@@ -74,9 +73,8 @@ Given gitcommit:
   # Changes to be committed:
   #	modified:   foo.txt
   #
-Execute (Put heading before comments (gitcommit buffer)):
-  let b:link_heading_before = '# Please enter'
-  call link#heading#Add('Links:')
+Execute (Add heading to middle of buffer):
+  call link#heading#Add('Links:', 5)
 
 Expect gitcommit:
   Git commit title
@@ -84,8 +82,8 @@ Expect gitcommit:
   Git commit body
   Body continued
 
-  Links:
 
+  Links:
 
   # Please enter the commit message for your changes. Lines starting
   # with '#' will be ignored, and an empty message aborts the commit.

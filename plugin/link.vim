@@ -44,7 +44,7 @@ function! LinkEnable() abort
   nnoremap <buffer> <silent> <Plug>(LinkVim-Reformat)      :LinkReformat<CR>
 
   " Apply default mappings, if user has set special variable in vimrc
-  if get(g:, 'link_use_default_mappings', 0) 
+  if get(g:, 'link_use_default_mappings', 0)
     nmap <LocalLeader>c   <Plug>(LinkVim-ConvertSingle)
     imap <C-g>c           <Plug>(LinkVim-ConvertSingleInsert)
     vmap <LocalLeader>c   <Plug>(LinkVim-ConvertRange)

@@ -19,7 +19,7 @@ function! LoadPlugin(name)
   endif
 
   if isdirectory( expand(s:plugin_path) )
-    let &runtimepath .= ',' .. expand(s:plugin_path)
+    let &runtimepath ..= ',' .. expand(s:plugin_path)
   else
     throw 'Could not find the ' .. a:name .. ' plugin. Is it installed?'
   endif
@@ -32,5 +32,5 @@ call LoadPlugin('vader.vim')
 call LoadPlugin('link.vim')
 
 " Exit tests
-nnoremap Q :qa!<CR>
-inoremap Q :qa!<CR>
+nnoremap Q      :qa!<CR>
+inoremap Q <Esc>:qa!<CR>

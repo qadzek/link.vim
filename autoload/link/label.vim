@@ -1,55 +1,45 @@
-" Determine new label number
-function! link#label#GetNewNumber(is_heading_present) abort
-  if a:is_heading_present
-    return link#label#GetLast('label_nr') + 1
-  endif
-
-  return link#label#GetStartIndex()
-endfunction
-
 " Return the start index for the first label, buffer-local or global, or default
 function! link#label#GetStartIndex() abort
-  if exists('b:link_start_index')
-    return b:link_start_index
-  endif
-
-  if exists('g:link_start_index')
-    return g:link_start_index
-  endif
-
+  if exists('b:link_start_index') | return b:link_start_index | endif
+  if exists('g:link_start_index') | return g:link_start_index | endif
   return g:link#globals#defaults['start_index']
 endfunction
 
-" Types : 'line_nr' or 'label_nr'
-" 'label_nr':
-" Return last label number in reference section, e.g. 3 for [3]: http://foo.com
-" Return -1 if not found
-" 'line_nr':
-" Return line number of last label in reference section
-" Return last line number of buffer if not found
-function! link#label#GetLast(type) abort
-  let l:regex = '\v^\s*\[\zs\d+\ze\]:\s+'
+" Return list of line number and label index, for first or last label in
+" reference section
+" Position : `first` or `last`
+function! link#label#GetInfo(position) abort
+  let l:save_cursor = getcurpos()
 
-  " Go to start of last non-blank line
-  " silent execute "normal! G$?.\<CR>0"
+  let l:search_flags = 'cW'
 
-  normal! G$
-  call search(l:regex, 'bcW')
+  if a:position ==# 'first'
+    call link#utils#MoveCursorTo('start')
 
-  if a:type ==# 'line_nr'
-    return line('.')
+  elseif a:position ==# 'last'
+    call link#utils#MoveCursorTo('end')
+    let l:search_flags ..= 'b'
+
+  else
+    throw 'Invalid position'
+  endif
+
+  let l:regex = g:link#globals#re['ref_def']
+
+  " Move cursor to search result
+  let l:match_line_nr = search(l:regex, l:search_flags)
+
+  " Return -1 when no link reference definition is found
+  if l:match_line_nr == 0
+    return [ -1, -1 ]
   endif
 
   " Get number between square brackets
-  let l:last_line_content = getline('.')
-  let l:match = matchstr(l:last_line_content, l:regex)
+  let l:line_content = getline(l:match_line_nr)
+  let l:match = matchstr(l:line_content, l:regex)
+  let l:label_idx = str2nr(l:match)
 
-  " This could happen if there is only a header present, without any labels, or
-  " if there is regular text below the header
-  if l:match !~# '^\d\+$'
-    return -1
-  endif
+  call setpos('.', l:save_cursor)
 
-  return str2nr(l:match)
+  return [ l:match_line_nr, l:label_idx ]
 endfunction
-

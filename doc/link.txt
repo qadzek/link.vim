@@ -1,6 +1,6 @@
 *link.txt* Convert inline links (Markdown or plaintext) to reference links
 
-                                                                          *link*
+                                                                 *link* *link.vim*
 >
        __       __  .__   __.  __  ___     ____    ____  __  .___  ___.
       |  |     |  | |  \ |  | |  |/  /     \   \  /   / |  | |   \/   |
@@ -10,7 +10,7 @@
       |_______||__| |__| \__| |__|\__\ (__)    \__/     |__| |__|  |__|
 <
 
-Version: 1.1.0
+Version: 1.2.0
 Author:  qadzek
 License: MIT
 
@@ -21,10 +21,11 @@ CONTENTS                                                         *link-contents*
     2. Usage ................ |link-usage|
     3. Mappings ............. |link-mappings|
     4. Configuration ........ |link-configuration|
-    5. Limitations .......... |link-limitations|
-    6. Contributing ......... |link-contributing|
-    7. Changelog ............ |link-changelog|
-    8. Credits .............. |link-credits|
+    5. Misc ................. |link-misc|
+    6. Limitations .......... |link-limitations|
+    7. Contributing ......... |link-contributing|
+    8. Changelog ............ |link-changelog|
+    9. Credits .............. |link-credits|
 
 ==============================================================================
 INTRODUCTION                                                 *link-introduction*
@@ -50,8 +51,8 @@ into >
   [1]: https://neovim.io
 <
 URLs are moved to a reference section. A heading is used to mark the divide
-between the document body and the reference section. It will be automatically
-added if needed.
+between the document body and the reference section. It will be added
+automatically if needed and can be customized or disabled.
 
 Terminology ~
                        Markdown format            Plaintext format
@@ -78,9 +79,8 @@ needed.
 
 *:LinkConvertSingle*
     Convert one inline link on the current line of the document body to a
-    reference link. Add a heading below the document body if needed. If there
-    are multiple links on the current line, pick the (first) link that is
-    positioned on the cursor or behind the cursor.
+    reference link. If there are multiple links on the current line, pick the
+    (first) link that is positioned on the cursor or behind the cursor.
 
 *:LinkConvertSingleInsert*
     Same as above; intended to be used with an Insert mode mapping. Return to
@@ -251,6 +251,14 @@ They can also be set in `vimrc`, if they are wrapped in an |autocmd|: >
     the reference section. To modify this heading:
       `let g:link_heading = '# My Resources'`
 
+    The heading can be disabled by setting it to an empty string. This is
+    especially useful when link reference definitions won't be visible in the
+    rendered output, e.g., for `README.md` files displayed on GitHub: >
+      augroup linkvim_readme
+        autocmd!
+        autocmd BufRead,BufNewFile README.md let b:link_heading = ''
+      augroup END
+<
 *b:link_start_index*
 *g:link_start_index*
     By default, the first converted link gets a label of 0. To change this:
@@ -259,9 +267,10 @@ They can also be set in `vimrc`, if they are wrapped in an |autocmd|: >
 *b:link_heading_before*
     By default, the heading is added to the last line. You can specify a
     pattern to which the cursor will be moved before the heading is added.
-    This regular expression is matched starting from the bottom of the
-    document. This allows to position the heading, and the entire reference
-    section, elsewhere. E.g. for a `gitcommit` buffer, the following could be
+    This works even if the heading is disabled. This regular expression is
+    matched starting from the bottom of the document. This allows to position
+    the heading, and the entire reference section, elsewhere. E.g. for a
+    `gitcommit` buffer, the following could be
     useful:
       `let b:link_heading_before = '^# Please enter the commit message'`
 
@@ -271,9 +280,26 @@ They can also be set in `vimrc`, if they are wrapped in an |autocmd|: >
       `let b:link_skip_line = '^>'`
 
 ==============================================================================
+MISC                                                                 *link-misc*
+
+Consider using an alternative Markdown plugin for additional link-related
+features. For example, https://github.com/preservim/vim-markdown supports
+concealing, so `[Foo][3]` is displayed as just `Foo` when not in insert mode.
+
+Other options:
+  - https://github.com/tpope/vim-markdown (this is the default)
+  - https://github.com/SidOfc/mkdx/
+  - https://github.com/vim-pandoc/vim-pandoc-syntax
+  - https://github.com/MeanderingProgrammer/render-markdown.nvim
+
+------------------------------------------------------------------------------
+
+Images using Markdown syntax are supported.
+`![Sun](https://example.com/sun.jpg)` will be converted to `![Sun][2]`.
+
+==============================================================================
 LIMITATIONS                                                   *link-limitations*
 
-- Using a blank line as heading is currently not supported.
 - When converting an inline link to a reference link, a link reference
   definition will be created, even if the same URL is already present in the
   reference section. It would be better if the same label were reused. Using
@@ -299,8 +325,11 @@ To execute the tests: `./test/run_tests.sh`
 ==============================================================================
 CHANGELOG                                                       *link-changelog*
 
+1.2.0   2024-11-07
+        - Support link conversion without using a heading
+
 1.1.0   2024-11-04
-	- Support `<Plug>` mappings
+        - Support `<Plug>` mappings
 
 1.0.5   2024-09-11
         - Fix trailing punctuation characters being seen as

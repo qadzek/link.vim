@@ -72,8 +72,8 @@ let g:link_use_default_mappings = 1
 Note that by default, `<LocalLeader>` is the backslash key. Run `:help
 link-mappings` to view how to change these key bindings.
 
-Read `:help link-configuration` to learn how to customize the heading, the
-position of the reference section, which lines to skip and more.
+Read `:help link-configuration` to learn how to customize or disable the
+heading, the position of the reference section, which lines to skip and more.
 
 The [Wiki][2] contains some snippets submitted by users, showing configuration
 for e.g. `gitcommit` buffers.

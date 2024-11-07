@@ -17,7 +17,14 @@ function! link#lifecycle#Finalize(orig_view, orig_fold_option) abort
 
   let &l:foldenable = a:orig_fold_option
 
-" TODO
-  call link#utils#VimwikiRefLinksRefresh()
+  call s:VimwikiRefLinksRefresh()
 endfunction
 
+" Fix Vimwiki bug where newly created reference links don't work instantly
+" See https://github.com/vimwiki/vimwiki/issues/1005 and
+" https://github.com/vimwiki/vimwiki/issues/1351
+function! s:VimwikiRefLinksRefresh() abort
+  if &filetype !~# 'vimwiki' | return | endif
+
+  call vimwiki#markdown_base#scan_reflinks()
+endfunction

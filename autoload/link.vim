@@ -1,6 +1,6 @@
 " Convert inline links to reference links within a range
-" Types : `multiple-links`, `single-link`
-" Modes : `normal`, `insert`
+" Type : `multiple-links` or `single-link`
+" Mode : `normal` or `insert`
 function! link#Convert(type = 'multiple-links', mode = 'normal') abort range
   let [l:orig_view, l:orig_line_nr, l:orig_col_nr, l:orig_fold_option] =
     \ link#lifecycle#Initialize()
@@ -12,20 +12,37 @@ function! link#Convert(type = 'multiple-links', mode = 'normal') abort range
     unlet b:init_view
   endif
 
-  let [ l:heading_text, l:is_heading_present, l:heading_line_nr ] =
-    \ link#heading#GetInfo()
+  let [ l:first_label_line_nr, @_] = link#label#GetInfo('first')
+  let [ l:last_label_line_nr, l:last_label_idx ] = link#label#GetInfo('last')
 
-  let l:new_label_nr = link#label#GetNewNumber(l:is_heading_present)
-  let l:start_label_nr = l:new_label_nr
+  let l:heading_text = link#heading#GetText()
+  let l:heading_is_empty = link#heading#IsEmpty(l:heading_text)
+  let l:heading_is_needed = link#heading#IsNeeded(l:heading_is_empty, l:heading_text)
 
-  let l:max_line_nr = link#heading#LimitRange(l:is_heading_present,
-    \ l:heading_line_nr, a:lastline)
+  " No reference section present
+  if l:first_label_line_nr == -1
+    call link#reference#PositionSection()
+    let l:divider_line_nr = line('.')
+    let l:last_label_line_nr = line('.')
+    let l:range_end_line_nr = a:lastline
+    let l:new_label_idx = link#label#GetStartIndex()
+    let l:first_ref_added = 0
+
+  " Reference section present
+  else
+    let l:divider_line_nr = l:first_label_line_nr - 1
+    let l:range_end_line_nr = link#body#LimitRange(l:divider_line_nr, a:lastline)
+    let l:new_label_idx = l:last_label_idx + 1
+    let l:first_ref_added = 1
+  endif
+
+  let l:conversion_counter = 0
 
   " Loop over all lines within the range
-  for l:cur_line_nr in range(a:firstline, l:max_line_nr)
+  for l:cur_line_nr in range(a:firstline, l:range_end_line_nr)
 
-    " Necessary if reference section is repositioned
-    if l:is_heading_present && l:cur_line_nr >= l:heading_line_nr
+    " Necessary if reference section is positioned
+    if l:cur_line_nr > l:divider_line_nr
       break
     endif
 
@@ -50,31 +67,31 @@ function! link#Convert(type = 'multiple-links', mode = 'normal') abort range
     " Loop over all inline links on current line
     for l:link in l:all_links_on_line
 
-      " Last label line number is known
-      if exists('l:last_label_line_nr')
+      " In case of an empty heading, add a blank line
+      if l:first_ref_added == 0 && l:heading_is_empty
+        call append( line('.'), '')
         let l:last_label_line_nr += 1
+        let l:first_ref_added = 1
+      endif
 
-      " Last label line number is unknown, so look it up
-      elseif l:is_heading_present
-        let l:last_label_line_nr = link#label#GetLast('line_nr')
-
-      " No heading
-      else
-        call link#heading#Add(l:heading_text)
-        let l:is_heading_present = 1
-        let l:heading_line_nr = link#heading#GetLineNr(l:heading_text)
-        let l:last_label_line_nr = l:heading_line_nr + 1
+      " Add a (non-empty) heading
+      if l:heading_is_needed
+        call link#heading#Add(l:heading_text, l:divider_line_nr)
+        let l:last_label_line_nr += 3 " Three lines were added
+        let l:heading_is_needed = 0
       endif
 
       let l:cur_line_content = getline(l:cur_line_nr)
 
       call link#body#ReplaceLink(l:cur_line_content, l:link['full_link'],
-            \ l:link['link_text'], l:new_label_nr, l:cur_line_nr)
+            \ l:link['link_text'], l:new_label_idx, l:cur_line_nr)
 
-      call link#reference#Add(l:new_label_nr, l:link['destination'],
+      call link#reference#Add(l:new_label_idx, l:link['destination'],
             \ l:last_label_line_nr)
 
-      let l:new_label_nr += 1
+      let l:conversion_counter += 1
+      let l:last_label_line_nr += 1
+      let l:new_label_idx += 1
     endfor " End looping over all links on current line
   endfor " End looping over all lines
 
@@ -82,8 +99,7 @@ function! link#Convert(type = 'multiple-links', mode = 'normal') abort range
 
   " Display how many links were converted
   if a:type !=# 'single-link'
-    call link#utils#DisplayMsg(l:new_label_nr - l:start_label_nr ..
-      \ ' links were converted')
+    call link#utils#DisplayMsg(l:conversion_counter .. ' link(s) were converted')
   endif
 
   " Move cursor when function is called from Insert mode, so user can continue
@@ -92,13 +108,13 @@ function! link#Convert(type = 'multiple-links', mode = 'normal') abort range
     " Move to end of reference link: first to start, then to 1st/2nd `]`
     call cursor(l:orig_line_nr, l:link['col_start'])
     if link#utils#IsFiletypeMarkdown()
-      normal! 2f]
+      keepjumps normal! 2f]
     else
-      normal! f]
+      keepjumps normal! f]
     endif
 
     " Determine if link is at the very end of the line
-    let l:orig_line_len = strlen(l:cur_line_content)
+    let l:orig_line_len = len(l:cur_line_content)
     let l:sum = l:link['col_start'] + l:link['length'] - 1
 
     " Return to insert mode; link is at the very end of the line
@@ -114,47 +130,48 @@ endfunction
 
 " Connect a reference link and the corresponding link reference definition and
 " perform some action
-" Types : `jump`, `open`, `peek`
-function! link#Connect(type) abort
+" Action : `jump`, `open` or `peek`
+function! link#Connect(action) abort
   let [l:orig_view, l:orig_line_nr, l:orig_col_nr, l:orig_fold_option] =
         \ link#lifecycle#Initialize()
 
-  let [l:is_heading_present, l:heading_line_nr] = link#heading#GetInfo()[1:2]
-  if !l:is_heading_present
-    call link#utils#DisplayError('no_heading')
+  let [ l:first_label_line_nr, @_] = link#label#GetInfo('first')
+  " No reference section present
+  if l:first_label_line_nr == -1
+    call link#utils#DisplayError('no_ref_section')
     call link#lifecycle#Finalize(l:orig_view, l:orig_fold_option)
     return
   endif
 
+  let l:divider_line_nr = l:first_label_line_nr - 1
+
   " No opening/peeking from reference section
-  if (a:type ==# 'open' || a:type ==# 'peek') && l:orig_line_nr >= l:heading_line_nr
+  if (a:action ==# 'open' || a:action ==# 'peek') && l:orig_line_nr >= l:divider_line_nr
     call link#utils#DisplayError('not_from_ref')
     call link#lifecycle#Finalize(l:orig_view, l:orig_fold_option)
     return
   endif
 
   " Determine if we should jump to the reference section or to the document body
-  if l:orig_line_nr < l:heading_line_nr
-    let l:line_nr = link#jump#ToReferenceSection(l:orig_line_nr, l:orig_col_nr, l:heading_line_nr)
+  if l:orig_line_nr < l:divider_line_nr
+    let l:line_nr = link#jump#ToReferenceSection(l:orig_line_nr, l:orig_col_nr, l:divider_line_nr)
   else
-    let l:line_nr = link#jump#ToBody(l:orig_line_nr, l:heading_line_nr)
+    let l:line_nr = link#jump#ToBody(l:orig_line_nr, l:divider_line_nr)
   endif
 
-  " 0 will get returned if the jump failed
+  " 0 gets returned if the jump failed
   if l:line_nr == 0
     call link#lifecycle#Finalize(l:orig_view, l:orig_fold_option)
     return
   endif
 
   " Open URL from corresponding link reference definition in browser
-  if a:type ==# 'open'
+  if a:action ==# 'open'
     let l:ref_link = link#reference#Parse(l:line_nr, 'one')[0]
     let l:url = l:ref_link['destination']
-    
+
     " Add protocol if required
-    if l:url =~# '^www'
-      let l:url = 'https://' .. l:url
-    endif
+    if l:url =~# '^www' | let l:url = 'https://' .. l:url | endif
 
     " Not a valid URL
     if l:url !~# '^http'
@@ -177,8 +194,7 @@ function! link#Connect(type) abort
     let l:esc_url = shellescape(l:url)
 
     " Open URL in browser; capture command's output and remove trailing newline
-    let l:output = substitute( system(l:open_cmd .. ' ' .. l:esc_url),
-          \ '\n\+$', '', '' )
+    let l:output = substitute( system(l:open_cmd .. ' ' .. l:esc_url), '\n\+$', '', '' )
     if v:shell_error != 0
       call link#utils#DisplayError('open_in_browser_failed', l:output)
     endif
@@ -187,7 +203,7 @@ function! link#Connect(type) abort
   endif
 
   " Display corresponding link reference definition
-  if a:type ==# 'peek'
+  if a:action ==# 'peek'
     let l:line_content = getline('.')
     call link#utils#DisplayMsg(l:line_content)
     call link#lifecycle#Finalize(l:orig_view, l:orig_fold_option)
@@ -198,15 +214,21 @@ endfunction
 function! link#Reformat() abort
   let [l:orig_view, @_, @_, l:orig_fold_option] = link#lifecycle#Initialize()
 
-  let [l:is_heading_present, l:heading_line_nr] = link#heading#GetInfo()[1:2]
-  if !l:is_heading_present
-    call link#utils#DisplayError('no_heading')
+  let [ l:first_label_line_nr, @_] = link#label#GetInfo('first')
+  let [ l:last_label_line_nr, @_ ] = link#label#GetInfo('last')
+  let l:orig_ref_len = l:last_label_line_nr - l:first_label_line_nr + 1
+
+  " No reference section present
+  if l:first_label_line_nr == -1
+    call link#utils#DisplayError('no_ref_section')
     call link#lifecycle#Finalize(l:orig_view, l:orig_fold_option)
     return
   endif
 
-  let l:ref_section_start = l:heading_line_nr + 2
-  let l:ref_section_end = link#label#GetLast('line_nr')
+  let l:divider_line_nr = l:first_label_line_nr - 1
+
+  let l:ref_section_start = l:first_label_line_nr
+  let l:ref_section_end = l:last_label_line_nr
   let l:ref_section = link#reference#Parse(l:ref_section_start, 'all')
 
   " Nth reference link, counting from start of document body
@@ -215,13 +237,12 @@ function! link#Reformat() abort
   let l:all_ref_links = []
 
   " Loop over all lines from first line until heading
-  for l:body_line_nr in range(1, l:heading_line_nr - 1)
+  for l:body_line_nr in range(1, l:divider_line_nr)
     if link#body#SkipLine(l:body_line_nr)
       continue
     endif
 
-    let l:all_links_on_line = link#body#ParseLineFor('reference',
-          \ l:body_line_nr)
+    let l:all_links_on_line = link#body#ParseLineFor('reference', l:body_line_nr)
 
     " Loop over all links on current line
     for l:link in l:all_links_on_line
@@ -248,6 +269,7 @@ function! link#Reformat() abort
       let l:all_ref_links_copy = deepcopy(l:all_ref_links)
       let l:url_matches = filter( l:all_ref_links_copy,
             \ { _, val -> val['url'] ==# l:link['url'] } )
+
       " 'Merge' labels
       if len(l:url_matches) >= 1
         let l:link['index'] = l:url_matches[0]['index']
@@ -272,17 +294,16 @@ function! link#Reformat() abort
   silent execute 'normal! :' .. l:ref_section_start .. ',' .. l:ref_section_end
         \ .. "$ delete _ \<CR>"
 
-  " Add new reference section
+  " Generate new reference section
   for l:idx in range( len(l:all_ref_links) )
     let l:ref_link = l:all_ref_links[l:idx]
-    let l:line_nr = l:ref_section_start - 1 + l:idx
+    let l:line_nr = l:divider_line_nr + l:idx
     call link#reference#Add(l:ref_link['index'], l:ref_link['url'], l:line_nr)
-
-    let l:ref_section_start = l:heading_line_nr + 2
   endfor
 
-  let l:orig_ref_len = l:ref_section_end - l:ref_section_start + 1
-  let l:new_ref_len = link#label#GetLast('line_nr') - l:ref_section_start + 1
+  let [ l:first_label_line_nr, @_] = link#label#GetInfo('first')
+  let [ l:last_label_line_nr, @_ ] = link#label#GetInfo('last')
+  let l:new_ref_len = l:last_label_line_nr - l:ref_section_start + 1
 
   call link#utils#DisplayMsg('Finished reformatting reference links and reference section')
   call link#utils#DisplayMsg('Number of lines in reference section -- Before: '

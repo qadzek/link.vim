@@ -23,5 +23,7 @@ link-credits	link.txt	/*link-credits*
 link-introduction	link.txt	/*link-introduction*
 link-limitations	link.txt	/*link-limitations*
 link-mappings	link.txt	/*link-mappings*
+link-misc	link.txt	/*link-misc*
 link-usage	link.txt	/*link-usage*
 link.txt	link.txt	/*link.txt*
+link.vim	link.txt	/*link.vim*

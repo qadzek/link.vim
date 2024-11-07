@@ -1,3 +1,4 @@
+" Display message in Vim's command-line
 function! link#utils#DisplayMsg(msg) abort
   echohl WarningMsg
 
@@ -6,6 +7,7 @@ function! link#utils#DisplayMsg(msg) abort
   echohl None
 endfunction
 
+" Display error in Vim's command-line
 function! link#utils#DisplayError(error_key, suffix = '') abort
   echohl ErrorMsg
 
@@ -17,13 +19,30 @@ function! link#utils#DisplayError(error_key, suffix = '') abort
   echohl None
 endfunction
 
-" Return boolean
+" Move cursor to first character of first line or last char of last line
+function! link#utils#MoveCursorTo(destination) abort
+  if a:destination ==# 'start'
+    let l:row = 1
+    let l:col = 1
+
+  elseif a:destination ==# 'end'
+    let l:row = line('$')
+    let l:col = col( [ l:row, '$' ] ) " Last char of last line
+
+  else
+    throw 'Invalid destination'
+  endif
+
+  call cursor(l:row, l:col)
+endfunction
+
+" Return boolean indicating if filetype includes Markdown or Vimwiki
 function! link#utils#IsFiletypeMarkdown() abort
   " NOTE This assumes that Vimwiki uses Markdown syntax
   return &filetype =~# 'markdown' || &filetype =~# 'vimwiki'
 endfunction
 
-" Return 'Darwin', 'Linux' or 'Windows'
+" Return operating system: 'Darwin', 'Linux' or 'Windows'
 function! link#utils#GetOperatingSystem() abort
   " https://vi.stackexchange.com/a/2577/50213
   if has('win64') || has('win32') || has('win16')
@@ -44,16 +63,4 @@ function! link#utils#GetOpenCommand(os) abort
   else
     throw 'Unknown operating system'
   endif
-endfunction
-
-" Fix Vimwiki bug where newly created reference links don't work instantly
-function! link#utils#VimwikiRefLinksRefresh() abort
-  " See https://github.com/vimwiki/vimwiki/issues/1005 and
-  " https://github.com/vimwiki/vimwiki/issues/1351
-
-  if &filetype !~# 'vimwiki'
-    return
-  endif
-
-  call vimwiki#markdown_base#scan_reflinks()
 endfunction

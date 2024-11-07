@@ -61,12 +61,12 @@ Expect mail:
 
 Given mail:
   Subject: Join Our Webinar Series!
-  
+
   Hi John,
-  
+
   Exciting news! We're hosting a series of webinars on Vim and Neovim. Here's
   the schedule:
-  
+
   Intro to Vim: Join here: https://vim.com/webinar1 or https://vimbackup.com/webinar1
   Advanced Vim Techniques: Join here: www.vim.com/webinar2
   Q&A with Experts: Join here: http://vim.com/webinar3
@@ -76,7 +76,7 @@ Given mail:
   Q&A with Experts: Join here: http://neovim.com/webinar3
 
   Don't miss out — register now! Let us know if you have any questions.
-  
+
   Cheers,
   Jane
 ~~~~~
@@ -88,12 +88,12 @@ Execute (Mail buffer):
 ~~~~~
 Expect mail:
   Subject: Join Our Webinar Series!
-  
+
   Hi John,
-  
+
   Exciting news! We're hosting a series of webinars on Vim and Neovim. Here's
   the schedule:
-  
+
   Intro to Vim: Join here: https://vim.com/webinar1 or https://vimbackup.com/webinar1
   Advanced Vim Techniques: Join here: www.vim.com/webinar2
   Q&A with Experts: Join here: [0]
@@ -105,7 +105,7 @@ Expect mail:
   Don't miss out — register now! Let us know if you have any questions.
 
   Full Links:
-  
+
   [0]: http://vim.com/webinar3
   [1]: https://neovim.com/webinar1
   [2]: https://neovimbackup.com/webinar1

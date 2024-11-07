@@ -9,12 +9,13 @@ After:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-" Given python:
-"   filler
-" Execute (Filetype not included in defaults):
-"   AssertThrows LinkConvertAll
-" Expect python:
-"   filler
+Given ruby:
+  filler
+Execute (Filetype not included in defaults):
+  AssertThrows LinkConvertAll
+  AssertEqual g:vader_exception, 'Vim:E492: Not an editor command: LinkConvertAll'
+Expect ruby:
+  filler
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

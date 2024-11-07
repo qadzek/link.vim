@@ -2,30 +2,30 @@
 
 Given markdown:
   # Yar Pirate Ipsum
-  
+
   ## Fluke furl
-  
+
   Fluke furl [cutlass][0] scuttle coffer
   [topmast][1] hang the jib spyglass driver crack Jennys tea cup.
   Quarterdeck run a rig Jolly Roger gangway no prey, no pay pirate quarter log
   schooner draft. Sink me wherry [tackle][3]
   matey ballast mizzen pinnace bucko bowsprit Cat o'nine tails.
-  
+
   Nipperkin chase guns topgallant Nelsons folly Jolly Roger matey hulk aye
   overhaul rum. Black jack fathom booty provost killick bounty Yellow Jack bucko
   [sloop topgallant][4]. Scurvy Admiral of the Black spirits clipper
   belaying pin lanyard gally barque keel gaff.
-  
+
   ## Transom no
-  
+
   Transom no prey, no pay haul wind galleon log smartly quarterdeck interloper
   Nelsons folly dead men tell no tales. [Topgallant](www.gallant.top) plunder
   maroon hempen halter pink hang the jib [crimp][6] squiffy clap of
   [thunder][7] fathom. Spanish [Main][8] killick case
   shot Shiver me timbers wench red ensign smartly chase guns pillage boom.
-  
+
   ## Links
-  
+
   [0]: http://cutlass.com
   [1]: www.topmast.org
   [2]: www.sink.com
@@ -41,30 +41,30 @@ Execute (Delete two links, [2] and [5]):
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect markdown:
   # Yar Pirate Ipsum
-  
+
   ## Fluke furl
-  
+
   Fluke furl [cutlass][0] scuttle coffer
   [topmast][1] hang the jib spyglass driver crack Jennys tea cup.
   Quarterdeck run a rig Jolly Roger gangway no prey, no pay pirate quarter log
   schooner draft. Sink me wherry [tackle][2]
   matey ballast mizzen pinnace bucko bowsprit Cat o'nine tails.
-  
+
   Nipperkin chase guns topgallant Nelsons folly Jolly Roger matey hulk aye
   overhaul rum. Black jack fathom booty provost killick bounty Yellow Jack bucko
   [sloop topgallant][3]. Scurvy Admiral of the Black spirits clipper
   belaying pin lanyard gally barque keel gaff.
-  
+
   ## Transom no
-  
+
   Transom no prey, no pay haul wind galleon log smartly quarterdeck interloper
   Nelsons folly dead men tell no tales. [Topgallant](www.gallant.top) plunder
   maroon hempen halter pink hang the jib [crimp][4] squiffy clap of
   [thunder][5] fathom. Spanish [Main][6] killick case
   shot Shiver me timbers wench red ensign smartly chase guns pillage boom.
-  
+
   ## Links
-  
+
   [0]: http://cutlass.com
   [1]: www.topmast.org
   [2]: https://tackle.net
@@ -76,30 +76,30 @@ Expect markdown:
 
 Given markdown:
   # Yar Pirate Ipsum
-  
+
   ## Fluke furl
-  
+
   Fluke furl [cutlass][0] scuttle coffer
   [topmast][1] hang the jib spyglass driver crack [Jennys][19] tea cup.
   Quarterdeck run a rig Jolly Roger gangway no prey, no pay pirate quarter log
   schooner draft. Sink me wherry [tackle][3]
   matey ballast mizzen pinnace bucko bowsprit Cat o'nine tails.
-  
+
   Nipperkin [chase][23] guns topgallant Nelsons folly Jolly Roger matey hulk aye
   overhaul rum. Black jack fathom booty provost killick bounty Yellow Jack bucko
   [sloop topgallant][4]. Scurvy Admiral of the Black [spirits][15] clipper
   belaying pin lanyard gally barque keel gaff.
-  
+
   ## Transom no
-  
+
   Transom no prey, no pay haul wind galleon log smartly quarterdeck interloper
   Nelsons folly dead men tell no tales. [Topgallant](www.gallant.top) plunder
   maroon hempen halter pink hang the jib [crimp][6] squiffy clap of
   [thunder][7] fathom. Spanish [Main][8] killick case
   shot Shiver me timbers wench red ensign smartly chase guns pillage boom.
-  
+
   ## Links
-  
+
   [1]: www.topmast.org
   [2]: www.sink.com
   [6]: crimp.com
@@ -119,28 +119,28 @@ Execute (Merge links):
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect markdown:
   # Yar Pirate Ipsum
-  
+
   ## Fluke furl
-  
+
   Fluke furl [cutlass][0] scuttle coffer
   [topmast][1] hang the jib spyglass driver crack [Jennys][2] tea cup.
   Quarterdeck run a rig Jolly Roger gangway no prey, no pay pirate quarter log
   schooner draft. Sink me wherry [tackle][3]
   matey ballast mizzen pinnace bucko bowsprit Cat o'nine tails.
-  
+
   Nipperkin [chase][1] guns topgallant Nelsons folly Jolly Roger matey hulk aye
   overhaul rum. Black jack fathom booty provost killick bounty Yellow Jack bucko
   [sloop topgallant][4]. Scurvy Admiral of the Black [spirits][2] clipper
   belaying pin lanyard gally barque keel gaff.
-  
+
   ## Transom no
-  
+
   Transom no prey, no pay haul wind galleon log smartly quarterdeck interloper
   Nelsons folly dead men tell no tales. [Topgallant](www.gallant.top) plunder
   maroon hempen halter pink hang the jib [crimp][5] squiffy clap of
   [thunder][2] fathom. Spanish [Main][6] killick case
   shot Shiver me timbers wench red ensign smartly chase guns pillage boom.
-  
+
   ## Links
 
   [0]: http://cutlass.com
