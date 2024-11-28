@@ -1,19 +1,27 @@
-" Scan single line in document body for inline link [foo](bar.com) or reference
-" link [foo][5]
-" Return list of dictionaries, containing full link [foo](www.bar.com), link
+" Scan single line in document body for inline link [foo](http://bar.com) or
+" reference link [foo][5]
+" Return list of dictionaries, containing full link [foo](http://bar.com), link
 " text, destination (URL or reference), length of total match and start position
 " of total match
 function! link#body#ParseLineFor(type, line_nr) abort
   if a:type ==# 'inline'
     " Match `http://`, `ftp://`, `www.` etc.
-    let l:protocol = '[a-zA-Z0-9.-]{2,12}:\/\/|www\.'
+    let l:protocol = g:link#globals#re['protocol'] .. '|www\.'
 
-    " Match [foo](https://bar.com)
     if link#utils#IsFiletypeMarkdown()
-      let l:regex = '\v' .. '\[(' .. '[^]]+' .. ')\]' ..
-          \ '\((' .. '%(' .. l:protocol .. ')' .. '[^)]+' .. ')\)'
+      let l:regex_start = '\v' .. '\[(' .. '[^]]+' .. ')\]' .. '\(('
+      let l:regex_end = '[^)]+' .. ')\)'
 
-    " Match https://bar.com
+      " Match link to URL, e.g. [foo](http://bar.com)
+      if link#utils#ConvertUrlsOnly()
+        let l:regex = l:regex_start .. '%(' .. l:protocol .. ')' .. l:regex_end
+
+      " Match link to URL, or to internal wiki page, e.g. [foo](bar.md)
+      else
+        let l:regex = l:regex_start .. l:regex_end
+      endif
+
+    " Match http://bar.com
     else
       " Avoid trailing punctuation character from being considered part of URL
       let l:last_url_char = '[a-zA-Z0-9/#-]'
@@ -64,7 +72,12 @@ function! link#body#ParseLineFor(type, line_nr) abort
     \ }
 
     call add(l:all_links, l:link)
-    let l:col = l:match_start + l:total_len
+
+    let l:new_col = l:match_start + l:total_len
+    if l:new_col == l:col
+      let l:new_col += 1 " Avoid infinite loop
+    endif
+    let l:col = l:new_col
   endwhile
 
   return l:all_links

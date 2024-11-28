@@ -36,5 +36,6 @@ let s:re_ref_def_suf = '\ze\]:\s+'
 let g:link#globals#re = {
   \ 'ref_def_pre': s:re_ref_def_pre,
   \ 'ref_def_suf': s:re_ref_def_suf,
-  \ 'ref_def': s:re_ref_def_pre .. '\d+' .. s:re_ref_def_suf
+  \ 'ref_def': s:re_ref_def_pre .. '\d+' .. s:re_ref_def_suf,
+  \ 'protocol': '[a-zA-Z][a-zA-Z0-9.-]{1,9}:\/\/'
 \ }

@@ -6,10 +6,12 @@
 :LinkOpen	link.txt	/*:LinkOpen*
 :LinkPeek	link.txt	/*:LinkPeek*
 :LinkReformat	link.txt	/*:LinkReformat*
+b:link_disable_internal_links	link.txt	/*b:link_disable_internal_links*
 b:link_heading	link.txt	/*b:link_heading*
 b:link_heading_before	link.txt	/*b:link_heading_before*
 b:link_skip_line	link.txt	/*b:link_skip_line*
 b:link_start_index	link.txt	/*b:link_start_index*
+g:link_disable_internal_links	link.txt	/*g:link_disable_internal_links*
 g:link_enabled_filetypes	link.txt	/*g:link_enabled_filetypes*
 g:link_heading	link.txt	/*g:link_heading*
 g:link_start_index	link.txt	/*g:link_start_index*

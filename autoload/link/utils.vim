@@ -64,3 +64,17 @@ function! link#utils#GetOpenCommand(os) abort
     throw 'Unknown operating system'
   endif
 endfunction
+
+" Return boolean indicating if only URLs should be converted, not links to
+" internal wiki pages
+function! link#utils#ConvertUrlsOnly() abort
+  if exists('b:link_disable_internal_links')
+    return b:link_disable_internal_links
+  endif
+
+  if exists('g:link_disable_internal_links')
+    return g:link_disable_internal_links
+  endif
+
+  return 0
+endfunction

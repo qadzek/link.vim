@@ -1,0 +1,202 @@
+Before:
+  unlet! b:link_disable_internal_links
+  unlet! g:link_disable_internal_links
+After:
+  unlet! b:link_disable_internal_links
+  unlet! g:link_disable_internal_links
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown:
+  URL [foo](http://bar.com)
+  Internal wiki page [alfa](bravo.md)
+Execute (Default settings):
+  LinkConvertAll
+
+Expect markdown:
+  URL [foo][0]
+  Internal wiki page [alfa][1]
+
+  ## Links
+
+  [0]: http://bar.com
+  [1]: bravo.md
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown:
+  URL [foo](http://bar.com)
+  Internal wiki page [alfa](bravo.md)
+Execute (Disabled globally):
+  let g:link_disable_internal_links = 1
+  LinkConvertAll
+
+Expect markdown:
+  URL [foo][0]
+  Internal wiki page [alfa](bravo.md)
+
+  ## Links
+
+  [0]: http://bar.com
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown:
+  URL [foo](http://bar.com)
+  Internal wiki page [alfa](bravo.md)
+Execute (Disabled buffer-local):
+  let b:link_disable_internal_links = 1
+  LinkConvertAll
+
+Expect markdown:
+  URL [foo][0]
+  Internal wiki page [alfa](bravo.md)
+
+  ## Links
+
+  [0]: http://bar.com
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown:
+  URL [foo](http://bar.com)
+  Internal wiki page [alfa](bravo.md)
+Execute (Enabled globally, disabled buffer-local):
+  let g:link_disable_internal_links = 0
+  let b:link_disable_internal_links = 1
+  LinkConvertAll
+
+Expect markdown:
+  URL [foo][0]
+  Internal wiki page [alfa](bravo.md)
+
+  ## Links
+
+  [0]: http://bar.com
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown:
+  URL [foo](http://bar.com)
+  Internal wiki page [alfa](bravo.md)
+Execute (Disabled globally, enabled buffer-local):
+  let g:link_disable_internal_links = 1
+  let b:link_disable_internal_links = 0
+  LinkConvertAll
+
+Expect markdown:
+  URL [foo][0]
+  Internal wiki page [alfa][1]
+
+  ## Links
+
+  [0]: http://bar.com
+  [1]: bravo.md
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown:
+  A regular [URL](https://github.com).
+  A URL without a protocol but including 'www' or [world wide web](www.google.com)!
+  Not a Markdown extension but a Moldovan [domain](https://nic.md).
+  A .wiki top-level [domain name](https://kodi.wiki/view/Main_Page).
+
+  A link to an internal wiki page; in this case a regular [file](file.md).
+  A file inside a [subdirectory](subdir/file.md).
+  A file in a [parent](../file.md) directory.
+  Just a [directory](subdir/), no filename.
+  A filename containing [spaces](file with spaces.md).
+  The same filename but this time [percent-encoded](file%20with%20spaces.md).
+  A filename containing [Unicode](önskelistä.md) characters.
+  An anchor, pointing to a heading inside a [file](file.md#heading).
+Execute (Default (so enabled); list of URLs and internal wiki pages):
+  LinkConvertAll
+
+Expect markdown:
+  A regular [URL][0].
+  A URL without a protocol but including 'www' or [world wide web][1]!
+  Not a Markdown extension but a Moldovan [domain][2].
+  A .wiki top-level [domain name][3].
+
+  A link to an internal wiki page; in this case a regular [file][4].
+  A file inside a [subdirectory][5].
+  A file in a [parent][6] directory.
+  Just a [directory][7], no filename.
+  A filename containing [spaces][8].
+  The same filename but this time [percent-encoded][9].
+  A filename containing [Unicode][10] characters.
+  An anchor, pointing to a heading inside a [file][11].
+
+  ## Links
+
+  [0]: https://github.com
+  [1]: www.google.com
+  [2]: https://nic.md
+  [3]: https://kodi.wiki/view/Main_Page
+  [4]: file.md
+  [5]: subdir/file.md
+  [6]: ../file.md
+  [7]: subdir/
+  [8]: file with spaces.md
+  [9]: file%20with%20spaces.md
+  [10]: önskelistä.md
+  [11]: file.md#heading
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown:
+  A regular [URL](https://github.com).
+  A URL without a protocol but including 'www' or [world wide web](www.google.com)!
+  Not a Markdown extension but a Moldovan [domain](https://nic.md).
+  A .wiki top-level [domain name](https://kodi.wiki/view/Main_Page).
+
+  A link to an internal wiki page; in this case a regular [file](file.md).
+  A file inside a [subdirectory](subdir/file.md).
+  A file in a [parent](../file.md) directory.
+  Just a [directory](subdir/), no filename.
+  A filename containing [spaces](file with spaces.md).
+  The same filename but this time [percent-encoded](file%20with%20spaces.md).
+  A filename containing [Unicode](önskelistä.md) characters.
+  An anchor, pointing to a heading inside a [file](file.md#heading).
+Execute (Disabled; list of URLs and internal wiki pages):
+  let g:link_disable_internal_links = 1
+  LinkConvertAll
+
+Expect markdown:
+  A regular [URL][0].
+  A URL without a protocol but including 'www' or [world wide web][1]!
+  Not a Markdown extension but a Moldovan [domain][2].
+  A .wiki top-level [domain name][3].
+
+  A link to an internal wiki page; in this case a regular [file](file.md).
+  A file inside a [subdirectory](subdir/file.md).
+  A file in a [parent](../file.md) directory.
+  Just a [directory](subdir/), no filename.
+  A filename containing [spaces](file with spaces.md).
+  The same filename but this time [percent-encoded](file%20with%20spaces.md).
+  A filename containing [Unicode](önskelistä.md) characters.
+  An anchor, pointing to a heading inside a [file](file.md#heading).
+
+  ## Links
+
+  [0]: https://github.com
+  [1]: www.google.com
+  [2]: https://nic.md
+  [3]: https://kodi.wiki/view/Main_Page
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown:
+  A regular [URL](https://github.com).
+  A regex like [a-zA-Z](\d+) could be interpreted as a Markdown inline link.
+  Code snippets can resemble an inline link too: command! -buffer -range=% -bar TagLinks silent keeppatterns <line1>,<line2>substitute#\v%(\[[^\]]+\]\(\s*)@https?://([^.]+)\S+#[\1](\0)#giep
+  Yet another regular [URL](https://www.vim.org).
+
+Execute (Similar to inline links; causes issues if internal links aren't disabled):
+  let g:link_disable_internal_links = 1
+  LinkConvertAll
+
+Expect markdown:
+  A regular [URL][0].
+  A regex like [a-zA-Z](\d+) could be interpreted as a Markdown inline link.
+  Code snippets can resemble an inline link too: command! -buffer -range=% -bar TagLinks silent keeppatterns <line1>,<line2>substitute#\v%(\[[^\]]+\]\(\s*)@https?://([^.]+)\S+#[\1](\0)#giep
+  Yet another regular [URL][1].
+
+  ## Links
+
+  [0]: https://github.com
+  [1]: https://www.vim.org
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

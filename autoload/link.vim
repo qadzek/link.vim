@@ -170,11 +170,11 @@ function! link#Connect(action) abort
     let l:ref_link = link#reference#Parse(l:line_nr, 'one')[0]
     let l:url = l:ref_link['destination']
 
-    " Add protocol if required
+    " Add protocol if URL starts with `www`
     if l:url =~# '^www' | let l:url = 'https://' .. l:url | endif
 
-    " Not a valid URL
-    if l:url !~# '^http'
+    " Not a valid URL if it doesn't start with a protocol
+    if l:url !~# '\v^' .. g:link#globals#re['protocol']
       call link#utils#DisplayError('no_valid_url', l:url)
       call link#lifecycle#Finalize(l:orig_view, l:orig_fold_option)
       return
