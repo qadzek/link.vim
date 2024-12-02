@@ -1,9 +1,21 @@
-" Minimal vimrc: create a testing environment isolated from plugins and settings
+" Create a testing environment isolated from existing plugins and settings on
+" your workstation
 
-" Settings
-filetype off
+" Settings --------------------------------------------------------- {{{1
+
 filetype plugin indent on
 syntax enable
+
+" Disable the pager prompt `-- More --`; see `:help pager` and `:help more`
+set nomore
+
+" Key bindings ----------------------------------------------------- {{{1
+
+" Exit tests
+nnoremap Q      :qa!<CR>
+inoremap Q <Esc>:qa!<CR>
+
+" Load plugins ----------------------------------------------------- {{{1
 
 " Location where plugins are installed, depends on Vim/Neovim/plugin manager
 " E.g. when using regular Vim and Vundle: ~/.vim/bundle/
@@ -30,7 +42,3 @@ call LoadPlugin('vader.vim')
 
 " Load this plugin
 call LoadPlugin('link.vim')
-
-" Exit tests
-nnoremap Q      :qa!<CR>
-inoremap Q <Esc>:qa!<CR>

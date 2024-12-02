@@ -2,7 +2,7 @@
 " gitcommit resource
 
 Before:
-  edit resources/gitcommit_converted.gitcommit
+  find **/gitcommit_converted.gitcommit
   normal! gg
   unlet! g:link_heading
   unlet! b:link_heading

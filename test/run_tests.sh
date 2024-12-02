@@ -88,7 +88,7 @@ if [[ "$watch_modus" == true ]]; then
   while true; do
     clear
 
-    if "$editor" -N -u minimal.vimrc +"${vader_cmd} ${test_files}"; then
+    if "$editor" -N -u workstation.vimrc +"${vader_cmd} ${test_files}"; then
       sleep 1
     else
       printf "\e[31mFailure\e[0m\n\a"
@@ -99,5 +99,5 @@ if [[ "$watch_modus" == true ]]; then
 else
   # -N         No-compatible mode
   # -u {vimrc} Use the commands in the file {vimrc} for initializations
-  "$editor" -N -u minimal.vimrc +"${vader_cmd} ${test_files}"
+  "$editor" -N -u workstation.vimrc +"${vader_cmd} ${test_files}"
 fi

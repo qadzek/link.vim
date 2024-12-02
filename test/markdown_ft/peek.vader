@@ -1,5 +1,5 @@
 Before:
-  edit resources/lorem-converted.md
+  find **/lorem-converted.md
   normal! gg
 
 Execute (Valid peek, from single reference link on line, [2]):
