@@ -116,6 +116,16 @@ endfunction
 
 " Return boolean indicating if line should be skipped
 function! link#body#SkipLine(cur_line_nr) abort
+  let l:line_content = getline(a:cur_line_nr)
+
+  " In `markdown` and `mail` buffers skip links in blockquotes, except if
+  " variable is set
+  if (link#utils#IsFiletypeMarkdown() || &filetype ==# 'mail') &&
+    \ l:line_content =~# '^>' &&
+    \ get(b:, 'link_include_blockquotes', 0) != 1
+    return 1
+  endif
+
   if exists('b:link_skip_line')
     " Use custom pattern
     let l:regex = b:link_skip_line
@@ -125,7 +135,7 @@ function! link#body#SkipLine(cur_line_nr) abort
     let l:regex = '\V\^' .. substitute( escape(&commentstring, '\'), '%s', '\\.\\*', 'g' ) .. '\$'
   endif
 
-  return match( getline(a:cur_line_nr), l:regex ) >= 0
+  return match( l:line_content, l:regex ) >= 0
 endfunction
 
 " Limit range to line containing heading/divider, so reference section stays

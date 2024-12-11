@@ -1,8 +1,11 @@
-" For an unknown reason, the order of the tests seems to matter here
+" For an unknown reason, both the order of the tests in this file and the order
+" in which the tests are run, seem to matter. This is why this filename is
+" prefixed with `_`.
 
 Before:
   unlet! g:vader_exception
   unlet! g:vader_throwpoint
+  unlet! g:link_enabled_filetypes
 After:
   unlet! g:vader_exception
   unlet! g:vader_throwpoint

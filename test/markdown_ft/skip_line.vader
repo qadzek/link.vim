@@ -29,14 +29,13 @@ Expect markdown:
 
   Continued
 
-  > Blockquote: [lacus][1]
+  > Blockquote: [lacus](http://lacus.org/lacus)
 
   End
 
   ## Links
 
   [0]: www.magna.com
-  [1]: http://lacus.org/lacus
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown:
