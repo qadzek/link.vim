@@ -59,7 +59,7 @@ function! link#utils#GetOpenCommand(os) abort
   elseif a:os ==? 'Linux'
     return 'xdg-open'
   elseif a:os ==? 'Windows'
-    return 'start'
+    return 'start ""'
   else
     throw 'Unknown operating system'
   endif
