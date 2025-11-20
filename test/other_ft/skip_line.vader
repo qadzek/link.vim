@@ -9,13 +9,13 @@ After:
 
 Given javascript:
   // filler
-  const url = ' www.magna.com '
+  const url = ' http://www.magna.com '
 
   // this is a comment: https://vitae.net/index.html
 ~~~~~
 Execute (Use default (commentstring) to skip lines; JavaScript):
   let b:link_heading = 'Links:'
-  % call link#Convert()
+  LinkConvertAll
 ~~~~~
 Expect javascript:
   // filler
@@ -25,12 +25,12 @@ Expect javascript:
 
   Links:
 
-  [0]: www.magna.com
+  [0]: http://www.magna.com
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given html:
   Filler
-  Not a comment: www.magna.com
+  Not a comment: http://www.magna.com
 
   <!-- this is a comment: https://vitae.net/index.html -->
 
@@ -41,7 +41,7 @@ Given html:
   End
 ~~~~~
 Execute (Use default (commentstring) to skip lines; HTML):
-  % call link#Convert()
+  LinkConvertAll
 ~~~~~
 Expect html:
   Filler
@@ -51,30 +51,29 @@ Expect html:
 
   Continued
 
-  > Blockquote: [1]
+  > Blockquote: http://lacus.org/lacus
 
   End
 
   Links:
 
-  [0]: www.magna.com
-  [1]: http://lacus.org/lacus
+  [0]: http://www.magna.com
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given html:
-  Not a comment: www.magna.com
+  Not a comment: http://www.magna.com
 
   <!-- this is a comment: https://vitae.net/index.html -->
 
   Continued
 
-  > Blockquote: http://lacus.org/lacus
+  // custom comment: http://lacus.org/lacus
 
   End
 ~~~~~
 Execute (Use custom pattern to skip lines; HTML):
-  let b:link_skip_line = '^>'
-  % call link#Convert()
+  let b:link_skip_line = '^//'
+  LinkConvertAll
 ~~~~~
 Expect html:
   Not a comment: [0]
@@ -83,12 +82,12 @@ Expect html:
 
   Continued
 
-  > Blockquote: http://lacus.org/lacus
+  // custom comment: http://lacus.org/lacus
 
   End
 
   Links:
 
-  [0]: www.magna.com
+  [0]: http://www.magna.com
   [1]: https://vitae.net/index.html
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

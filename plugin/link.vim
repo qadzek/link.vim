@@ -1,60 +1,82 @@
-" Boilerplate; see `:help use-cpo-save`
-if exists('g:loaded_link') | finish | endif
-let g:loaded_link = 1
-let s:save_compatible_options = &cpoptions
-set cpoptions&vim
+if exists('g:loaded_linkvim') | finish | endif
+let g:loaded_linkvim = 1
 
-" User can specify for which filetypes the plugin should be enabled
-let s:fts = get(g:, 'link_enabled_filetypes', g:link#globals#defaults['filetypes'])
-let s:fts = join(s:fts, ',')
+let g:linkvim#defaults = {
+  \ 'heading_markdown': '## Links',
+  \ 'heading_other': 'Links:',
+  \ 'start_index': 0,
+  \ 'missing_marker': '???',
+\ }
+let g:linkvim#protocols = ['wiki', 'http', 'https', 'ftp', 'ftps',
+  \ 'mailto', 'file', 'news', 'telnet', 'ssh', 'sftp' ]
 
-" Enable plugin on desired filetypes
-augroup link_vim_filetypes
-  autocmd!
-  execute 'autocmd FileType ' .. s:fts .. ' call LinkEnable()'
-augroup end
+let g:linkvim_cache_root = ''
+let g:linkvim_link_default_schemes = {}
+let g:linkvim_filetypes = ['md', 'wiki']
 
-function! LinkEnable() abort
-  " Define commands
-  " `init_view` stores view of current window (cursor position etc.) before
-  " range function moves cursor to first line of range
-  command! -buffer -bar -range LinkConvertRange
-    \ let b:init_view = winsaveview() |
-    \ :<line1>,<line2>call link#Convert()
-  command! -buffer -bar        LinkConvertAll            :% LinkConvertRange
-  command! -buffer -bar        LinkConvertSingle
-    \ let b:init_view = winsaveview() |
-    \ :call link#Convert('single-link')
-  command! -buffer -bar        LinkConvertSingleInsert
-    \ let b:init_view = winsaveview() |
-    \ :call link#Convert('single-link', 'insert')
-  command! -buffer -bar        LinkJump               :call link#Connect('jump')
-  command! -buffer -bar        LinkOpen               :call link#Connect('open')
-  command! -buffer -bar        LinkPeek               :call link#Connect('peek')
-  command! -buffer -bar        LinkReformat           :call link#Reformat()
+if has('win32') || has('win32unix')
+  let s:default_viewer = 'start'
+elseif has('mac') || has('ios') || substitute(system('uname'), '\n', '', '') =~# 'Darwin'
+  let s:default_viewer = 'open'
+else
+  let s:default_viewer = 'xdg-open'
+endif
+call linkvim#init#option('linkvim_viewer', {
+      \ '_' : s:default_viewer,
+      \ 'md' : ':edit',
+      \ 'wiki' : ':edit',
+      \})
 
-  " Initialize mappings
-  nnoremap <buffer> <silent> <Plug>(LinkVim-ConvertSingle) :LinkConvertSingle<CR>
-  inoremap <buffer> <silent> <Plug>(LinkVim-ConvertSingleInsert) <Esc>:LinkConvertSingleInsert<CR>
-  vnoremap <buffer> <silent> <Plug>(LinkVim-ConvertRange)  :LinkConvertRange<CR>
-  nnoremap <buffer> <silent> <Plug>(LinkVim-ConvertAll)    :LinkConvertAll<CR>
-  nnoremap <buffer> <silent> <Plug>(LinkVim-Jump)          :LinkJump<CR>
-  nnoremap <buffer> <silent> <Plug>(LinkVim-Open)          :LinkOpen<CR>
-  nnoremap <buffer> <silent> <Plug>(LinkVim-Peek)          :LinkPeek<CR>
-  nnoremap <buffer> <silent> <Plug>(LinkVim-Reformat)      :LinkReformat<CR>
+call linkvim#init#option('linkvim_link_default_schemes', {
+      \ 'wiki': { 'wiki': 'wiki', 'adoc': 'adoc' },
+      \ 'md': 'md',
+      \ 'md_fig': 'file',
+      \ 'org': 'wiki',
+      \ 'adoc_xref_inline': 'adoc',
+      \ 'adoc_xref_bracket': 'adoc',
+      \ 'adoc_link': 'file',
+      \ 'ref_target': '',
+      \ 'date': 'journal',
+      \ 'cite': 'zot',
+      \})
 
-  " Apply default mappings, if user has set special variable in vimrc
-  if get(g:, 'link_use_default_mappings', 0)
-    nmap <LocalLeader>c   <Plug>(LinkVim-ConvertSingle)
-    imap <C-g>c           <Plug>(LinkVim-ConvertSingleInsert)
-    vmap <LocalLeader>c   <Plug>(LinkVim-ConvertRange)
-    nmap <LocalLeader>a   <Plug>(LinkVim-ConvertAll)
-    nmap <LocalLeader>j   <Plug>(LinkVim-Jump)
-    nmap <LocalLeader>o   <Plug>(LinkVim-Open)
-    nmap <LocalLeader>p   <Plug>(LinkVim-Peek)
-    nmap <LocalLeader>r   <Plug>(LinkVim-Reformat)
-  endif
-endfunction
+" Initialize global commands
+command! -bar        LinkShow                call linkvim#link#show()
+command! -bar        LinkPrev                call linkvim#nav#prev_link()
+command! -bar        LinkNext                call linkvim#nav#next_link()
+command! -bar        LinkJump                call linkvim#x#jump#jump()
+command! -bar        LinkPeek                call linkvim#x#peek#peek()
+command! -bar        LinkOpen                call linkvim#x#open#open()
+command! -bar        LinkReformat            call linkvim#x#reformat#reformat()
+command! -bar        LinkConvertSingle       let b:init_view = winsaveview() | :call linkvim#x#convert#convert('single')
+command! -bar        LinkConvertSingleInsert let b:init_view = winsaveview() | :call linkvim#x#convert#convert('single', 'insert')
+command! -bar -range LinkConvertRange        let b:init_view = winsaveview() | :<line1>,<line2>call linkvim#x#convert#convert()
+command! -bar        LinkConvertAll          :% LinkConvertRange
 
-let &cpoptions = s:save_compatible_options
-unlet s:save_compatible_options
+" Initialize mappings
+nnoremap <silent> <plug>(LinkVim-Show)                     :LinkShow<cr>
+nnoremap <silent> <plug>(LinkVim-Prev)                     :LinkPrev<cr>
+nnoremap <silent> <plug>(LinkVim-Next)                     :LinkNext<cr>
+nnoremap <silent> <plug>(LinkVim-Jump)                     :LinkJump<cr>
+nnoremap <silent> <plug>(LinkVim-Peek)                     :LinkPeek<cr>
+nnoremap <silent> <plug>(LinkVim-Open)                     :LinkOpen<cr>
+nnoremap <silent> <plug>(LinkVim-Reformat)                 :LinkReformat<cr>
+nnoremap <silent> <plug>(LinkVim-ConvertSingle)            :LinkConvertSingle<cr>
+inoremap <silent> <plug>(LinkVim-ConvertSingleInsert) <cmd>:LinkConvertSingleInsert<cr>
+vnoremap <silent> <plug>(LinkVim-ConvertRange)             :LinkConvertRange<cr>
+nnoremap <silent> <plug>(LinkVim-ConvertAll)               :LinkConvertAll<cr>
+
+" Apply default mappings, if user has set variable (before loading plugin)
+if get(g:, 'link_use_default_mappings', 0)
+  nnoremap <LocalLeader>s <plug>(LinkVim-Show)
+  nnoremap <C-p>          <plug>(LinkVim-Prev)
+  nnoremap <C-n>          <plug>(LinkVim-Next)
+  nnoremap <LocalLeader>j <plug>(LinkVim-Jump)
+  nnoremap <LocalLeader>p <plug>(LinkVim-Peek)
+  nnoremap <LocalLeader>o <plug>(LinkVim-Open)
+  nnoremap <LocalLeader>r <plug>(LinkVim-Reformat)
+  nnoremap <LocalLeader>c <Plug>(LinkVim-ConvertSingle)
+  inoremap <C-g>c         <Plug>(LinkVim-ConvertSingleInsert)
+  vnoremap <LocalLeader>c <plug>(LinkVim-ConvertRange)
+  nnoremap <LocalLeader>a <plug>(LinkVim-ConvertAll)
+endif

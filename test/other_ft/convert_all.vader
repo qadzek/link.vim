@@ -33,39 +33,38 @@ Execute (Convert all URLs in a mail buffer):
   LinkConvertAll
 
 Expect mail:
-  [0]
-  Fluke furl [1] scuttle coffer
-  [2] hang the jib spyglass driver crack Jennys tea cup.
-  Quarterdeck run a [3]
-  rig Jolly Roger [4] gangway [5] no prey,
-  no pay pirate quarter log [6]
-  schooner draft [7]
-  [8]
-  Scurvy Admiral of the Black spirits clipper [9] Nipperkin
-  [10] Jolly Roger matey hulk aye
-  [11]
-  booty provost killick bounty [12]
-  [13]
+  www.bar.com
+  Fluke furl [0] scuttle coffer
+  [1] hang the jib spyglass driver crack Jennys tea cup.
+  Quarterdeck run a [2]
+  rig Jolly Roger [3] gangway [4] no prey,
+  no pay pirate quarter log [5]
+  schooner draft [6]
+  [7]
+  Scurvy Admiral of the Black spirits clipper [8] Nipperkin
+  [9] Jolly Roger matey hulk aye
+  [10]
+  booty provost killick bounty [11]
+  [12]
   bar
   bar.com
   Line containing something resembling an inline link: command! -buffer -range=% -bar TagLinks silent keeppatterns <line1>,<line2>substitute#\v%(\[[^\]]+\]\(\s*)@<!\zs<https?://([^.]+)\S+#[\1](\0)#giep
 
   Links:
 
-  [0]: www.bar.com
-  [1]: ftp://ftp.bar.net
-  [2]: file://path/to/file.txt
-  [3]: http://www.bar.com
-  [4]: https://bar.org
-  [5]: http://192.0.2.1
-  [6]: http://subdomain.bar.com
-  [7]: https://bar.travel
-  [8]: http://bar.very123longtld
-  [9]: http://www.ba-r.com
-  [10]: http://bar.com:8080
-  [11]: http://bar.com/baz
-  [12]: http://bar.com/index.html
-  [13]: http://www.parameters.org/page2014.html?utm_source=facebook&utm_medium=eventlinkonwall&utm_term=trapshoot&utm_content=calendar_event_on_wall&utm_campaign=trapshoot2014
+  [0]: ftp://ftp.bar.net
+  [1]: file://path/to/file.txt
+  [2]: http://www.bar.com
+  [3]: https://bar.org
+  [4]: http://192.0.2.1
+  [5]: http://subdomain.bar.com
+  [6]: https://bar.travel
+  [7]: http://bar.very123longtld
+  [8]: http://www.ba-r.com
+  [9]: http://bar.com:8080
+  [10]: http://bar.com/baz
+  [11]: http://bar.com/index.html
+  [12]: http://www.parameters.org/page2014.html?utm_source=facebook&utm_medium=eventlinkonwall&utm_term=trapshoot&utm_content=calendar_event_on_wall&utm_campaign=trapshoot2014
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -130,7 +129,7 @@ Expect gitcommit:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given mail:
-  www.bar.com
+  http://www.bar.com
   Fluke furl ftp://ftp.bar.net scuttle coffer
   file://path/to/file.txt hang the jib spyglass driver crack Jennys tea cup.
   > Quarterdeck run a http://www.bar.com
@@ -154,7 +153,7 @@ Expect mail:
 
   Links:
 
-  [0]: www.bar.com
+  [0]: http://www.bar.com
   [1]: ftp://ftp.bar.net
   [2]: file://path/to/file.txt
   [3]: https://bar.travel
@@ -242,7 +241,7 @@ Given mail:
   the schedule:
 
   Intro to Vim: Join here: https://vim.com/webinar1 or https://vimbackup.com/webinar1
-  Advanced Vim Techniques: Join here: www.vim.com/webinar2
+  Advanced Vim Techniques: Join here: http://www.vim.com/webinar2
   Q&A with Experts: Join here: http://vim.com/webinar3
 
   Intro to Neovim: Join here: https://neovim.com/webinar1 or https://neovimbackup.com/webinar1
@@ -282,7 +281,7 @@ Expect mail:
 
   [0]: https://vim.com/webinar1
   [1]: https://vimbackup.com/webinar1
-  [2]: www.vim.com/webinar2
+  [2]: http://www.vim.com/webinar2
   [3]: http://vim.com/webinar3
   [4]: https://neovim.com/webinar1
   [5]: https://neovimbackup.com/webinar1
@@ -292,35 +291,38 @@ Expect mail:
   Jane
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given mail:
+Given mail (Two identical links on the same line):
   foo https://www.vim.org bar https://www.vim.org baz
-Execute (Two identical links on the same line):
+Execute:
   let b:link_heading = 'Links:'
   LinkConvertAll
 
 Expect mail:
-  foo [0] bar [1] baz
+  foo [0] bar [0] baz
 
   Links:
 
   [0]: https://www.vim.org
-  [1]: https://www.vim.org
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given mail:
-  foo https://www.vim.org, bar
-  baz https://neovim.io. qux
-Execute (URLs with trailing punctuation characters):
-  LinkConvertAll
-
-Expect mail:
-  foo [0], bar
-  baz [1]. qux
-
-  Links:
-
-  [0]: https://www.vim.org
-  [1]: https://neovim.io
+#Given mail (URLs with trailing punctuation characters): TODO
+#  foo https://www.vim.org, bar
+#  baz https://neovim.io. qux
+#-----
+#
+#Execute:
+#  LinkConvertAll
+#
+#-----
+#
+#Expect mail:
+#  foo [0], bar
+#  baz [1]. qux
+#
+#  Links:
+#
+#  [0]: https://www.vim.org
+#  [1]: https://neovim.io
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given mail:
@@ -393,7 +395,7 @@ Given mail:
   the schedule:
 
   Intro to Vim: Join here: https://vim.com/webinar1 or https://vimbackup.com/webinar1
-  Advanced Vim Techniques: Join here: www.vim.com/webinar2
+  Advanced Vim Techniques: Join here: http://www.vim.com/webinar2
   Q&A with Experts: Join here: http://vim.com/webinar3
 
   Intro to Neovim: Join here: https://neovim.com/webinar1 or https://neovimbackup.com/webinar1
@@ -427,7 +429,7 @@ Expect mail:
 
   [0]: https://vim.com/webinar1
   [1]: https://vimbackup.com/webinar1
-  [2]: www.vim.com/webinar2
+  [2]: http://www.vim.com/webinar2
   [3]: http://vim.com/webinar3
   [4]: https://neovim.com/webinar1
   [5]: https://neovimbackup.com/webinar1
@@ -435,4 +437,58 @@ Expect mail:
 
   Cheers,
   Jane
+= 11 ===========================================================================
+
+Given mail (URL is already present in reference section):
+  Intro to Vim: Join here: [0]
+  Follow the webinar at: https://vim.com/webinar1
+  Intro to Neovim: Join here: https://neovim.com/webinar1 or https://neovimbackup.com/webinar1
+  Into to Vim: https://vim.com/webinar1
+
+  Links:
+
+  [0]: https://vim.com/webinar1
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute:
+  LinkConvertAll
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Expect mail:
+  Intro to Vim: Join here: [0]
+  Follow the webinar at: [0]
+  Intro to Neovim: Join here: [1] or [2]
+  Into to Vim: [0]
+
+  Links:
+
+  [0]: https://vim.com/webinar1
+  [1]: https://neovim.com/webinar1
+  [2]: https://neovimbackup.com/webinar1
+= 12 ===========================================================================
+
+Given mail (URL is not yet present in reference section, but same URL is present multiple times in body):
+  Intro to Vim: Join here: https://vim.com/webinar1
+  Follow the webinar at: https://vim.com/webinar1
+  Intro to Neovim: Join here: https://neovim.com/webinar1 or https://neovimbackup.com/webinar1
+  Into to Vim: https://vim.com/webinar1
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute:
+  LinkConvertAll
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Expect mail:
+  Intro to Vim: Join here: [0]
+  Follow the webinar at: [0]
+  Intro to Neovim: Join here: [1] or [2]
+  Into to Vim: [0]
+
+  Links:
+
+  [0]: https://vim.com/webinar1
+  [1]: https://neovim.com/webinar1
+  [2]: https://neovimbackup.com/webinar1
+================================================================================

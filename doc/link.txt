@@ -1,4 +1,4 @@
-*link.txt* Convert inline links (Markdown or plaintext) to reference links
+*link.txt* Convert inline links to reference links
 
                                                                  *link* *link.vim*
 >
@@ -10,7 +10,7 @@
       |_______||__| |__| \__| |__|\__\ (__)    \__/     |__| |__|  |__|
 <
 
-Version: 1.4.0
+Version: 2.0.0
 Author:  qadzek
 License: MIT
 
@@ -35,6 +35,17 @@ of your document helps maintain the flow of the body of the text. However,
 managing reference links manually can be tedious. This plugin for Vim and
 Neovim helps converting and handling these links. Links in Markdown syntax and
 plaintext links (e.g. in emails, in text files etc.) are supported.
+
+The following link formats are fully supported:
+
+- Markdown external link:  `[Vim](https://www.vim.org)`
+- plaintext external link: `https://neovim.io`
+
+The following link formats are supported in varying degrees:
+
+- Markdown internal link:                 `[My Recipes](recipes.md)`
+- Wiki internal link with description:    `[[recipes.md|My Recipes]]`
+- Wiki internal link without description: `[[recipes.md]]`
 
 The main command will convert >
   # Notes
@@ -77,6 +88,10 @@ The link.vim plugin exposes the following commands.
 All `:LinkConvert*` commands will add a heading below the document body if
 needed.
 
+*:LinkPrev*
+*:LinkNext*
+    Move the cursor to the previous/next link.
+
 *:LinkConvertSingle*
     Convert one inline link on the current line of the document body to a
     reference link. If there are multiple links on the current line, pick the
@@ -98,8 +113,8 @@ needed.
     Convert all inline links in the document body to reference links.
 
 *:LinkOpen*
-    For a reference link within the document body, open the URL of the
-    corresponding link reference definition in the default browser.
+    Open an external link in the default browser. Open an internal link in the
+    editor.
 
 *:LinkPeek*
     For a reference link within the document body, show a preview of the
@@ -110,6 +125,9 @@ needed.
     corresponding link reference definition in the reference section, and the
     other way around.
 
+*:LinkShow*
+    Show some info on link under the cursor. Useful for debugging.
+
 *:LinkReformat*
     Reformat reference links and reference section. This command is powerful;
     use it with care. It deletes the current reference section and
@@ -119,15 +137,11 @@ needed.
         [Vim][1] is a text editor.
         [Neovim][0] is another one.
 
-        ## Links
-
         [0]: https://neovim.io
         [1]: https://www.vim.org
 <      is turned into >
         [Vim][0] is a text editor.
         [Neovim][1] is another one.
-
-        ## Links
 
         [0]: https://www.vim.org
         [1]: https://neovim.io
@@ -136,15 +150,11 @@ needed.
         Vim [0] is a text editor.
         Bram Moolenaar created Vim [1].
 
-        Links:
-
         [0]: https://www.vim.org
         [1]: https://www.vim.org
 <      is turned into >
         Vim [0] is a text editor.
         Bram Moolenaar created Vim [0].
-
-        Links:
 
         [0]: https://www.vim.org
 <
@@ -152,15 +162,11 @@ needed.
         [Vim][0] is a text editor.
         Neovim is another one.
 
-        ## Links
-
         [0]: https://www.vim.org
         [1]: https://neovim.io
 <      is turned into >
         [Vim][0] is a text editor.
         Neovim is another one.
-
-        ## Links
 
         [0]: https://www.vim.org
 <
@@ -168,17 +174,14 @@ needed.
         Vim [0] is a text editor.
         Neovim [1] is another one.
 
-        Links:
-
         [0]: https://www.vim.org
 <      is turned into >
         Vim [0] is a text editor.
         Neovim [???] is another one.
 
-        Links:
-
         [0]: https://www.vim.org
 <
+
 ==============================================================================
 MAPPINGS                                                         *link-mappings*
 
@@ -186,49 +189,43 @@ No mappings are built-in to avoid conflicts with existing key bindings.
 
                                                    *g:link_use_default_mappings*
 Enable the suggested key bindings (the same as mentioned below) by adding this
-line to your `vimrc`: >
+line to your `vimrc`, before your plugin manager initializes: >
   let g:link_use_default_mappings = 1
 <
 If you prefer to specify your own key bindings, ensure the variable mentioned
 above is not set (or set to `0`) and add the following to your `vimrc`: >
+  nnoremap <C-p>          <plug>(LinkVim-Prev)
+  nnoremap <C-n>          <plug>(LinkVim-Next)
+  nnoremap <LocalLeader>j <plug>(LinkVim-Jump)
+  nnoremap <LocalLeader>p <plug>(LinkVim-Peek)
+  nnoremap <LocalLeader>o <plug>(LinkVim-Open)
+  nnoremap <LocalLeader>r <plug>(LinkVim-Reformat)
+  nnoremap <LocalLeader>c <Plug>(LinkVim-ConvertSingle)
+  inoremap <C-g>c         <Plug>(LinkVim-ConvertSingleInsert)
+  vnoremap <LocalLeader>c <plug>(LinkVim-ConvertRange)
+  nnoremap <LocalLeader>a <plug>(LinkVim-ConvertAll)
+  nnoremap <LocalLeader>s <plug>(LinkVim-Show)
+<
+To ensure that these key bindings are only applied to a particular filetype,
+add them to e.g. `~/.vim/ftplugin/markdown.vim` instead. Make sure to add the
+`<buffer>` attribute.
+
+To apply these key bindings to multiple filetypes, you can add an |autocmd| to
+your `vimrc`: >
   augroup linkvim_key_bindings
     autocmd!
     autocmd Filetype markdown,vimwiki,mail,text :call LinkVimAddKeyBindings()
   augroup END
 
   function! LinkVimAddKeyBindings()
-    nmap <LocalLeader>c       <Plug>(LinkVim-ConvertSingle)
-    imap <C-g>c               <Plug>(LinkVim-ConvertSingleInsert)
-    vmap <LocalLeader>c       <Plug>(LinkVim-ConvertRange)
-    nmap <LocalLeader>a       <Plug>(LinkVim-ConvertAll)
-    nmap <LocalLeader>j       <Plug>(LinkVim-Jump)
-    nmap <LocalLeader>o       <Plug>(LinkVim-Open)
-    nmap <LocalLeader>p       <Plug>(LinkVim-Peek)
-    nmap <LocalLeader>r       <Plug>(LinkVim-Reformat)
+    nnoremap <buffer> <LocalLeader>a <plug>(LinkVim-ConvertAll)
+    ...
   endfunction
 <
-You might want to change the filetypes mentioned in the |autocmd|. Another way
-to ensure that these key bindings are only applied to certain filetypes is to
-add them to e.g. `~/.vim/ftplugin/markdown.vim`. That way, you don't need to
-use an |autocmd| or function.
-
 ==============================================================================
 CONFIGURATION                                               *link-configuration*
 
-By default, the plugin operates on the following filetypes: `markdown`,
-`vimwiki`, `email` and `text`.
-
-                                                      *g:link_enabled_filetypes*
-These filetypes can be customized: >
-  let g:link_enabled_filetypes = [ 'markdown', 'gitcommit' ]
-<
-For examples of how users have configured this plugin for particular
-filetypes, e.g. `gitcommit` buffers, visit the Wiki:
-https://github.com/qadzek/link.vim/wiki
-
-------------------------------------------------------------------------------
-
-Some of the following configuration options exist as a local buffer variable
+Most of the following configuration options exist as a local buffer variable
 (`b:`) or as a global variable (`g:`). The buffer-local variables enjoy a
 higher priority.
 
@@ -248,7 +245,8 @@ They can also be set in `vimrc`, if they are wrapped in an |autocmd|: >
 *g:link_heading*
     By default, the heading `## Links` (Markdown) or `Links:` (other
     filetypes) will be used to mark the divide between the document body and
-    the reference section. To modify this heading:
+    the reference section. Above and below this heading, a blank line will be
+    inserted. To modify this heading:
       `let g:link_heading = '# My Resources'`
 
     The heading can be disabled by setting it to an empty string. This is
@@ -259,6 +257,10 @@ They can also be set in `vimrc`, if they are wrapped in an |autocmd|: >
         autocmd BufRead,BufNewFile README.md let b:link_heading = ''
       augroup END
 <
+    A multi-line heading can be configured by providing a list of strings.
+    Note that any blank lines need to be specified explicitly.
+      `let b:link_heading = [ '', '-----', 'My Links:', '' ]`
+
 *b:link_start_index*
 *g:link_start_index*
     By default, the first converted link gets a label of 0. To change this:
@@ -276,21 +278,41 @@ They can also be set in `vimrc`, if they are wrapped in an |autocmd|: >
 
 *b:link_skip_line*
     By default, links in lines matching |commentstring| are not converted.
-    This pattern can be modified. E.g. to skip blockquotes:
-      `let b:link_skip_line = '^>'`
+    This pattern can be modified. E.g. to skip lines starting with a plus:
+      `let b:link_skip_line = '^+'`
 
 *b:link_include_blockquotes*
-    By default, in `markdown` and `mail` buffers, links in blockquotes (lines
-    starting with `>`) are not converted. To include them:
+*g:link_include_blockquotes*
+    By default, links in blockquotes (lines starting with `>`) are not
+    converted. To include them:
       `let b:link_include_blockquotes = 1`
 
 *b:link_disable_internal_links*
 *g:link_disable_internal_links*
-    Popular knowledge base plugins, such as Vimwiki, obsidian.nvim, and
-    wiki.vim, support links to internal wiki pages. To assist their users, by
-    default a link like `[strawberry cake](recipes.md)` will be converted in
-    Markdown buffers. To disable this feature and convert only URLs:
+    Popular knowledge base plugins, such as wiki.vim, obsidian.nvim, and
+    Vimwiki, support links to internal wiki pages. To assist their users, by
+    default a link to an internal file, e.g. `[strawberry cake](recipes.md)`
+    will be converted too. To disable this feature and convert only URLs:
       `let g:link_disable_internal_links = 1`
+
+*b:link_missing_marker*
+*g:link_missing_marker*
+    The `:LinkReformat` command marks reference links with a missing link
+    reference definition. E.g. `[foo][3]` will be converted to `[foo][???]` if
+    there is no corresponding `[3]: ...`. To change the default `???`:
+      `let g:link_missing_marker = 'X'`
+
+------------------------------------------------------------------------------
+
+*g:link_enabled_filetypes*                                               REMOVED
+    This plugin now operates on all filetypes by default. Configure your
+    plugin manager to limit the plugin to certain filetypes.
+
+    vim-plug:
+      `Plug 'qadzek/link.vim', { 'for': ['markdown', 'mail'] }`
+
+    lazy.nvim:
+      `{ "qadzek/link.vim", ft = { "markdown", "mail" } }`
 
 ==============================================================================
 MISC                                                                 *link-misc*
@@ -305,19 +327,9 @@ Other options:
   - https://github.com/vim-pandoc/vim-pandoc-syntax
   - https://github.com/MeanderingProgrammer/render-markdown.nvim
 
-------------------------------------------------------------------------------
-
-Images using Markdown syntax are supported.
-`![Sun](https://example.com/sun.jpg)` will be converted to `![Sun][2]`.
-
 ==============================================================================
 LIMITATIONS                                                   *link-limitations*
 
-- When converting an inline link to a reference link, a link reference
-  definition will be created, even if the same URL is already present in the
-  reference section. It would be better if the same label were reused. Using
-  `:LinkReformat` fixes this though.
-- URLs containing the asterisk character (`*`) are not supported.
 - Only numeric labels are supported.
 
 ==============================================================================
@@ -332,11 +344,21 @@ https://github.com/junegunn/vader.vim
 https://google.github.io/styleguide/vimscriptguide.xml
 https://google.github.io/styleguide/vimscriptfull.xml
 
-To analyze the code for issues: `vint **/*.vim`
-To execute the tests: `./test/run_tests.sh`
+To analyze the code for issues: `vint .`
+To run the tests, refer to `test/README.md`.
 
 ==============================================================================
 CHANGELOG                                                       *link-changelog*
+
+2.0.0   2025-11-20                                             BREAKING CHANGE
+        - Rewrite based on `wiki.vim`
+        - Support converting plaintext and Markdown links in the same file
+        - Support internal links (#14)
+        - Support multi-line headings (#21)
+        - Avoid adding duplicate links to reference section
+        - Support URLs containing special characters like `~` or `*`
+        - Add commands `:LinkPrev`, `:LinkNext` and `:LinkShow`
+        - Remove `g:link_enabled_filetypes`
 
 1.4.0   2024-12-11
         - Skip links in blockquotes (#16)
@@ -405,11 +427,17 @@ CHANGELOG                                                       *link-changelog*
 ==============================================================================
 CREDITS                                                           *link-credits*
 
+Originally, `link.vim` was written from scratch. To implement more advanced
+features, in `v2` it has been rewritten based on the excellent `wiki.vim` plugin
+by Karl Yngve Lervåg (@lervag):
+https://github.com/lervag/wiki.vim
+
 Learn Vimscript the Hard Way by Steve Losh:
 https://learnvimscriptthehardway.stevelosh.com/
 
 Contributors and their GitHub usernames:
 - Enno (@Konfekt)
+- @unclenull
 
 ==============================================================================
 

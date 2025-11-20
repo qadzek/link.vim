@@ -1,142 +1,252 @@
 Before:
   messages clear
+  normal! gg
 
-Given markdown:
-  Nascetur [ridiculus][0] mus.
+~ 1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown (Regular URL):
+  [ridiculus][0] mus.
 
   ## Links
 
   [0]: https://www.vim.org/
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-" These tests always fail in a container; adding FIXME marks the block as a
-" pending test case and ensures it doesn't affect the exit status
-Execute (FIXME Regular URL):
-  LinkOpen
-  AssertEqual 0, v:shell_error
+Execute:
+  let out = execute('LinkOpen')
+  let message = split(out, "\n")[0]
+  let exp = 'https://www.vim.org/'
+  AssertEqual exp, message
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~ 2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given markdown:
-  Nascetur [ridiculus][0] mus.
+Given markdown (URL containing percent-encoding):
+  [ridiculus][0] mus.
 
   ## Links
 
   [0]: https://en.wikipedia.org/wiki/Giro_d%27Italia
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Execute (FIXME URL containing percent-encoding):
-  LinkOpen
-  AssertEqual 0, v:shell_error
+Execute:
+  let out = execute('LinkOpen')
+  let message = split(out, "\n")[0]
+  let exp = 'https://en.wikipedia.org/wiki/Giro_d%27Italia'
+  AssertEqual exp, message
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~ 3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given markdown:
-  Nascetur [ridiculus][0] mus.
+Given markdown (URL containing percent-encoding and hash sign):
+  [ridiculus][0] mus.
 
   ## Links
 
   [0]: https://en.wikipedia.org/wiki/Giro_d%27Italia#Defunct_classifications
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Execute (FIXME URL containing percent-encoding and hash sign):
-  LinkOpen
-  AssertEqual 0, v:shell_error
+Execute:
+  let out = execute('LinkOpen')
+  let message = split(out, "\n")[0]
+  let exp = 'https://en.wikipedia.org/wiki/Giro_d%27Italia#Defunct_classifications'
+  AssertEqual exp, message
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~ 4 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given markdown:
-  Nascetur [ridiculus][0] mus.
+Given markdown (URL containing question mark):
+  [ridiculus][0] mus.
 
   ## Links
 
   [0]: https://www.mobileread.com/forums/showthread.php?p=1769412
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Execute (FIXME URL containing question mark):
-  LinkOpen
-  AssertEqual 0, v:shell_error
+Execute:
+  let out = execute('LinkOpen')
+  let message = split(out, "\n")[0]
+  let exp = 'https://www.mobileread.com/forums/showthread.php?p=1769412'
+  AssertEqual exp, message
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~ 5 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given markdown:
-  Nascetur [ridiculus][0] mus.
+Given markdown (URL containing question mark and ampersand):
+  [ridiculus][0] mus.
 
   ## Links
 
   [0]: https://www.mobileread.com/forums/showpost.php?p=1769412&postcount=1
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Execute (FIXME URL containing question mark and ampersand):
-  LinkOpen
-  AssertEqual 0, v:shell_error
+Execute:
+  let out = execute('LinkOpen')
+  let message = split(out, "\n")[0]
+  let exp = 'https://www.mobileread.com/forums/showpost.php?p=1769412&postcount=1'
+  AssertEqual exp, message
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~ 6 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given markdown;
-# A consectetuer nunc justo ac nisl.
-
-## Nam vitae purus
-
-Cum sociis natoque penatibus et magnis dis parturient montes,
-nascetur ridiculus mus.
-
-## Links
-
-[0]: http://www.loremipsumdolorsitamet.com
+Given markdown (From reference section):
+  # A consectetuer nunc justo ac nisl.
+  
+  ## Nam vitae purus
+  
+  Cum sociis natoque penatibus et magnis dis parturient montes,
+  nascetur ridiculus mus.
+  
+  ## Links
+  
+  [0]: http://www.loremipsumdolorsitamet.com
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-Execute (From reference section):
+Execute:
   call cursor('$', 1)
-  LinkOpen
-  let expected = g:link#globals#errors['not_from_ref']
-  let actual = split( execute('messages'), '\n')[-1]
-  AssertEqual expected, actual
+  let out = execute('LinkOpen')
+  let message = split(out, "\n")[0]
+  let exp = 'http://www.loremipsumdolorsitamet.com'
+  AssertEqual exp, message
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~ 7 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given markdown;
-# A consectetuer nunc justo ac nisl.
-
-## Nam vitae purus
-
-Cum sociis [natoque][0] penatibus et magnis dis parturient montes,
-nascetur ridiculus mus.
-
-Praesent semper magna. In eu justo. Nunc vitae risus nec
-sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
-
-## Links
-
-[0]: loremipsumdolorsitamet.com
+Given markdown (Line without link):
+  Praesent semper magna. In eu justo. Nunc vitae risus nec
+  sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-Execute (No reference link on line):
-  LinkOpen
-  let expected = g:link#globals#errors['no_reference_link']
-  let actual = split( execute('messages'), '\n')[-1]
-  AssertEqual expected, actual
+Execute:
+  let out = execute('LinkOpen')
+  let message = split(out, "\n")[0]
+  let exp = 'link.vim: No link found under cursor'
+  AssertEqual exp, message
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~ 8 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given markdown;
-# A consectetuer nunc justo ac nisl.
-
-## Nam vitae purus
-
-Cum sociis [natoque][0] penatibus et magnis dis parturient montes,
-nascetur ridiculus mus.
-
-Praesent semper magna. In eu justo. Nunc vitae risus nec
-sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
-
-## Links
-
-[0]: loremipsum.com
+Given markdown (Invalid URL: no protocol):
+  [natoque][0] penatibus et magnis dis parturient montes,
+  nascetur ridiculus mus.
+  
+  ## Links
+  
+  [0]: loremipsum.com
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-Execute (No valid URL: does not start with a protocol like 'http' or with 'www'):
-  call cursor(5, 1)
+Execute:
+  let out = execute('LinkOpen')
+  let messages = split(out, "\n")
+  let exp = []
+  AssertEqual exp, messages
+
+~ 9 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown (Internal link to existing Markdown file):
+  [ridiculus][0] mus.
+
+  [0]: bar.md
+--------------------------------------------------------------------------------
+
+Execute:
+  silent !touch bar.md
   LinkOpen
-  let expected = g:link#globals#errors['no_valid_url'] .. ' loremipsum.com'
-  let actual = split( execute('messages'), '\n')[-1]
-  AssertEqual expected, actual
+  let filename = expand('%:t')
+  AssertEqual 'bar.md', filename
+  silent !rm bar.md
+
+~ 10 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown (Internal link to non-existent Markdown file):
+  [ridiculus][0] mus.
+
+  [0]: foo.md
+--------------------------------------------------------------------------------
+
+Execute:
+  LinkOpen
+  let filename = expand('%:t')
+  AssertEqual '[Vader-workbench]', filename
+
+~ 11 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown (External Wiki link with description):
+  [[https://www.vim.org|Vim's website]] et magnis dis parturient montes,
+  nascetur ridiculus mus.
+--------------------------------------------------------------------------------
+
+Execute:
+  let out = execute('LinkOpen')
+  let message = split(out, "\n")[0]
+  let exp = 'https://www.vim.org'
+  AssertEqual exp, message
+
+~ 12 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown (External Wiki link without description):
+  [[https://www.vim.org]] et magnis dis parturient montes,
+  nascetur ridiculus mus.
+--------------------------------------------------------------------------------
+
+Execute:
+  let out = execute('LinkOpen')
+  let message = split(out, "\n")[0]
+  let exp = 'https://www.vim.org'
+  AssertEqual exp, message
+
+~ 13 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown (Internal Wiki link with description, without extension to existing file):
+  [[bar|My recipes]] mus.
+
+--------------------------------------------------------------------------------
+
+Execute:
+  silent !touch bar.md
+  LinkOpen
+  let filename = expand('%:t')
+  AssertEqual 'bar.md', filename
+  silent !rm bar.md
+
+~ 14 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown (Internal Wiki link with description, with extension to existing file):
+  [[bar.md|My recipes]] mus.
+
+--------------------------------------------------------------------------------
+
+Execute:
+  silent !touch bar.md
+  LinkOpen
+  let filename = expand('%:t')
+  AssertEqual 'bar.md', filename
+  silent !rm bar.md
+
+~ 15 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown (Internal Wiki link with description, without extension to non-existent file):
+  [[alpha|My recipes]] mus.
+
+--------------------------------------------------------------------------------
+
+Execute:
+  LinkOpen
+  let filename = expand('%:t')
+  AssertEqual 'alpha.md', filename
+
+~ 16 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown (Internal Wiki link without description, without extension to non-existent file):
+  [[bravo]] mus.
+
+--------------------------------------------------------------------------------
+
+Execute:
+  LinkOpen
+  let filename = expand('%:t')
+  AssertEqual 'bravo.md', filename
+
+~ 17 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown (Internal Wiki link without description, with extension to non-existent file):
+  [[charlie.md]] mus.
+
+--------------------------------------------------------------------------------
+
+Execute:
+  LinkOpen
+  let filename = expand('%:t')
+  AssertEqual 'charlie.md', filename
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

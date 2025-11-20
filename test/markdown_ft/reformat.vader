@@ -27,17 +27,17 @@ Given markdown:
   ## Links
 
   [0]: http://cutlass.com
-  [1]: www.topmast.org
-  [2]: www.sink.com
+  [1]: https://www.topmast.org
+  [2]: https://www.sink.com
   [3]: https://tackle.net
-  [4]: www.sloop.com
-  [5]: www.gallant.top
-  [6]: crimp.com
-  [7]: www.thunder.com
+  [4]: https://www.sloop.com
+  [5]: https://www.gallant.top
+  [6]: http://crimp.com
+  [7]: https://www.thunder.com
   [8]: http://main.es
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Delete two links, [2] and [5]):
-  call link#Reformat()
+  LinkReformat
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect markdown:
   # Yar Pirate Ipsum
@@ -66,11 +66,11 @@ Expect markdown:
   ## Links
 
   [0]: http://cutlass.com
-  [1]: www.topmast.org
+  [1]: https://www.topmast.org
   [2]: https://tackle.net
-  [3]: www.sloop.com
-  [4]: crimp.com
-  [5]: www.thunder.com
+  [3]: https://www.sloop.com
+  [4]: http://crimp.com
+  [5]: https://www.thunder.com
   [6]: http://main.es
 ~~~ 2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -100,22 +100,22 @@ Given markdown:
 
   ## Links
 
-  [1]: www.topmast.org
-  [2]: www.sink.com
-  [6]: crimp.com
+  [1]: https://www.topmast.org
+  [2]: https://www.sink.com
+  [6]: http://crimp.com
   [3]: https://tackle.net
-  [19]: www.thunder.com
-  [4]: www.sloop.com
-  [5]: www.gallant.top
-  [23]: www.topmast.org
-  [7]: www.thunder.com
+  [19]: https://www.thunder.com
+  [4]: https://www.sloop.com
+  [5]: https://www.gallant.top
+  [23]: https://www.topmast.org
+  [7]: https://www.thunder.com
   [0]: http://cutlass.com
-  [15]: www.thunder.com
-  [4]: www.sloop.com
+  [15]: https://www.thunder.com
+  [4]: https://www.sloop.com
   [8]: http://main.es
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute (Merge links):
-  call link#Reformat()
+  LinkReformat
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect markdown:
   # Yar Pirate Ipsum
@@ -144,11 +144,11 @@ Expect markdown:
   ## Links
 
   [0]: http://cutlass.com
-  [1]: www.topmast.org
-  [2]: www.thunder.com
+  [1]: https://www.topmast.org
+  [2]: https://www.thunder.com
   [3]: https://tackle.net
-  [4]: www.sloop.com
-  [5]: crimp.com
+  [4]: https://www.sloop.com
+  [5]: http://crimp.com
   [6]: http://main.es
 ~~~ 3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -165,21 +165,21 @@ Given markdown:
   Nunc convallis, massa eu [vestibulum][10] commodo, quam mauris interdum arcu,
   [pellentesque][6] diam metus ut nulla. Vestibulum eu
   dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
-  lobortis ac, [fringilla][17] ac, [turpis][8].
+  lobortis ac, [fringilla][1700] ac, [turpis][8].
   Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque
   dapibus. Duis venenatis magna feugiat.
 
   ## Links
 
   [2]: https://vitae.net/index.html
-  [1]: www.magna.com
+  [1]: https://www.magna.com
   [4]: ftp://nunc.com
-  [3]: www.nec.com
-  [5]: www.sem.com
+  [3]: https://www.nec.com
+  [5]: https://www.sem.com
   [9]: http://lacus.org/lacus
   [12]: http://no-exist.com
   [6]: https://pellentesque.com
-  [17]: www.fringilla.com
+  [1700]: https://www.fringilla.com
   [8]: http://turpis.net
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute ([10] has no corresponding label in the references section, [12] has no corresponding label in the document body; do not move cursor):
@@ -209,12 +209,165 @@ Expect markdown:
   ## Links
 
   [0]: http://lacus.org/lacus
-  [1]: www.magna.com
+  [1]: https://www.magna.com
   [2]: https://vitae.net/index.html
-  [3]: www.sem.com
+  [3]: https://www.sem.com
   [4]: ftp://nunc.com
-  [5]: www.nec.com
+  [5]: https://www.nec.com
   [6]: https://pellentesque.com
-  [7]: www.fringilla.com
+  [7]: https://www.fringilla.com
   [8]: http://turpis.net
+~ 4 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown (Reformat an already reformatted buffer, with links already merged):
+  Sapien ac iaculis feugiat, [lacus][0] lacus accumsan
+  lorem, quis volutpat justo turpis ac mauris.
+
+  Duis velit [magna][1], scelerisque
+  [vitae][2], varius ut, aliquam vel, justo. Proin ac
+  augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
+  Ut [sem][3] [nunc][4], vestibulum [nec][5],
+  sodales vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
+
+  Nunc convallis, massa eu [vestibulum][???] commodo, quam mauris interdum arcu,
+  [pellentesque][1] diam metus ut nulla. Vestibulum eu
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  lobortis ac, [fringilla][6] ac, [turpis][2].
+  Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque
+  dapibus. Duis venenatis magna feugiat.
+
+  ## Links
+
+  [0]: http://lacus.org/lacus
+  [1]: https://www.magna.com
+  [2]: https://vitae.net/index.html
+  [3]: https://www.sem.com
+  [4]: ftp://nunc.com
+  [5]: https://www.nec.com
+  [6]: https://www.fringilla.com
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute:
+  LinkReformat
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Expect markdown:
+  Sapien ac iaculis feugiat, [lacus][0] lacus accumsan
+  lorem, quis volutpat justo turpis ac mauris.
+
+  Duis velit [magna][1], scelerisque
+  [vitae][2], varius ut, aliquam vel, justo. Proin ac
+  augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
+  Ut [sem][3] [nunc][4], vestibulum [nec][5],
+  sodales vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
+
+  Nunc convallis, massa eu [vestibulum][???] commodo, quam mauris interdum arcu,
+  [pellentesque][1] diam metus ut nulla. Vestibulum eu
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  lobortis ac, [fringilla][6] ac, [turpis][2].
+  Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque
+  dapibus. Duis venenatis magna feugiat.
+
+  ## Links
+
+  [0]: http://lacus.org/lacus
+  [1]: https://www.magna.com
+  [2]: https://vitae.net/index.html
+  [3]: https://www.sem.com
+  [4]: ftp://nunc.com
+  [5]: https://www.nec.com
+  [6]: https://www.fringilla.com
+
+~ 5 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown (Internal links):
+  Sapien ac iaculis feugiat, [lacus][0] lacus accumsan
+  lorem, quis volutpat justo turpis ac mauris.
+
+  Duis velit [magna][1], scelerisque
+  [vitae][2], varius ut, aliquam vel, justo. Proin ac
+  augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
+  Ut [sem][3] [nunc][4], vestibulum [nec][5],
+  sodales vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
+
+  Nunc convallis, massa eu [vestibulum][???] commodo, quam mauris interdum arcu,
+  [pellentesque][1] diam metus ut nulla. Vestibulum eu
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  lobortis ac, [fringilla][6] ac, [turpis][2].
+  Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque
+  dapibus. Duis venenatis magna feugiat.
+
+  ## Links
+
+  [0]: http://lacus.org/lacus
+  [1]: foo.md
+  [2]: https://vitae.net/index.html
+  [3]: non-existent.md
+  [4]: ftp://nunc.com
+  [5]: bar.md
+  [6]: https://www.fringilla.com
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute:
+  silent !touch foo.md bar.md
+  LinkReformat
+  silent !rm foo.md bar.md
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Expect markdown:
+  Sapien ac iaculis feugiat, [lacus][0] lacus accumsan
+  lorem, quis volutpat justo turpis ac mauris.
+
+  Duis velit [magna][1], scelerisque
+  [vitae][2], varius ut, aliquam vel, justo. Proin ac
+  augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
+  Ut [sem][???] [nunc][3], vestibulum [nec][4],
+  sodales vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
+
+  Nunc convallis, massa eu [vestibulum][???] commodo, quam mauris interdum arcu,
+  [pellentesque][1] diam metus ut nulla. Vestibulum eu
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  lobortis ac, [fringilla][5] ac, [turpis][2].
+  Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque
+  dapibus. Duis venenatis magna feugiat.
+
+  ## Links
+
+  [0]: http://lacus.org/lacus
+  [1]: foo.md
+  [2]: https://vitae.net/index.html
+  [3]: ftp://nunc.com
+  [4]: bar.md
+  [5]: https://www.fringilla.com
+
+~ 6 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown (Ignore non-numeric labels):
+  Sapien ac iaculis feugiat, [lacus][1] lacus accumsan
+  lorem, [foo] volutpat justo turpis ac mauris.
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  Duis ac erat. Etiam [foo bar baz] est eu elit pellentesque
+  dapibus. Duis venenatis magna feugiat.
+
+  ## Links
+
+  [1]: http://lacus.org/lacus
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute:
+  LinkReformat
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Expect markdown:
+  Sapien ac iaculis feugiat, [lacus][0] lacus accumsan
+  lorem, [foo] volutpat justo turpis ac mauris.
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  Duis ac erat. Etiam [foo bar baz] est eu elit pellentesque
+  dapibus. Duis venenatis magna feugiat.
+
+  ## Links
+
+  [0]: http://lacus.org/lacus
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

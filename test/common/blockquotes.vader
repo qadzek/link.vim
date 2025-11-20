@@ -1,19 +1,21 @@
 Before:
   unlet! b:link_include_blockquotes
+  unlet! g:link_include_blockquotes
   unlet! b:link_heading
   unlet! b:link_heading_before
   unlet! b:link_skip_line
 After:
   unlet! b:link_include_blockquotes
+  unlet! g:link_include_blockquotes
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given markdown:
+Given markdown (Links in blockquotes are skipped by default, including in `markdown` buffers):
   lorem [magna](www.magna.com)
   > Blockquote: [lacus](http://lacus.org/lacus)
   [vitae](https://vitae.net/index.html)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Execute (By default, in `markdown` buffers links in blockquotes are skipped):
+Execute:
 
   LinkConvertAll
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -28,12 +30,12 @@ Expect markdown:
   [1]: https://vitae.net/index.html
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given mail:
-  lorem www.magna.com
+Given mail (Links in blockquotes are skipped by default, including in `mail` buffers):
+  lorem http://www.magna.com
   > Blockquote: http://lacus.org/lacus
   https://vitae.net/index.html
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Execute (By default, in `mail` buffers links in blockquotes are skipped):
+Execute:
 
   LinkConvertAll
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -44,38 +46,37 @@ Expect mail:
 
   Links:
 
-  [0]: www.magna.com
+  [0]: http://www.magna.com
   [1]: https://vitae.net/index.html
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given gitcommit:
-  lorem www.magna.com
+Given gitcommit (Links in blockquotes are skipped by default, including in `gitcommit` buffers):
+  lorem http://www.magna.com
   > Blockquote: http://lacus.org/lacus
   https://vitae.net/index.html
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Execute (By default, in `gitcommit` buffers links in blockquotes aren't skipped):
+Execute:
 
   LinkConvertAll
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect gitcommit:
   lorem [0]
-  > Blockquote: [1]
-  [2]
+  > Blockquote: http://lacus.org/lacus
+  [1]
 
   Links:
 
-  [0]: www.magna.com
-  [1]: http://lacus.org/lacus
-  [2]: https://vitae.net/index.html
+  [0]: http://www.magna.com
+  [1]: https://vitae.net/index.html
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given markdown:
+Given markdown (Links in blockquotes can be included, by setting a buffer-local variable):
   lorem [magna](www.magna.com)
   > Blockquote: [lacus](http://lacus.org/lacus)
   [vitae](https://vitae.net/index.html)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Execute (Links in blockquotes can be included in `markdown` buffers):
+Execute:
 
   let b:link_include_blockquotes = 1
   LinkConvertAll
@@ -93,26 +94,26 @@ Expect markdown:
   [2]: https://vitae.net/index.html
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given mail:
-  lorem www.magna.com
+Given text (Links in blockquotes can be included, by setting a global variable):
+  lorem http://www.magna.com
   > Blockquote: http://lacus.org/lacus
   https://vitae.net/index.html
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Execute (Links in blockquotes can be included in `mail` buffers):
+Execute:
 
-  let b:link_include_blockquotes = 1
+  let g:link_include_blockquotes = 1
   LinkConvertAll
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Expect mail:
+Expect text:
   lorem [0]
   > Blockquote: [1]
   [2]
 
   Links:
 
-  [0]: www.magna.com
+  [0]: http://www.magna.com
   [1]: http://lacus.org/lacus
   [2]: https://vitae.net/index.html
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

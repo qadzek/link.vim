@@ -3,9 +3,9 @@ Before:
 After:
   unlet! b:link_skip_line
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+= 1 ============================================================================
 
-Given markdown:
+Given markdown (Use default (commentstring) to skip lines):
   Filler
   Not a comment: [magna](www.magna.com)
 
@@ -16,11 +16,12 @@ Given markdown:
   > Blockquote: [lacus](http://lacus.org/lacus)
 
   End
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Execute (Use default (commentstring) to skip lines):
-
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Execute:
   LinkConvertAll
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Expect markdown:
   Filler
   Not a comment: [magna][0]
@@ -36,9 +37,9 @@ Expect markdown:
   ## Links
 
   [0]: www.magna.com
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+= 2 ============================================================================
 
-Given markdown:
+Given markdown (Use custom pattern to skip lines):
   Filler
   Not a comment: [magna](www.magna.com)
 
@@ -49,11 +50,13 @@ Given markdown:
   > Blockquote: [lacus](http://lacus.org/lacus)
 
   End
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Execute (Use custom pattern to skip lines):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute:
   let b:link_skip_line = '^>'
   LinkConvertAll
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Expect markdown:
   Filler
   Not a comment: [magna][0]
@@ -70,4 +73,26 @@ Expect markdown:
 
   [0]: www.magna.com
   [1]: https://vitae.net/index.html
+= 3 ============================================================================
+
+Given markdown (Use custom pattern '+' to skip lines):
+  alpha [magna](http://magna.com) bravo
+  +charlie [vitae](https://vitae.net/index.html) delta
+  echo [lacus](http://lacus.org/lacus) foxtrot
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute:
+  let b:link_skip_line = '^+'
+  LinkConvertAll
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Expect markdown:
+  alpha [magna][0] bravo
+  +charlie [vitae](https://vitae.net/index.html) delta
+  echo [lacus][1] foxtrot
+
+  ## Links
+
+  [0]: http://magna.com
+  [1]: http://lacus.org/lacus
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

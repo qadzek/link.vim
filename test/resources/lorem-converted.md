@@ -14,17 +14,19 @@ Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
 dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
 lobortis ac, [fringilla][7] ac, [turpis][8].
 Duis ac erat. Etiam consequat. Integer sed elit [pellentesque][9] dapibus.
-Duis venenatis magna feugiat.
+Duis venenatis magna [existing][11] aliquam [non-existent][12].
 
 ## Links
 
 [0]: http://lacus.org/lacus
 [1]: https://pellentesque.com
-[2]: www.magna.com
+[2]: http://www.magna.com
 [3]: https://vitae.net/index.html
-[4]: www.sem.com
-[5]: nunc.com
-[6]: www.nec.com
-[7]: www.fringilla.com
+[4]: http://www.sem.com
+[5]: http://nunc.com
+[6]: http://www.nec.com
+[7]: http://www.fringilla.com
 [8]: http://turpis.net
 [10]: http://lorem.com
+[11]: lorem-converted.md
+[12]: non-existent.md

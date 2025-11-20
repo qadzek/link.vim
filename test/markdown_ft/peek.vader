@@ -3,30 +3,43 @@ Before:
   normal! gg
 
 Execute (Valid peek, from single reference link on line, [2]):
-  call cursor(6, 1)
-  LinkPeek
-  let expected = '[2]: www.magna.com'
-  let messages = execute('messages')
-  let actual = split(messages, "\n")[-1] " Last message
-  AssertEqual expected, actual
+  call cursor(6, 12)
+  let expected = 'link.vim: http://www.magna.com'
+  let out = execute('LinkPeek')
+  let last_mes = split(out, "\n")[-1]
+  AssertEqual expected, last_mes
 
 Execute (Valid peek, from multiple reference links on line, [5]):
   call cursor(9, 15)
-  LinkPeek
-  let expected = '[5]: nunc.com'
-  let actual = split( execute('messages'), '\n')[-1]
-  AssertEqual expected, actual
+  let expected = 'link.vim: http://nunc.com'
+  let out = execute('LinkPeek')
+  let last_mes = split(out, "\n")[-1]
+  AssertEqual expected, last_mes
 
 Execute (Invalid peek, from below heading):
   call cursor(23, 1)
-  LinkPeek
-  let expected = link#globals#errors['not_from_ref']
-  let actual = split( execute('messages'), '\n')[-1]
-  AssertEqual expected, actual
+  let out = execute('LinkPeek')
+  let expected = 'link.vim: Can only peek reference links'
+  let last_mes = split(out, "\n")[-1]
+  AssertEqual expected, last_mes
 
 Execute (Invalid peek, label [9] not found in reference section):
-  call cursor(16, 1)
-  LinkPeek
-  let expected = link#globals#errors['no_label_ref_section'] .. ' 9'
-  let actual = split( execute('messages'), '\n')[-1]
-  AssertEqual expected, actual
+  call cursor(16, 49)
+  let out = execute('LinkPeek')
+  let expected = 'link.vim: Could not locate reference'
+  let first_mes = split(out, "\n")[0]
+  AssertEqual expected, first_mes
+
+Execute (Peek of internal link, pointing to existing Markdown file):
+  call cursor(17, 30)
+  let out = execute('LinkPeek')
+  let expected = 'link.vim: lorem-converted.md'
+  let first_mes = split(out, "\n")[0]
+  AssertEqual expected, first_mes
+
+Execute (Peek of internal link, pointing to non-existent Markdown file):
+  call cursor(17, 60)
+  let out = execute('LinkPeek')
+  let expected = 'link.vim: Could not resolve link'
+  let first_mes = split(out, "\n")[0]
+  AssertEqual expected, first_mes

@@ -8,7 +8,7 @@ Execute ():
 ==============================================
 
 Execute (Valid jump, from single reference link on line, [2]):
-  call cursor(6, 1)
+  call cursor(6, 12)
   LinkJump
   let [line_nr, col_nr] = getcurpos()[1:2]
   AssertEqual line_nr, 23
@@ -35,6 +35,13 @@ Execute (Invalid jump, single reference link on line with no corresponding link 
   AssertEqual line_nr, 16
   AssertEqual col_nr, 1
 
+Execute (Jump to internal link, [11]):
+  call cursor(17, 30)
+  LinkJump
+  let [line_nr, col_nr] = getcurpos()[1:2]
+  AssertEqual line_nr, 31
+  AssertEqual col_nr, 7
+
 ==============================================
 Execute ():
   Log 'From reference section to document body'
@@ -60,3 +67,17 @@ Execute (Invalid jump, no corresponding reference link, [10]):
   let [line_nr, col_nr] = getcurpos()[1:2]
   AssertEqual line_nr, 30
   AssertEqual col_nr, 1
+
+Execute (Jump from internal link, cursor on label, [11]):
+  call cursor(31, 1)
+  LinkJump
+  let [line_nr, col_nr] = getcurpos()[1:2]
+  AssertEqual line_nr, 17
+  AssertEqual col_nr, 35
+
+Execute (Jump from internal link, cursor on filename, [11]):
+  call cursor(32, 7)
+  LinkJump
+  let [line_nr, col_nr] = getcurpos()[1:2]
+  AssertEqual line_nr, 17
+  AssertEqual col_nr, 62

@@ -1,101 +1,82 @@
-Given markdown;
-# A consectetuer nunc justo ac nisl.
+Given markdown (Last line contains label; cursor at top/bottom):
+  # A consectetuer nunc justo ac nisl.
 
-Praesent semper magna. In eu justo. Nunc vitae risus nec
-sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+  Praesent semper magna. In eu justo. Nunc vitae risus nec
+  sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
 
-## Links
+  ## Links
 
-[2]: http://www.loremipsumdolorsitamet.com
-[3]: http://www.ipsumloremconsecteturadipiscing.com
-[4]: http://www.dolorsitametconsecteturadipiscingelit.com
-[5]: http://www.adipiscingelitipsumdolorsitamet.com
-Execute (Last line contains label; cursor at top/bottom):
+  [2]: http://www.loremipsumdolorsitamet.com
+  [3]: http://www.ipsumloremconsecteturadipiscing.com
+  [4]: http://www.dolorsitametconsecteturadipiscingelit.com
+  [5]: http://www.adipiscingelitipsumdolorsitamet.com
+Execute:
   call cursor(1, 1)
-  let expected = [ 8, 2 ]
-  let actual = link#label#GetInfo('first')
-  AssertEqual expected, actual
+  let actual = linkvim#x#label#get_info()
+  AssertEqual 2, actual.first.id
+  AssertEqual 8, actual.first.lnum
+  AssertEqual 5, actual.last.id
+  AssertEqual 11, actual.last.lnum
 
   call cursor('$', 99)
-  let expected = [ 8, 2 ]
-  let actual = link#label#GetInfo('first')
-  AssertEqual expected, actual
-
-  call cursor(1, 1)
-  let expected = [ 11, 5 ]
-  let actual = link#label#GetInfo('last')
-  AssertEqual expected, actual
-
-  call cursor('$', 99)
-  let expected = [ 11, 5 ]
-  let actual = link#label#GetInfo('last')
-  AssertEqual expected, actual
+  let actual = linkvim#x#label#get_info()
+  AssertEqual 2, actual.first.id
+  AssertEqual 8, actual.first.lnum
+  AssertEqual 5, actual.last.id
+  AssertEqual 11, actual.last.lnum
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given markdown;
-# A consectetuer nunc justo ac nisl.
-
-Praesent semper magna. In eu justo. Nunc vitae risus nec
-sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
-
-## Links
-
-[2]: http://www.loremipsumdolorsitamet.com
-[3]: http://www.ipsumloremconsecteturadipiscing.com
-[4]: http://www.dolorsitametconsecteturadipiscingelit.com
-[5]: http://www.adipiscingelitipsumdolorsitamet.com
-
-Cum sociis natoque penatibus et magnis dis parturient montes,
-nascetur ridiculus mus.
-Execute (Last line does not contain label; cursor at top/bottom):
+Given markdown (Last line does not contain label; cursor at top/bottom):
+  # A consectetuer nunc justo ac nisl.
+  
+  Praesent semper magna. In eu justo. Nunc vitae risus nec
+  sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+  
+  ## Links
+  
+  [2]: http://www.loremipsumdolorsitamet.com
+  [3]: http://www.ipsumloremconsecteturadipiscing.com
+  [4]: http://www.dolorsitametconsecteturadipiscingelit.com
+  [5]: http://www.adipiscingelitipsumdolorsitamet.com
+  
+  Cum sociis natoque penatibus et magnis dis parturient montes,
+  nascetur ridiculus mus.
+Execute:
   call cursor(1, 1)
-  let expected = [ 8, 2 ]
-  let actual = link#label#GetInfo('first')
-  AssertEqual expected, actual
+  let actual = linkvim#x#label#get_info()
+  AssertEqual 2, actual.first.id
+  AssertEqual 8, actual.first.lnum
+  AssertEqual 5, actual.last.id
+  AssertEqual 11, actual.last.lnum
 
   call cursor('$', 99)
-  let expected = [ 8, 2 ]
-  let actual = link#label#GetInfo('first')
-  AssertEqual expected, actual
-
-  call cursor(1, 1)
-  let expected = [ 11, 5 ]
-  let actual = link#label#GetInfo('last')
-  AssertEqual expected, actual
-
-  call cursor('$', 99)
-  let expected = [ 11, 5 ]
-  let actual = link#label#GetInfo('last')
-  AssertEqual expected, actual
+  let actual = linkvim#x#label#get_info()
+  AssertEqual 2, actual.first.id
+  AssertEqual 8, actual.first.lnum
+  AssertEqual 5, actual.last.id
+  AssertEqual 11, actual.last.lnum
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given markdown;
-# A consectetuer nunc justo ac nisl.
-
-Praesent semper magna. In eu justo. Nunc vitae risus nec
-sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
-
-Execute (No labels; cursor at top/bottom):
+Given markdown (No labels; cursor at top/bottom):
+  # A consectetuer nunc justo ac nisl.
+  
+  Praesent semper magna. In eu justo. Nunc vitae risus nec
+  sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+Execute:
   call cursor(1, 1)
-  let expected = [ -1, -1 ]
-  let actual = link#label#GetInfo('first')
-  AssertEqual expected, actual
+  let actual = linkvim#x#label#get_info()
+  AssertEqual -1, actual.first.id
+  AssertEqual -1, actual.first.lnum
+  AssertEqual -1, actual.last.id
+  AssertEqual -1, actual.last.lnum
 
   call cursor('$', 99)
-  let expected = [ -1, -1 ]
-  let actual = link#label#GetInfo('first')
-  AssertEqual expected, actual
-
-  call cursor(1, 1)
-  let expected = [ -1, -1 ]
-  let actual = link#label#GetInfo('last')
-  AssertEqual expected, actual
-
-  call cursor('$', 99)
-  let expected = [ -1, -1 ]
-  let actual = link#label#GetInfo('last')
-  AssertEqual expected, actual
+  let actual = linkvim#x#label#get_info()
+  AssertEqual -1, actual.first.id
+  AssertEqual -1, actual.first.lnum
+  AssertEqual -1, actual.last.id
+  AssertEqual -1, actual.last.lnum
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

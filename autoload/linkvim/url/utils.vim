@@ -1,0 +1,177 @@
+function! linkvim#url#utils#add_extension(filename) abort
+  " Input: Filename with possibly missing file extension
+  " Output: Filename with resolved extension
+
+  " Collect extension candidates
+  let l:extensions = linkvim#u#uniq_unsorted(g:linkvim_filetypes
+        \ + (exists('b:wiki.extension') ? [b:wiki.extension] : []))
+
+  if index(l:extensions, fnamemodify(a:filename, ':e')) >= 0
+    return a:filename
+  endif
+
+  " Determine the proper extension (if necessary)
+  for l:ext in l:extensions
+    let l:newpath = a:filename . '.' . l:ext
+    if filereadable(l:newpath) | return l:newpath | endif
+  endfor
+
+  " Fallback
+  return a:filename . '.' . l:extensions[0]
+endfunction
+
+function! linkvim#url#utils#extract_anchor(stripped) abort
+  let l:parts = split(a:stripped, '#', 1)
+
+  return len(l:parts) > 1
+        \ ? substitute(join(l:parts[1:], '#'), '#$', '', '')
+        \ : ''
+endfunction
+
+function! linkvim#url#utils#resolve_path(filename, origin) abort
+  let l:filename = a:filename
+  if l:filename =~# '/$'
+    let l:filename .= get(get(b:, 'wiki', {}), 'index_name', '')
+  endif
+
+  " Link within same page has empty filename
+  if empty(l:filename) | return a:origin | endif
+
+  let l:path = l:filename[0] ==# '/'
+        \ ? linkvim#get_root() . l:filename
+        \ : (empty(a:origin)
+        \   ? linkvim#get_root()
+        \   : fnamemodify(a:origin, ':p:h')) . '/' . l:filename
+  let l:path = linkvim#paths#s(l:path)
+
+  return linkvim#url#utils#add_extension(l:path)
+endfunction
+
+
+function! linkvim#url#utils#go_to_file(path, edit_cmd, url_stripped, do_edit) abort
+  if !a:do_edit | return | endif
+
+  " Check if dir exists
+  let l:dir = fnamemodify(a:path, ':p:h')
+  if !isdirectory(l:dir)
+    call mkdir(l:dir, 'p')
+  endif
+
+  try
+    execute a:edit_cmd fnameescape(a:path)
+  catch /E325:/
+  endtry
+
+  let b:wiki = get(b:, 'wiki', {})
+
+  if !filereadable(a:path)
+    redraw!
+    call linkvim#log#info('Opened new page "' . a:url_stripped . '"')
+  end
+endfunction
+
+function! linkvim#url#utils#go_to_anchor_adoc(anchor, do_edit) abort
+  if empty(a:anchor) | return | endif
+
+  " Manually add position to jumplist (necessary if we're in same file)
+  if !a:do_edit
+    normal! m'
+  endif
+
+  let l:match = matchlist(a:anchor, '\(.*\)[- _]\(\d\+\)$')
+  if empty(l:match)
+    let l:re = a:anchor
+    let l:num = 1
+  else
+    let l:re = l:match[1]
+    let l:num = l:match[2]
+  endif
+
+  let l:re = substitute(l:re, '^_', '', '')
+  let l:re = substitute(l:re, '[- _]', '[- _]', 'g')
+  let l:re = '\c^=\{1,6}\s*' . l:re
+
+  let l:old_pos = getpos('.')
+  call cursor(1, 1)
+
+  for l:_ in range(l:num)
+    if !search(l:re, l:_ == 0 ? 'Wc' : 'W')
+      call setpos('.', l:old_pos)
+      break
+    endif
+    let l:old_pos = getpos('.')
+  endfor
+endfunction
+
+function! linkvim#url#utils#go_to_anchor_wiki(anchor, do_edit) abort
+  if empty(a:anchor) | return | endif
+
+  " Manually add position to jumplist (necessary if we're in same file)
+  if !a:do_edit
+    normal! m'
+  endif
+
+  let l:old_pos = getcurpos('.')
+  call cursor(1, 1)
+
+  for l:part in split(a:anchor, '#', 0)
+    let l:part = substitute(l:part, '[- ]', '[- ]', 'g')
+    let l:header = '^\c#\{1,6}\s*' . l:part . '\s*$'
+    let l:headerid =
+          \ '^\C#\{1,6}\s*\w.*\s{#'
+          \ .. substitute(l:part, ' ', '-', 'g')
+          \ .. '}\s*$'
+    let l:bold = linkvim#rx#surrounded(l:part, '*')
+
+    if !(search(l:header, 'Wc')
+          \ || search(l:bold, 'Wc')
+          \ || search(l:headerid, 'Wc'))
+      call setpos('.', l:old_pos)
+      break
+    endif
+    let l:old_pos = getcurpos('.')
+  endfor
+endfunction
+
+function! linkvim#url#utils#focus(do_edit) abort
+  if !&foldenable | return | endif
+
+  if a:do_edit
+    normal! zx
+  else
+    normal! zv
+  endif
+endfunction
+
+
+function! linkvim#url#utils#url_encode(str) abort
+  " This code is based on Tip Pope's vim-unimpaired:
+  " https://github.com/tpope/vim-unimpaired
+  return substitute(
+        \ a:str,
+        \ '[^A-Za-z0-9_.~-]',
+        \ '\="%".printf("%02X",char2nr(submatch(0)))',
+        \ 'g'
+        \)
+endfunction
+
+function! linkvim#url#utils#url_decode(str) abort
+  " This code is based on Tip Pope's vim-unimpaired:
+  " https://github.com/tpope/vim-unimpaired
+  let l:str =
+        \ substitute(
+        \   substitute(
+        \     substitute(a:str, '%0[Aa]\n$', '%0A', ''),
+        \     '%0[Aa]', '\n', 'g'),
+        \   '+', ' ', 'g')
+  return substitute(l:str, '%\(\x\x\)', '\=nr2char("0x".submatch(1))', 'g')
+endfunction
+
+function! linkvim#url#utils#url_encode_specific(str, chars) abort
+  return substitute(
+        \ a:str,
+        \ '[' .. a:chars .. ']',
+        \ '\="%"..printf("%02X", char2nr(submatch(0)))',
+        \ 'g'
+        \)
+endfunction

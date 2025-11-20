@@ -1,45 +1,42 @@
 # Run tests in a Docker container to avoid any interference from existing
 # settings and plugins.
 
+# hadolint global ignore=DL3001,DL3008,DL3059
+
+# This points to the current Ubuntu LTS release.
 ARG BASE_IMAGE=ubuntu:latest
 FROM ${BASE_IMAGE}
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-# Install packages
+# Install packages.
 RUN apt-get update && \
-  apt-get install --yes curl git pipx vim neovim && \
+  apt-get install --yes --no-install-recommends git pipx vim neovim make && \
   rm -rf /var/lib/apt/lists/*
 
-# Ensure that `vim` doesn't point to `nvim` on Ubuntu
+# Ensure that `vim` doesn't point to `nvim` on Ubuntu.
 RUN update-alternatives --set vim /usr/bin/vim.basic
 
 RUN useradd --create-home vimmer
 USER vimmer
-
 WORKDIR /home/vimmer
+RUN echo "set -o vi" >> /home/vimmer/.bashrc
 
-# Install linter
+# Install the Vint linter.
+# hadolint ignore=DL3013
 RUN pipx install git+https://github.com/Vimjas/vint.git
+ENV PATH="/home/vimmer/.local/bin:${PATH}"
 
-# Copy Vim/Neovim configuration
-COPY --chown=vimmer:vimmer test/docker.vimrc .vimrc
-COPY --chown=vimmer:vimmer test/docker.vimrc .config/nvim/init.vim
+# Install the Vader test plugin.
+RUN git clone https://github.com/junegunn/vader.vim vader.vim
 
-# Install `vim-plug` plugin manager, then install plugins
-RUN vim +qall && vim -es -u .vimrc -i NONE +PlugInstall +qall
-RUN nvim +qall && nvim -E -s -u .config/nvim/init.vim +PlugInstall +qall
+# Copy the Vim and Neovim configuration files.
+COPY --chown=vimmer:vimmer test/minimal.vimrc .vimrc
+COPY --chown=vimmer:vimmer test/minimal.vimrc .config/nvim/init.vim
 
-# Copy (possibly modified) plugin, instead of pulling latest release from GitHub
-COPY --chown=vimmer:vimmer ./ plugged/link.vim/
+# Copy the link.vim plugin.
+COPY --chown=vimmer:vimmer . link.vim
 
-WORKDIR /home/vimmer/plugged/link.vim
+WORKDIR /home/vimmer/link.vim
 
-# Lint
-RUN /home/vimmer/.local/bin/vint ./
-
-# Run tests
-RUN vim '+Vader! **/*.vader'
-RUN nvim '+Vader! **/*.vader'
-
-CMD [ "echo", "Success" ]
+CMD [ "bash" ]

@@ -12,7 +12,6 @@ After:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given mail:
-  foo www.bar.com
   foo ftp://ftp.bar.net
   foo file://path/to/file.txt
   foo http://www.bar.com
@@ -26,6 +25,7 @@ Given mail:
   foo http://bar.com/baz
   foo http://bar.com/index.html
   foo http://www.parameters.org/page2014.html?utm_source=facebook&utm_medium=eventlinkonwall&utm_term=trapshoot&utm_content=calendar_event_on_wall&utm_campaign=trapshoot2014
+  foo www.bar.com
   foo bar
   foo bar.com
   Line containing something resembling an inline link: command! -buffer -range=% -bar TagLinks silent keeppatterns <line1>,<line2>substitute#\v%(\[[^\]]+\]\(\s*)@<!\zs<https?://([^.]+)\S+#[\1](\0)#giep
@@ -48,25 +48,24 @@ Expect mail:
   foo [10]
   foo [11]
   foo [12]
-  foo [13]
+  foo www.bar.com
   foo bar
   foo bar.com
   Line containing something resembling an inline link: command! -buffer -range=% -bar TagLinks silent keeppatterns <line1>,<line2>substitute#\v%(\[[^\]]+\]\(\s*)@<!\zs<https?://([^.]+)\S+#[\1](\0)#giep
 
   Links:
 
-  [0]: www.bar.com
-  [1]: ftp://ftp.bar.net
-  [2]: file://path/to/file.txt
-  [3]: http://www.bar.com
-  [4]: https://bar.org
-  [5]: http://192.0.2.1
-  [6]: http://subdomain.bar.com
-  [7]: https://bar.travel
-  [8]: http://bar.very123longtld
-  [9]: http://www.ba-r.com
-  [10]: http://bar.com:8080
-  [11]: http://bar.com/baz
-  [12]: http://bar.com/index.html
-  [13]: http://www.parameters.org/page2014.html?utm_source=facebook&utm_medium=eventlinkonwall&utm_term=trapshoot&utm_content=calendar_event_on_wall&utm_campaign=trapshoot2014
+  [0]: ftp://ftp.bar.net
+  [1]: file://path/to/file.txt
+  [2]: http://www.bar.com
+  [3]: https://bar.org
+  [4]: http://192.0.2.1
+  [5]: http://subdomain.bar.com
+  [6]: https://bar.travel
+  [7]: http://bar.very123longtld
+  [8]: http://www.ba-r.com
+  [9]: http://bar.com:8080
+  [10]: http://bar.com/baz
+  [11]: http://bar.com/index.html
+  [12]: http://www.parameters.org/page2014.html?utm_source=facebook&utm_medium=eventlinkonwall&utm_term=trapshoot&utm_content=calendar_event_on_wall&utm_campaign=trapshoot2014
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

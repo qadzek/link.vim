@@ -1,57 +1,66 @@
 Before:
   messages clear
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~ 1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given mail;
-Cum sociis natoque penatibus et magnis dis parturient montes,
-nascetur ridiculus mus. [0]
+Given mail (From body):
+  Cum sociis natoque penatibus et magnis dis parturient montes,
+  nascetur ridiculus mus. [0]
 
-Links:
+  Links:
 
-[0]: http://www.loremipsumdolorsitamet.com
+  [0]: http://www.loremipsumdolorsitamet.com
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Execute (From reference section):
+Execute:
+  call cursor(2, 27)
+  let out = execute('LinkOpen')
+  let message = split(out, "\n")[0]
+  let exp = 'http://www.loremipsumdolorsitamet.com'
+  AssertEqual exp, message
+
+~ 2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given mail  (From reference section):
+  Cum sociis natoque penatibus et magnis dis parturient montes,
+  nascetur ridiculus mus. [0]
+
+  Links:
+
+  [0]: http://www.loremipsumdolorsitamet.com
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Execute:
   call cursor('$', 1)
-  LinkOpen
-  let expected = g:link#globals#errors['not_from_ref']
-  let actual = split( execute('messages'), '\n')[-1]
-  AssertEqual expected, actual
+  let out = execute('LinkOpen')
+  let message = split(out, "\n")[0]
+  let exp = 'http://www.loremipsumdolorsitamet.com'
+  AssertEqual exp, message
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~ 3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given mail;
-Nam vitae purus
-
-Cum sociis natoque [0] penatibus et magnis dis parturient montes,
-nascetur ridiculus mus.
-
-Praesent semper magna. In eu justo. Nunc vitae risus nec
-sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
-
-Links:
-
-[0]: loremipsumdolorsitamet.com
+Given mail (Line without link):
+  Praesent semper magna. In eu justo. Nunc vitae risus nec
+  sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-Execute (No reference link on line):
-  LinkOpen
-  let expected = g:link#globals#errors['no_reference_link']
-  let actual = split( execute('messages'), '\n')[-1]
-  AssertEqual expected, actual
+Execute:
+  let out = execute('LinkOpen')
+  let message = split(out, "\n")[0]
+  let exp = 'link.vim: No link found under cursor'
+  AssertEqual exp, message
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Given mail;
-Cum sociis natoque [0] penatibus et magnis dis parturient montes,
-nascetur ridiculus mus.
+~ 4 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Links:
+Given mail (Invalid URL: no protocol):
+  [0] penatibus et magnis dis parturient montes,
+  nascetur ridiculus mus.
 
-[0]: loremipsum.com
+  Links:
+
+  [0]: loremipsum.com
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-Execute (No valid URL: does not start with a protocol like 'http' or with 'www'):
-  call cursor(1, 1)
-  LinkOpen
-  let expected = g:link#globals#errors['no_valid_url'] .. ' loremipsum.com'
-  let actual = split( execute('messages'), '\n')[-1]
-  AssertEqual expected, actual
+Execute:
+  let out = execute('LinkOpen')
+  let messages = split(out, "\n")
+  let exp = []
+  AssertEqual exp, messages
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

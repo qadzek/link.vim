@@ -337,12 +337,11 @@ Execute (Two identical links on the same line):
   LinkConvertAll
 
 Expect markdown:
-  foo [Vim][0] bar [Vim][1]
+  foo [Vim][0] bar [Vim][0]
 
   ## Links
 
   [0]: https://www.vim.org
-  [1]: https://www.vim.org
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown:
@@ -459,3 +458,312 @@ Expect markdown:
   [7]: www.fringilla.com
   [8]: http://turpis.net
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given markdown (Internal link to Markdown file):
+  Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
+  [pellentesque][1] diam metus ut nulla. Vestibulum eu
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  lobortis ac, [fringilla](foo.md) ac, [turpis](bar.md).
+  Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque dapibus.
+  Duis venenatis magna feugiat.
+
+  ## Links
+
+  [1]: https://pellentesque.com
+--------------------------------------------------------------------------------
+Execute:
+  LinkConvertAll
+
+--------------------------------------------------------------------------------
+Expect markdown:
+  Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
+  [pellentesque][1] diam metus ut nulla. Vestibulum eu
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  lobortis ac, [fringilla][2] ac, [turpis][3].
+  Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque dapibus.
+  Duis venenatis magna feugiat.
+
+  ## Links
+
+  [1]: https://pellentesque.com
+  [2]: foo.md
+  [3]: bar.md
+=   ============================================================================
+
+Given markdown (Image link):
+  Sapien ac iaculis feugiat, [lacus](http://lacus.org/lacus) lacus accumsan
+  lorem, ![img](https://upload.wikimedia.org/wikipedia/en/a/a9/Example.jpg) at
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute:
+  LinkConvertAll
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Expect markdown:
+  Sapien ac iaculis feugiat, [lacus][0] lacus accumsan
+  lorem, ![img][1] at
+
+  ## Links
+
+  [0]: http://lacus.org/lacus
+  [1]: https://upload.wikimedia.org/wikipedia/en/a/a9/Example.jpg
+=   ============================================================================
+
+Given markdown (URL is already present in reference section):
+  Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
+  [pellentesque][0] diam metus ut nulla. Vestibulum eu
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  lobortis ac, [fringilla](https://pellentesque.com) ac
+
+  ## Links
+
+  [0]: https://pellentesque.com
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute:
+  LinkConvertAll
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Expect markdown:
+  Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
+  [pellentesque][0] diam metus ut nulla. Vestibulum eu
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  lobortis ac, [fringilla][0] ac
+
+  ## Links
+
+  [0]: https://pellentesque.com
+=   ============================================================================
+
+Given markdown (URL is not yet present in reference section, but same URL is present multiple times in body):
+  augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
+  Ut [nunc](http://nunc.com), vestibulum [nec](http://nunc.com),
+  sodales vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
+
+  Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
+  [pellentesque][0] diam metus ut nulla. Vestibulum eu
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  lobortis ac, [fringilla](http://fringilla.com) ac, [turpis](http://turpis.net).
+  Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque dapibus.
+  dolor sit amet lacus [varius](http://nunc.com) fermentum. Morbi dolor enim, pulvinar eget,
+
+  ## Links
+
+  [0]: https://pellentesque.com
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute:
+  LinkConvertAll
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Expect markdown:
+  augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
+  Ut [nunc][1], vestibulum [nec][1],
+  sodales vitae, vehicula eget, ipsum. Sed nec tortor. Aenean malesuada.
+
+  Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
+  [pellentesque][0] diam metus ut nulla. Vestibulum eu
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  lobortis ac, [fringilla][2] ac, [turpis][3].
+  Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque dapibus.
+  dolor sit amet lacus [varius][1] fermentum. Morbi dolor enim, pulvinar eget,
+
+  ## Links
+
+  [0]: https://pellentesque.com
+  [1]: http://nunc.com
+  [2]: http://fringilla.com
+  [3]: http://turpis.net
+================================================================================
+
+Given markdown (Multiple links, multi-line heading present):
+  Sapien ac iaculis feugiat, [lacus][0] lacus accumsan
+  lorem, quis volutpat justo turpis ac mauris.
+
+  [vitae](https://vitae.net/index.html), varius ut, aliquam vel, justo. Proin ac
+  augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
+  Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
+  [pellentesque](https://pellentesque.com) diam metus ut nulla. Vestibulum eu
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  lobortis ac, [fringilla](http://fringilla.com) ac, [turpis](http://turpis.net).
+  Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque dapibus.
+  Duis venenatis magna feugiat.
+
+  ---
+  ## My Links
+
+  [0]: http://lacus.org/lacus
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute:
+  let b:link_heading = [ '', '---', '## My Links', '' ]
+  LinkConvertAll
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Expect markdown:
+  Sapien ac iaculis feugiat, [lacus][0] lacus accumsan
+  lorem, quis volutpat justo turpis ac mauris.
+
+  [vitae][1], varius ut, aliquam vel, justo. Proin ac
+  augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
+  Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
+  [pellentesque][2] diam metus ut nulla. Vestibulum eu
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  lobortis ac, [fringilla][3] ac, [turpis][4].
+  Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque dapibus.
+  Duis venenatis magna feugiat.
+
+  ---
+  ## My Links
+
+  [0]: http://lacus.org/lacus
+  [1]: https://vitae.net/index.html
+  [2]: https://pellentesque.com
+  [3]: http://fringilla.com
+  [4]: http://turpis.net
+================================================================================
+
+Given markdown (Multiple links, multi-line heading not yet present):
+  lorem, quis volutpat justo turpis ac mauris.
+  [vitae](https://vitae.net/index.html), varius ut, aliquam vel, justo. Proin ac
+  augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
+  Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
+  [pellentesque](https://pellentesque.com) diam metus ut nulla. Vestibulum eu
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  lobortis ac, [fringilla](http://fringilla.com) ac, [turpis](http://turpis.net).
+  Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque dapibus.
+  Duis venenatis magna feugiat.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute:
+  let b:link_heading = [ '', '---', '## My Links', '' ]
+  LinkConvertAll
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Expect markdown:
+  lorem, quis volutpat justo turpis ac mauris.
+  [vitae][0], varius ut, aliquam vel, justo. Proin ac
+  augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
+  Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
+  [pellentesque][1] diam metus ut nulla. Vestibulum eu
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  lobortis ac, [fringilla][2] ac, [turpis][3].
+  Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque dapibus.
+  Duis venenatis magna feugiat.
+
+  ---
+  ## My Links
+
+  [0]: https://vitae.net/index.html
+  [1]: https://pellentesque.com
+  [2]: http://fringilla.com
+  [3]: http://turpis.net
+================================================================================
+
+Given markdown (Links within a fenced code block):
+  lorem, quis volutpat justo turpis ac mauris.
+
+  ```text
+  [vitae](https://vitae.net/index.html), varius ut, aliquam vel, justo. Proin ac
+  augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
+  Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
+  [pellentesque](https://pellentesque.com) diam metus ut nulla. Vestibulum eu
+  ```
+
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  lobortis ac, [fringilla](http://fringilla.com) ac, [turpis](http://turpis.net).
+  Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque dapibus.
+  Duis venenatis magna feugiat.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute:
+  LinkConvertAll
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Expect markdown:
+  lorem, quis volutpat justo turpis ac mauris.
+
+  ```text
+  [vitae](https://vitae.net/index.html), varius ut, aliquam vel, justo. Proin ac
+  augue. Nullam auctor lectus vitae arcu. Vestibulum porta justo placerat purus.
+  Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
+  [pellentesque](https://pellentesque.com) diam metus ut nulla. Vestibulum eu
+  ```
+
+  dolor sit amet lacus varius fermentum. Morbi dolor enim, pulvinar eget,
+  lobortis ac, [fringilla][0] ac, [turpis][1].
+  Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque dapibus.
+  Duis venenatis magna feugiat.
+
+  ## Links
+
+  [0]: http://fringilla.com
+  [1]: http://turpis.net
+================================================================================
+
+Given markdown (Links within inline code):
+  lorem, quis volutpat justo turpis ac mauris.
+  augue. Nullam arcu `[vitae](https://vitae.net/index.html)`, varius ut, aliquam
+  vel, justo. Proin ac
+  Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
+  `[pellentesque](https://pellentesque.com) diam metus` ut nulla. Vestibulum eu
+
+  dolor sit amet lacus varius vestibulum [nec](http://nec.com), fermentum.
+  `ac, [fringilla](http://fringilla.com)` ac, `[turpis](http://turpis.net)`
+  Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque dapibus.
+  Duis venenatis `https://vitae.net/index.html` magna feugiat.
+
+  Deadlights jack lad schooner scallywag dance the hempen jig carouser broadside
+  cable strike colors. Bring a spring upon her cable blow the `man down
+  spanker Shiver me http://timbers.com account` lookout wherry doubloon chase.
+  Belay yo-ho-ho keelhaul squiffy black spot yardarm spyglass sheet transom
+  heave to.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute:
+  LinkConvertAll
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Expect markdown:
+  lorem, quis volutpat justo turpis ac mauris.
+  augue. Nullam arcu `[vitae](https://vitae.net/index.html)`, varius ut, aliquam
+  vel, justo. Proin ac
+  Nunc convallis, massa eu vestibulum commodo, quam mauris interdum arcu, at
+  `[pellentesque](https://pellentesque.com) diam metus` ut nulla. Vestibulum eu
+
+  dolor sit amet lacus varius vestibulum [nec][0], fermentum.
+  `ac, [fringilla](http://fringilla.com)` ac, `[turpis](http://turpis.net)`
+  Duis ac erat. Etiam consequat. Integer sed est eu elit pellentesque dapibus.
+  Duis venenatis `https://vitae.net/index.html` magna feugiat.
+
+  Deadlights jack lad schooner scallywag dance the hempen jig carouser broadside
+  cable strike colors. Bring a spring upon her cable blow the `man down
+  spanker Shiver me http://timbers.com account` lookout wherry doubloon chase.
+  Belay yo-ho-ho keelhaul squiffy black spot yardarm spyglass sheet transom
+  heave to.
+
+  ## Links
+
+  [0]: http://nec.com
+================================================================================
+
+Given markdown (Ensure <text>:<text> isn't recognized as a link):
+  Deadlights jack lad schooner scallywag alpha:bravo hempen jig carouser broadside
+  Belay yo-ho-ho foo:bar keelhaul squiffy Charlie:delta yardarm spyglass sheet
+  transom heave to.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute:
+  LinkConvertAll
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Expect markdown:
+  Deadlights jack lad schooner scallywag alpha:bravo hempen jig carouser broadside
+  Belay yo-ho-ho foo:bar keelhaul squiffy Charlie:delta yardarm spyglass sheet
+  transom heave to.
+================================================================================

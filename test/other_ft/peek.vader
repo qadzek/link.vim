@@ -17,38 +17,36 @@ After:
 Execute (Valid peek, from single reference link on line, [0]):
   let b:link_heading = 'Links:'
   let b:link_heading_before = '^# Please enter'
-  call cursor(6, 1)
-  call link#Connect('peek')
-  let expected = '[0]: https://github.com/example/project/wiki'
-  let messages = execute('messages')
-  let actual = split(messages, "\n")[-1] " Last message
-  AssertEqual expected, actual
+  call cursor(6, 20)
+  let expected = 'link.vim: https://github.com/example/project/wiki'
+  let out = execute('LinkPeek')
+  let last_mes = split(out, "\n")[-1]
+  AssertEqual expected, last_mes
 
 Execute (Valid peek, from multiple reference links on line, [3]):
   let b:link_heading = 'Links:'
   let b:link_heading_before = '^# Please enter'
-  call cursor(8, 24)
-  call link#Connect('peek')
-  let expected = '[3]: https://docs.example.com/developer-guide'
-  let messages = execute('messages')
-  let actual = split( execute('messages'), '\n')[-1]
-  AssertEqual expected, actual
+  call cursor(8, 50)
+  let expected = 'link.vim: https://docs.example.com/developer-guide'
+  let out = execute('LinkPeek')
+  let last_mes = split(out, "\n")[-1]
+  AssertEqual expected, last_mes
 
-Execute (Invalid peek, from below heading):
+Execute (Invalid peek, from reference section):
   let b:link_heading = 'Links:'
   let b:link_heading_before = '^# Please enter'
-  call cursor(16, 1)
-  call link#Connect('peek')
-  let expected = link#globals#errors['not_from_ref']
-  let actual = split( execute('messages'), '\n')[-1]
-  AssertEqual expected, actual
+  call cursor(17, 1)
+  let expected = 'link.vim: Can only peek reference links'
+  let out = execute('LinkPeek')
+  let last_mes = split(out, "\n")[-1]
+  AssertEqual expected, last_mes
 
 Execute (Invalid peek, label [1] not found in reference section):
   let b:link_heading = 'Links:'
   let b:link_heading_before = '^# Please enter'
   18 delete
-  call cursor(7, 1)
-  call link#Connect('peek')
-  let expected = link#globals#errors['no_label_ref_section'] .. ' 1'
-  let actual = split( execute('messages'), '\n')[-1]
-  AssertEqual expected, actual
+  call cursor(7, 25)
+  let out = execute('LinkPeek')
+  let expected = 'link.vim: Could not locate reference'
+  let first_mes = split(out, "\n")[0]
+  AssertEqual expected, first_mes

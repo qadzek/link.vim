@@ -50,7 +50,7 @@ Execute (Delete two links, [0] and [3]):
   let b:link_heading = 'Links:'
   let b:link_heading_before = '^# Please enter the commit message'
   let b:link_skip_line = '^>'
-  call link#Reformat()
+  LinkReformat
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect gitcommit:
   Update README.md with project documentation links
@@ -120,7 +120,7 @@ Execute (Merge links; do not move cursor):
   let b:link_heading = 'Links:'
   let b:link_heading_before = '^# Please enter the commit message'
   let b:link_skip_line = '^>'
-  call link#Reformat()
+  LinkReformat
   let [line_nr, col_nr] = getcurpos()[1:2]
   AssertEqual line_nr, 5
   AssertEqual col_nr, 6

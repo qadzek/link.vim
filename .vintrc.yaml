@@ -21,7 +21,7 @@ cmdargs:
   json: false
 
   # Change human-readable output format
-  format: '{file_path}:{line_number}:{column_number}: {description}'
+  format: "{file_path}:{line_number}:{column_number}: {description}"
 
 policies:
   ProhibitAutocmdWithNoGroup:
@@ -47,7 +47,8 @@ policies:
   ProhibitUnusedVariable:
     enabled: true
     ignored_patterns:
-      - '^_'
+      - "^_"
+      - "l:_"
   ProhibitUsingUndeclaredVariable:
     enabled: true
   ProhibitAbbreviationOption:

@@ -1,4 +1,4 @@
-Given markdown:
+Given markdown (Add link reference definition):
   # A consectetuer nunc justo ac nisl.
 
   ## Nam vitae purus
@@ -10,8 +10,9 @@ Given markdown:
   ## Links
 
   [0]: http://ipsum.com
-Execute (Add link reference definition):
-  call link#reference#Add('1', 'https://lorem.com/')
+--------------------------------------------------------------------------------
+Execute:
+  call linkvim#x#reference#add(11, '1', 'https://lorem.com/')
 
 Expect markdown:
   # A consectetuer nunc justo ac nisl.
@@ -26,4 +27,4 @@ Expect markdown:
 
   [0]: http://ipsum.com
   [1]: https://lorem.com/
-------------------------------------------------------------
+--------------------------------------------------------------------------------

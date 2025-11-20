@@ -7,7 +7,7 @@ After:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given markdown:
+Given markdown (URLs in varying formats; internal links included):
   [foo](www.bar.com)
   [foo](ftp://ftp.bar.net)
   [foo](file://path/to/file.txt)
@@ -24,8 +24,11 @@ Given markdown:
   [foo](http://www.parameters.org/page2014.html?utm_source=facebook&utm_medium=eventlinkonwall&utm_term=trapshoot&utm_content=calendar_event_on_wall&utm_campaign=trapshoot2014)
   [foo](bar)
   [foo](bar.com)
+  [literal-asterisk](https://example.com/files/*/index.html)
+  [encoded-asterisk](https://example.net/query?value=%2A)
+  [tilde](https://domain.com/~user)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Execute (URLs in varying formats; internal links not disabled):
+Execute:
   LinkConvertAll
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect markdown:
@@ -45,6 +48,9 @@ Expect markdown:
   [foo][13]
   [foo][14]
   [foo][15]
+  [literal-asterisk][16]
+  [encoded-asterisk][17]
+  [tilde][18]
 
   ## Links
 
@@ -64,6 +70,9 @@ Expect markdown:
   [13]: http://www.parameters.org/page2014.html?utm_source=facebook&utm_medium=eventlinkonwall&utm_term=trapshoot&utm_content=calendar_event_on_wall&utm_campaign=trapshoot2014
   [14]: bar
   [15]: bar.com
+  [16]: https://example.com/files/*/index.html
+  [17]: https://example.net/query?value=%2A
+  [18]: https://domain.com/~user
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given markdown:
@@ -89,6 +98,7 @@ Execute (URLs in varying formats; internal links disabled):
   LinkConvertAll
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expect markdown:
+  [foo](www.bar.com)
   [foo][0]
   [foo][1]
   [foo][2]
@@ -102,24 +112,22 @@ Expect markdown:
   [foo][10]
   [foo][11]
   [foo][12]
-  [foo][13]
   [foo](bar)
   [foo](bar.com)
 
   ## Links
 
-  [0]: www.bar.com
-  [1]: ftp://ftp.bar.net
-  [2]: file://path/to/file.txt
-  [3]: http://www.bar.com
-  [4]: https://bar.org
-  [5]: http://192.0.2.1
-  [6]: http://subdomain.bar.com
-  [7]: https://bar.travel
-  [8]: http://bar.very123longtld
-  [9]: http://www.ba-r.com
-  [10]: http://bar.com:8080
-  [11]: http://bar.com/baz
-  [12]: http://bar.com/index.html
-  [13]: http://www.parameters.org/page2014.html?utm_source=facebook&utm_medium=eventlinkonwall&utm_term=trapshoot&utm_content=calendar_event_on_wall&utm_campaign=trapshoot2014
+  [0]: ftp://ftp.bar.net
+  [1]: file://path/to/file.txt
+  [2]: http://www.bar.com
+  [3]: https://bar.org
+  [4]: http://192.0.2.1
+  [5]: http://subdomain.bar.com
+  [6]: https://bar.travel
+  [7]: http://bar.very123longtld
+  [8]: http://www.ba-r.com
+  [9]: http://bar.com:8080
+  [10]: http://bar.com/baz
+  [11]: http://bar.com/index.html
+  [12]: http://www.parameters.org/page2014.html?utm_source=facebook&utm_medium=eventlinkonwall&utm_term=trapshoot&utm_content=calendar_event_on_wall&utm_campaign=trapshoot2014
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -4,7 +4,7 @@ After:
   unlet! b:link_heading_before
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given markdown:
+Given markdown (Add heading to bottom of buffer):
   # A consectetuer nunc justo ac nisl.
 
   ## Nam vitae purus
@@ -12,8 +12,8 @@ Given markdown:
   Cum sociis natoque penatibus et magnis dis parturient montes,
   nascetur ridiculus mus. Praesent semper magna. In eu justo. Nunc vitae risus nec
   sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
-Execute (Add heading to bottom of buffer):
-  call link#heading#Add('## My Resources', '$')
+Execute:
+  call linkvim#x#heading#add('## My Resources', '$')
 
 Expect markdown:
   # A consectetuer nunc justo ac nisl.
@@ -28,7 +28,7 @@ Expect markdown:
   
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given mail:
+Given mail (Add heading to top of buffer):
   Hi Recipient,
 
   I hope this email finds you well.
@@ -40,8 +40,8 @@ Given mail:
   Your Job Title
   Your Company Name
   Your Contact Information
-Execute (Add heading to top of buffer):
-  call link#heading#Add('Links:', 0)
+Execute:
+  call linkvim#x#heading#add('Links:', 0)
 
 Expect mail:
 
@@ -60,7 +60,7 @@ Expect mail:
   Your Contact Information
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given gitcommit:
+Given gitcommit (Add heading to middle of buffer):
   Git commit title
 
   Git commit body
@@ -73,8 +73,8 @@ Given gitcommit:
   # Changes to be committed:
   #	modified:   foo.txt
   #
-Execute (Add heading to middle of buffer):
-  call link#heading#Add('Links:', 5)
+Execute:
+  call linkvim#x#heading#add('Links:', 5)
 
 Expect gitcommit:
   Git commit title
@@ -93,3 +93,33 @@ Expect gitcommit:
   #	modified:   foo.txt
   #
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given mail (Multi-line heading):
+  Cum sociis natoque penatibus et magnis dis parturient montes,
+  nascetur ridiculus mus. Praesent semper magna. In eu justo. Nunc vitae risus nec
+  sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+Execute:
+  call linkvim#x#heading#add( [ '', '---', 'My Links:', '' ], '$')
+
+Expect markdown:
+  Cum sociis natoque penatibus et magnis dis parturient montes,
+  nascetur ridiculus mus. Praesent semper magna. In eu justo. Nunc vitae risus nec
+  sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+
+  ---
+  My Links:
+  
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given mail ('Multi'-line heading without blank lines):
+  Cum sociis natoque penatibus et magnis dis parturient montes,
+  nascetur ridiculus mus. Praesent semper magna. In eu justo. Nunc vitae risus nec
+  sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+Execute:
+  call linkvim#x#heading#add( [ 'My Links:' ], '$')
+
+Expect markdown:
+  Cum sociis natoque penatibus et magnis dis parturient montes,
+  nascetur ridiculus mus. Praesent semper magna. In eu justo. Nunc vitae risus nec
+  sem scelerisque consequat. In hac habitasse platea dictumst. Nam posuere
+  My Links:

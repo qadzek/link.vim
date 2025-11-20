@@ -5,13 +5,17 @@ After:
   unlet! b:link_disable_internal_links
   unlet! g:link_disable_internal_links
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+= 1 ============================================================================
 
-Given markdown:
+Given markdown (Default settings):
   URL [foo](http://bar.com)
   Internal wiki page [alfa](bravo.md)
-Execute (Default settings):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute:
   LinkConvertAll
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Expect markdown:
   URL [foo][0]
@@ -21,15 +25,19 @@ Expect markdown:
 
   [0]: http://bar.com
   [1]: bravo.md
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+= 2 ============================================================================
 
-Given markdown:
+Given markdown (Disabled globally):
   URL [foo](http://bar.com)
   Internal wiki page [alfa](bravo.md)
-Execute (Disabled globally):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute:
   let g:link_disable_internal_links = 1
   LinkConvertAll
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Expect markdown:
   URL [foo][0]
   Internal wiki page [alfa](bravo.md)
@@ -37,15 +45,19 @@ Expect markdown:
   ## Links
 
   [0]: http://bar.com
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+= 3 ============================================================================
 
-Given markdown:
+Given markdown (Disabled buffer-local):
   URL [foo](http://bar.com)
   Internal wiki page [alfa](bravo.md)
-Execute (Disabled buffer-local):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute:
   let b:link_disable_internal_links = 1
   LinkConvertAll
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Expect markdown:
   URL [foo][0]
   Internal wiki page [alfa](bravo.md)
@@ -53,16 +65,20 @@ Expect markdown:
   ## Links
 
   [0]: http://bar.com
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+= 4 ============================================================================
 
-Given markdown:
+Given markdown (Enabled globally, disabled buffer-local):
   URL [foo](http://bar.com)
   Internal wiki page [alfa](bravo.md)
-Execute (Enabled globally, disabled buffer-local):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute:
   let g:link_disable_internal_links = 0
   let b:link_disable_internal_links = 1
   LinkConvertAll
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Expect markdown:
   URL [foo][0]
   Internal wiki page [alfa](bravo.md)
@@ -70,15 +86,19 @@ Expect markdown:
   ## Links
 
   [0]: http://bar.com
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+= 5 ============================================================================
 
-Given markdown:
+Given markdown (Disabled globally, enabled buffer-local):
   URL [foo](http://bar.com)
   Internal wiki page [alfa](bravo.md)
-Execute (Disabled globally, enabled buffer-local):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute:
   let g:link_disable_internal_links = 1
   let b:link_disable_internal_links = 0
   LinkConvertAll
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Expect markdown:
   URL [foo][0]
@@ -88,9 +108,9 @@ Expect markdown:
 
   [0]: http://bar.com
   [1]: bravo.md
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+= 6 ============================================================================
 
-Given markdown:
+Given markdown (Default (so enabled); list of URLs and internal wiki pages):
   A regular [URL](https://github.com).
   A URL without a protocol but including 'www' or [world wide web](www.google.com)!
   Not a Markdown extension but a Moldovan [domain](https://nic.md).
@@ -104,8 +124,12 @@ Given markdown:
   The same filename but this time [percent-encoded](file%20with%20spaces.md).
   A filename containing [Unicode](önskelistä.md) characters.
   An anchor, pointing to a heading inside a [file](file.md#heading).
-Execute (Default (so enabled); list of URLs and internal wiki pages):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute:
   LinkConvertAll
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Expect markdown:
   A regular [URL][0].
@@ -136,9 +160,9 @@ Expect markdown:
   [9]: file%20with%20spaces.md
   [10]: önskelistä.md
   [11]: file.md#heading
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+= 7 ============================================================================
 
-Given markdown:
+Given markdown (Disabled; list of URLs and internal wiki pages):
   A regular [URL](https://github.com).
   A URL without a protocol but including 'www' or [world wide web](www.google.com)!
   Not a Markdown extension but a Moldovan [domain](https://nic.md).
@@ -152,15 +176,19 @@ Given markdown:
   The same filename but this time [percent-encoded](file%20with%20spaces.md).
   A filename containing [Unicode](önskelistä.md) characters.
   An anchor, pointing to a heading inside a [file](file.md#heading).
-Execute (Disabled; list of URLs and internal wiki pages):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute:
   let g:link_disable_internal_links = 1
   LinkConvertAll
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Expect markdown:
   A regular [URL][0].
-  A URL without a protocol but including 'www' or [world wide web][1]!
-  Not a Markdown extension but a Moldovan [domain][2].
-  A .wiki top-level [domain name][3].
+  A URL without a protocol but including 'www' or [world wide web](www.google.com)!
+  Not a Markdown extension but a Moldovan [domain][1].
+  A .wiki top-level [domain name][2].
 
   A link to an internal wiki page; in this case a regular [file](file.md).
   A file inside a [subdirectory](subdir/file.md).
@@ -174,20 +202,22 @@ Expect markdown:
   ## Links
 
   [0]: https://github.com
-  [1]: www.google.com
-  [2]: https://nic.md
-  [3]: https://kodi.wiki/view/Main_Page
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  [1]: https://nic.md
+  [2]: https://kodi.wiki/view/Main_Page
+= 8 ============================================================================
 
-Given markdown:
+Given markdown (Similar to inline links; causes issues if internal links aren't disabled):
   A regular [URL](https://github.com).
   A regex like [a-zA-Z](\d+) could be interpreted as a Markdown inline link.
   Code snippets can resemble an inline link too: command! -buffer -range=% -bar TagLinks silent keeppatterns <line1>,<line2>substitute#\v%(\[[^\]]+\]\(\s*)@https?://([^.]+)\S+#[\1](\0)#giep
   Yet another regular [URL](https://www.vim.org).
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Execute (Similar to inline links; causes issues if internal links aren't disabled):
+Execute:
   let g:link_disable_internal_links = 1
   LinkConvertAll
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Expect markdown:
   A regular [URL][0].
@@ -199,4 +229,4 @@ Expect markdown:
 
   [0]: https://github.com
   [1]: https://www.vim.org
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+================================================================================

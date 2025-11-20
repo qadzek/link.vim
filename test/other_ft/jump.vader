@@ -22,17 +22,17 @@ Execute ():
 Execute (Valid jump, from single reference link on line, [0]):
   let b:link_heading = 'Links:'
   let b:link_heading_before = '^# Please enter'
-  call cursor(6, 1)
-  call link#Connect('jump')
+  call cursor(6, 18)
+  call linkvim#x#jump#jump()
   let [line_nr, col_nr] = getcurpos()[1:2]
   AssertEqual line_nr, 17
   AssertEqual col_nr, 6
 
-Execute (Valid jump, from second reference link on line, [5]):
+Execute (Valid jump, from second reference link on line, [3]):
   let b:link_heading = 'Links:'
   let b:link_heading_before = '^# Please enter'
-  call cursor(8, 24)
-  call link#Connect('jump')
+  call cursor(8, 49)
+  call linkvim#x#jump#jump()
   let [line_nr, col_nr] = getcurpos()[1:2]
   AssertEqual line_nr, 20
   AssertEqual col_nr, 6
@@ -41,7 +41,7 @@ Execute (Invalid jump, no reference link on line):
   let b:link_heading = 'Links:'
   let b:link_heading_before = '^# Please enter'
   call cursor(3, 5)
-  call link#Connect('jump')
+  call linkvim#x#jump#jump()
   let [line_nr, col_nr] = getcurpos()[1:2]
   AssertEqual line_nr, 3
   AssertEqual col_nr, 5
@@ -51,7 +51,7 @@ Execute (Invalid jump, single reference link on line with no corresponding link 
   let b:link_heading_before = '^# Please enter'
   18 delete
   call cursor(7, 1)
-  call link#Connect('jump')
+  call linkvim#x#jump#jump()
   let [line_nr, col_nr] = getcurpos()[1:2]
   AssertEqual line_nr, 7
   AssertEqual col_nr, 1
@@ -66,7 +66,7 @@ Execute (Valid jump, to a line with a single link, [0]):
   let b:link_heading = 'Links:'
   let b:link_heading_before = '^# Please enter'
   call cursor(17, 1)
-  call link#Connect('jump')
+  call linkvim#x#jump#jump()
   let [line_nr, col_nr] = getcurpos()[1:2]
   AssertEqual line_nr, 6
   AssertEqual col_nr, 20
@@ -75,7 +75,7 @@ Execute (Valid jump, to a line with multiple links, [3]):
   let b:link_heading = 'Links:'
   let b:link_heading_before = '^# Please enter'
   call cursor(20, 25)
-  call link#Connect('jump')
+  call linkvim#x#jump#jump()
   let [line_nr, col_nr] = getcurpos()[1:2]
   AssertEqual line_nr, 8
   AssertEqual col_nr, 51
@@ -85,7 +85,7 @@ Execute (Invalid jump, no corresponding reference link, [1]):
   let b:link_heading_before = '^# Please enter'
   7 delete
   call cursor(17, 1)
-  call link#Connect('jump')
+  call linkvim#x#jump#jump()
   let [line_nr, col_nr] = getcurpos()[1:2]
   AssertEqual line_nr, 17
   AssertEqual col_nr, 1
