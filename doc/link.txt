@@ -17,15 +17,16 @@ License: MIT
 ==============================================================================
 CONTENTS                                                         *link-contents*
 
-    1. Introduction ......... |link-introduction|
-    2. Usage ................ |link-usage|
-    3. Mappings ............. |link-mappings|
-    4. Configuration ........ |link-configuration|
-    5. Misc ................. |link-misc|
-    6. Limitations .......... |link-limitations|
-    7. Contributing ......... |link-contributing|
-    8. Changelog ............ |link-changelog|
-    9. Credits .............. |link-credits|
+    1.  Introduction ......... |link-introduction|
+    2.  Installation ......... |link-installation|
+    3.  Usage ................ |link-usage|
+    4.  Mappings ............. |link-mappings|
+    5.  Configuration ........ |link-configuration|
+    6.  Misc ................. |link-misc|
+    7.  Limitations .......... |link-limitations|
+    8.  Contributing ......... |link-contributing|
+    9.  Changelog ............ |link-changelog|
+    10. Credits ............. |link-credits|
 
 ==============================================================================
 INTRODUCTION                                                 *link-introduction*
@@ -80,6 +81,19 @@ Terminology ~
 
 For more information about the syntax Markdown uses for links, refer to the
 CommonMark Specification at https://spec.commonmark.org/0.31.2/#links
+
+==============================================================================
+INSTALLATION                                                 *link-installation*
+
+Use your favorite plugin manager to install this plugin.
+
+    vim-plug:
+      `Plug 'qadzek/link.vim'`
+
+    lazy.nvim:
+      `{ "qadzek/link.vim" }`
+
+An example spec file is available in the repository for users of `lazy.nvim`.
 
 ==============================================================================
 USAGE                                                               *link-usage*

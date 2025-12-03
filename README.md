@@ -1,26 +1,24 @@
 # link.vim
 
 `link.vim` is a plugin for Vim and Neovim that keeps long URLs out of your way.
-It supports links in Markdown syntax and plaintext links (e.g. in emails, in
-text files etc.)
+It moves URLs to a reference section, so you can focus on the content of your
+document.
 
-Inline links will be moved to a reference section. For instance, the following
-Markdown document:
+Links in Markdown syntax and plaintext links (e.g. in emails, in text files
+etc.) are supported.
+
+For instance, the following document:
 
 ```md
-# Notes
-
-[Vim](https://www.vim.org) and [Neovim](https://neovim.io) are text editors.
+[Vim](https://www.vim.org) and Neovim https://neovim.io are text editors.
 ```
 
 will be turned into
 
 ```md
-# Notes
+[Vim][0] and Neovim [1] are text editors.
 
-[Vim][0] and [Neovim][1] are text editors.
-
-## Links
+Links:
 
 [0]: https://www.vim.org
 [1]: https://neovim.io
@@ -32,11 +30,19 @@ https://github.com/qadzek/link.vim/assets/84473512/7be44a63-677c-4477-8e30-fa609
 
 ## Installation
 
-Use your favorite plugin manager to install this plugin. For instance, if you
-use [vim-plug][0]:
+Use your favorite plugin manager to install this plugin.
+
+If you use [vim-plug][0]:
 
 ```vim
 Plug 'qadzek/link.vim'
+```
+
+If you use [lazy.nvim][1], see the example [spec](./lazy_nvim_spec_example.lua)
+file, or just add the following to your list of plugins:
+
+```lua
+{ "qadzek/link.vim" }
 ```
 
 ## Usage
@@ -57,8 +63,8 @@ Plug 'qadzek/link.vim'
 | `:LinkNext`          | `<C-n>`           | Move cursor to next link                 |
 
 No mappings are built-in to avoid conflicts with your existing key bindings.
-You can enable the key bindings suggested above by adding this line to your
-`vimrc`, before your plugin manager initializes:
+You can quickly try out the key bindings suggested above by adding this line to
+your `vimrc`, _before_ your plugin manager initializes:
 
 ```vim
 let g:link_use_default_mappings = 1
@@ -76,13 +82,14 @@ Questions, suggestions, comments, feature requests... everything is welcome in
 the _Issues_ tab.
 
 While this plugin was originally written from scratch, in `v2` it has been
-rewritten based on the excellent [wiki.vim][1] plugin. Make sure to give it a try,
-it's a great tool for writing and maintaining a personal wiki.
+rewritten based on the excellent [wiki.vim][2] plugin. Make sure to give it a
+try, it's a great tool for writing and maintaining a personal wiki.
 
 If you would like to contribute, see `:help link-contributing`. This plugin uses
-the [Vint][2] linter and the [Vader][3] test framework.
+the [Vint][3] linter and the [Vader][4] test framework.
 
 [0]: https://github.com/junegunn/vim-plug
-[1]: https://github.com/lervag/wiki.vim
-[2]: https://github.com/Vimjas/vint
-[3]: https://github.com/junegunn/vader.vim
+[1]: https://github.com/folke/lazy.nvim
+[2]: https://github.com/lervag/wiki.vim
+[3]: https://github.com/Vimjas/vint
+[4]: https://github.com/junegunn/vader.vim
