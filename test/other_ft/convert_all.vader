@@ -305,24 +305,24 @@ Expect mail:
   [0]: https://www.vim.org
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#Given mail (URLs with trailing punctuation characters): TODO
-#  foo https://www.vim.org, bar
-#  baz https://neovim.io. qux
-#-----
-#
-#Execute:
-#  LinkConvertAll
-#
-#-----
-#
-#Expect mail:
-#  foo [0], bar
-#  baz [1]. qux
-#
-#  Links:
-#
-#  [0]: https://www.vim.org
-#  [1]: https://neovim.io
+Given mail (URLs with trailing punctuation characters):
+  foo https://www.vim.org, bar
+  baz https://neovim.io. qux
+-----
+
+Execute:
+  LinkConvertAll
+
+-----
+
+Expect mail:
+  foo [0], bar
+  baz [1]. qux
+
+  Links:
+
+  [0]: https://www.vim.org
+  [1]: https://neovim.io
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Given mail:

@@ -29,7 +29,7 @@ let linkvim#rx#italic = linkvim#rx#surrounded(
       \ '[^_`[:space:]]\%([^_`]*[^_`[:space:]]\)\?', '_')
 let linkvim#rx#date = '\d\d\d\d-\d\d-\d\d'
 let linkvim#rx#url =
-      \ '\%(\<\l\+:\%(\/\/\)\?[^ \t()\[\]|]\+'
+      \ '\%(\<\l\+:\%(\/\/\)\?[^ \t()\[\]|]\+[^ \t()\[\]|.,?!:;''"]'
       \ . '\|'
       \ . '<\zs\l\+:\%(\/\/\)\?[^>]\+\ze>\)'
 " Match as few characters as possible, each of which is not \, [, or ].
