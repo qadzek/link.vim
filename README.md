@@ -45,6 +45,13 @@ file, or just add the following to your list of plugins:
 { "qadzek/link.vim" }
 ```
 
+If you use a Debian-based Linux distribution, this plugin might be available in
+its [repositories][2]:
+
+```sh
+apt install vim-link-vim
+```
+
 ## Usage
 
 `link.vim` can be used by executing one of the following commands:
@@ -82,14 +89,15 @@ Questions, suggestions, comments, feature requests... everything is welcome in
 the _Issues_ tab.
 
 While this plugin was originally written from scratch, in `v2` it has been
-rewritten based on the excellent [wiki.vim][2] plugin. Make sure to give it a
+rewritten based on the excellent [wiki.vim][3] plugin. Make sure to give it a
 try, it's a great tool for writing and maintaining a personal wiki.
 
 If you would like to contribute, see `:help link-contributing`. This plugin uses
-the [Vint][3] linter and the [Vader][4] test framework.
+the [Vint][4] linter and the [Vader][5] test framework.
 
 [0]: https://github.com/junegunn/vim-plug
 [1]: https://github.com/folke/lazy.nvim
-[2]: https://github.com/lervag/wiki.vim
-[3]: https://github.com/Vimjas/vint
-[4]: https://github.com/junegunn/vader.vim
+[2]: https://repology.org/project/vim-link-vim/versions
+[3]: https://github.com/lervag/wiki.vim
+[4]: https://github.com/Vimjas/vint
+[5]: https://github.com/junegunn/vader.vim

@@ -93,7 +93,12 @@ Use your favorite plugin manager to install this plugin.
     lazy.nvim:
       `{ "qadzek/link.vim" }`
 
-An example spec file is available in the repository for users of `lazy.nvim`.
+For `lazy.nvim` users, an example spec file is available in this project's
+GitHub repository.
+
+If you use a Debian-based Linux distribution, this plugin might be available
+in its repositories: https://repology.org/project/vim-link-vim/versions
+      `apt install vim-link-vim`
 
 ==============================================================================
 USAGE                                                               *link-usage*
