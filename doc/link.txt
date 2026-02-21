@@ -369,6 +369,10 @@ To run the tests, refer to `test/README.md`.
 ==============================================================================
 CHANGELOG                                                       *link-changelog*
 
+2.0.1   2026-02-21
+        - Fix bug where setting wasn't honored when converting internal images
+          (#25)
+
 2.0.0   2025-11-20                                             BREAKING CHANGE
         - Rewrite based on `wiki.vim`
         - Support converting plaintext and Markdown links in the same file

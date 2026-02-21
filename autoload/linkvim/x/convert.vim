@@ -41,7 +41,11 @@ function! linkvim#x#convert#convert(type = 'multiple', mode = 'normal') abort ra
   let l:links = linkvim#x#u#get_links(l:allowed_types, a:firstline, a:lastline)
 
   if s:convert_urls_only()
-    let l:links = filter(deepcopy(l:links), {_,link -> s:is_in(link.scheme, g:linkvim#protocols) })
+    " Extract protocol from URL, check if it's in the allowed list of protocols,
+    " and keep the link if it is. Internal links will have an empty protocol and
+    " be filtered out.
+    let l:links = filter(deepcopy(l:links),
+          \ {_,link -> s:is_in(matchstr(link.url_raw, '^\w\+\ze:'), g:linkvim#protocols) })
   endif
 
   if empty(l:links)

@@ -229,4 +229,64 @@ Expect markdown:
 
   [0]: https://github.com
   [1]: https://www.vim.org
+= 9 ============================================================================
+
+Given markdown (Picture; default settings):
+  View my local ![picture](./balloons.jpg) now.
+  View my online ![picture](https://upload.wikimedia.org/wikipedia/commons/7/75/Vim_modes.svg) now.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute:
+  LinkConvertAll
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Expect markdown:
+  View my local ![picture][0] now.
+  View my online ![picture][1] now.
+
+  ## Links
+
+  [0]: ./balloons.jpg
+  [1]: https://upload.wikimedia.org/wikipedia/commons/7/75/Vim_modes.svg
+= 10 ===========================================================================
+
+Given markdown (Picture; disabled globally):
+  View my local ![picture](./balloons.jpg) now.
+  View my online ![picture](https://upload.wikimedia.org/wikipedia/commons/7/75/Vim_modes.svg) now.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute:
+  let g:link_disable_internal_links = 1
+  LinkConvertAll
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Expect markdown:
+  View my local ![picture](./balloons.jpg) now.
+  View my online ![picture][0] now.
+
+  ## Links
+
+  [0]: https://upload.wikimedia.org/wikipedia/commons/7/75/Vim_modes.svg
+= 11 ===========================================================================
+
+Given markdown (Picture; disabled buffer-local):
+  View my local ![picture](balloons.jpg) now.
+  View my online ![picture](https://upload.wikimedia.org/wikipedia/commons/7/75/Vim_modes.svg) now.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute:
+  let b:link_disable_internal_links = 1
+  LinkConvertAll
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Expect markdown:
+  View my local ![picture](balloons.jpg) now.
+  View my online ![picture][0] now.
+
+  ## Links
+
+  [0]: https://upload.wikimedia.org/wikipedia/commons/7/75/Vim_modes.svg
 ================================================================================
