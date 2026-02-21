@@ -11,8 +11,13 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 # Install packages.
 RUN apt-get update && \
-  apt-get install --yes --no-install-recommends git pipx vim neovim make && \
-  rm -rf /var/lib/apt/lists/*
+    apt-get install --yes --no-install-recommends \
+      git       \
+      pipx      \
+      make      \
+      vim       \
+      neovim && \
+    rm -rf /var/lib/apt/lists/*
 
 # Ensure that `vim` doesn't point to `nvim` on Ubuntu.
 RUN update-alternatives --set vim /usr/bin/vim.basic
@@ -35,7 +40,7 @@ COPY --chown=vimmer:vimmer test/minimal.vimrc .vimrc
 COPY --chown=vimmer:vimmer test/minimal.vimrc .config/nvim/init.vim
 
 # Copy the link.vim plugin.
-COPY --chown=vimmer:vimmer . link.vim
+COPY --chown=vimmer:vimmer . ./link.vim
 
 WORKDIR /home/vimmer/link.vim
 
