@@ -48,11 +48,10 @@ let g:linkvim#link#definitions#org = {
       \ 'rx_text' : '\[\[\/\?[^\\\]]\{-}\]\[\zs[^\\\]]\{-}\ze\]\]',
       \}
 
-" MODIFIED
 let g:linkvim#link#definitions#ref_target = {
       \ 'type': 'ref_target',
       \ 'rx': g:linkvim#rx#link_ref_target,
-      \ 'rx_url': '\[' . g:linkvim#rx#reflabel . '\]:\s\+\zs' . g:linkvim#rx#url_ref_target,
+      \ 'rx_url': '\[' . g:linkvim#rx#reflabel . '\]:\s\+\zs.*',
       \ 'rx_text': '^\s*\[\zs' . g:linkvim#rx#reflabel . '\ze\]',
       \ '__transformer': function('linkvim#link#templates#ref_target'),
       \}

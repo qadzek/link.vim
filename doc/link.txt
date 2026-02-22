@@ -10,7 +10,7 @@
       |_______||__| |__| \__| |__|\__\ (__)    \__/     |__| |__|  |__|
 <
 
-Version: 2.0.0
+Version: 2.0.2
 Author:  qadzek
 License: MIT
 
@@ -368,6 +368,9 @@ To run the tests, refer to `test/README.md`.
 
 ==============================================================================
 CHANGELOG                                                       *link-changelog*
+
+2.0.2   2026-02-22
+        - Sync with upstream `wiki.vim` changes
 
 2.0.1   2026-02-21
         - Fix bug where setting wasn't honored when converting internal images

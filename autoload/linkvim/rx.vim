@@ -48,9 +48,8 @@ let linkvim#rx#link_ref_full =
       \ . '\[' . linkvim#rx#reftext   . '\]'
       \ . '\[' . linkvim#rx#reflabel . '\]'
       \ . '[\]\[]\@!'
-let linkvim#rx#url_ref_target = '\S\+' " MODIFIED
 let linkvim#rx#link_ref_target =
-      \ '^\s*\[' . linkvim#rx#reflabel . '\]:\s\+' . linkvim#rx#url_ref_target " MODIFIED
+      \ '^\s*\[' . linkvim#rx#reflabel . '\]:\s\+.*'
 let linkvim#rx#link_cite = '\%(\s\|^\|\[\)\zs@[-_.+:a-zA-Z0-9]\+[-_a-zA-Z0-9]'
 let linkvim#rx#link_cite_url = '\%(\s\|^\|\[\)@\zs[-_.+:a-zA-Z0-9]\+[-_a-zA-Z0-9]'
 let linkvim#rx#link_wiki = '\[\[\/\?[^\\\]]\{-}\%(|[^\\\]]\{-}\)\?\]\]'
