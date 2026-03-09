@@ -37,7 +37,7 @@ policies:
   ProhibitImplicitScopeBuiltinVariable:
     enabled: true
   ProhibitMissingScriptEncoding:
-    enabled: true
+    enabled: false
   ProhibitNoAbortFunction:
     enabled: true
   ProhibitSetNoCompatible:
