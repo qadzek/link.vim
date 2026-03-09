@@ -1,4 +1,3 @@
-
 function! linkvim#url#resolvers#adoc(url) abort
   let l:url = deepcopy(a:url)
 
@@ -117,6 +116,45 @@ function! linkvim#url#resolvers#reference(url, return_lnum = v:false) abort
 
   " The url is not recognized, so we add a fallback handler that will take us
   " to the reference position.
+  return extend(deepcopy(a:url), {
+        \ 'scheme': 'refbad',
+        \ 'lnum': l:lnum_target,
+        \ 'original': a:url
+        \})
+endfunction
+
+function! linkvim#url#resolvers#reference_fig(url) abort
+  let l:id = a:url.stripped
+  let l:lnum_target = searchpos('^\s*\[' . l:id . '\]: ', 'nW')[0]
+  if l:lnum_target == 0
+    call linkvim#log#warn(
+          \ 'Could not locate reference ',
+          \ ['ModeMsg', a:url.stripped]
+          \)
+    return {}
+  endif
+
+  let l:line = getline(l:lnum_target)
+  let l:url_string = matchstr(l:line, '^\s*\[' . l:id . '\]: \s*\zs.*\ze\s*$')
+
+  let l:parts = matchlist(l:url_string, '\v%((\w+):)?.*')
+  let l:scheme = tolower(l:parts[1])
+  if empty(l:scheme)
+    let l:url_string = 'file:' . l:url_string
+  elseif l:scheme !=? 'file'
+    call linkvim#log#warn(
+          \ 'Image reference links only support file scheme! Not: ',
+          \ ['ModeMsg', l:scheme]
+          \)
+    return {}
+  endif
+
+  if !empty(l:url_string)
+    return linkvim#url#resolve(l:url_string)
+  endif
+
+  " The reference definition is found, but the URL was empty. Use a fallback
+  " handler that will take us to the reference position.
   return extend(deepcopy(a:url), {
         \ 'scheme': 'refbad',
         \ 'lnum': l:lnum_target,

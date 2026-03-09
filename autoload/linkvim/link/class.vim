@@ -109,7 +109,7 @@ endfunction
 function! s:link.resolve() dict abort
   if self.type ==# 'word' | return '' | endif
 
-  return linkvim#url#resolve(self.url, self.origin)
+  return linkvim#url#resolve(self.url, #{ origin: self.origin })
 endfunction
 
 " vint: +ProhibitImplicitScopeVariable

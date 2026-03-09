@@ -56,12 +56,38 @@ let g:linkvim#link#definitions#ref_target = {
       \ '__transformer': function('linkvim#link#templates#ref_target'),
       \}
 
+let g:linkvim#link#definitions#reference_fig = {
+      \ 'type': 'reference_fig',
+      \ 'rx': g:linkvim#rx#link_reference_fig,
+      \ 'rx_url': '\[\zs' . g:linkvim#rx#reflabel . '\ze\]',
+      \ '__scheme': 'reference_fig',
+      \ '__transformer': { _u, _t, l -> linkvim#link#templates#md_fig(l.url, l.id) },
+      \}
+
+let g:linkvim#link#definitions#ref_fig_collapsed = extend(
+      \ deepcopy(g:linkvim#link#definitions#reference_fig), {
+      \ 'rx': g:linkvim#rx#link_ref_fig_collapsed,
+      \ 'rx_url': '\[\zs' . g:linkvim#rx#reflabel . '\ze\]\[\]',
+      \ 'rx_text': '\[\zs' . g:linkvim#rx#reflabel . '\ze\]\[\]',
+      \})
+
+let g:linkvim#link#definitions#ref_fig_full = extend(
+      \ deepcopy(g:linkvim#link#definitions#reference_fig), {
+      \ 'rx': g:linkvim#rx#link_ref_fig_full,
+      \ 'rx_url':
+      \   '\['    . g:linkvim#rx#reftext   . '\]'
+      \ . '\[\zs' . g:linkvim#rx#reflabel . '\ze\]',
+      \ 'rx_text':
+      \   '\[\zs' . g:linkvim#rx#reftext   . '\ze\]'
+      \ . '\['    . g:linkvim#rx#reflabel . '\]',
+      \})
+
 let g:linkvim#link#definitions#reference = {
       \ 'type': 'reference',
       \ 'rx': g:linkvim#rx#link_reference,
       \ 'rx_url': '\[\zs' . g:linkvim#rx#reflabel . '\ze\]',
       \ '__scheme': 'reference',
-      \ '__transformer': { _u, _t, l -> linkvim#link#template#md(l.url, l.id) },
+      \ '__transformer': { _u, _t, l -> linkvim#link#templates#md(l.url, l.id) },
       \}
 
 let g:linkvim#link#definitions#ref_collapsed = extend(
@@ -117,16 +143,19 @@ let g:linkvim#link#definitions#word = {
 " they differ: [[url|description]] vs [[url][description]], respectively.
 let g:linkvim#link#definitions#all = [
       \ g:linkvim#link#definitions#wiki,
-      \ g:linkvim#link#definitions#adoc_xref_bracket,
-      \ g:linkvim#link#definitions#adoc_xref_inline,
-      \ g:linkvim#link#definitions#adoc_link,
       \ g:linkvim#link#definitions#md_fig,
       \ g:linkvim#link#definitions#md,
       \ g:linkvim#link#definitions#org,
       \ g:linkvim#link#definitions#ref_target,
+      \ g:linkvim#link#definitions#reference_fig,
+      \ g:linkvim#link#definitions#ref_fig_collapsed,
+      \ g:linkvim#link#definitions#ref_fig_full,
       \ g:linkvim#link#definitions#reference,
       \ g:linkvim#link#definitions#ref_collapsed,
       \ g:linkvim#link#definitions#ref_full,
+      \ g:linkvim#link#definitions#adoc_xref_bracket,
+      \ g:linkvim#link#definitions#adoc_xref_inline,
+      \ g:linkvim#link#definitions#adoc_link,
       \ g:linkvim#link#definitions#cite,
       \ g:linkvim#link#definitions#url,
       \ g:linkvim#link#definitions#date,

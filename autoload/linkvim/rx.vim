@@ -48,6 +48,9 @@ let linkvim#rx#link_ref_full =
       \ . '\[' . linkvim#rx#reftext   . '\]'
       \ . '\[' . linkvim#rx#reflabel . '\]'
       \ . '[\]\[]\@!'
+let linkvim#rx#link_reference_fig = '!' . linkvim#rx#link_reference
+let linkvim#rx#link_ref_fig_collapsed = '!' . linkvim#rx#link_ref_collapsed
+let linkvim#rx#link_ref_fig_full = '!' . linkvim#rx#link_ref_full
 let linkvim#rx#link_ref_target =
       \ '^\s*\[' . linkvim#rx#reflabel . '\]:\s\+.*'
 let linkvim#rx#link_cite = '\%(\s\|^\|\[\)\zs@[-_.+:a-zA-Z0-9]\+[-_a-zA-Z0-9]'
